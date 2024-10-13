@@ -3,8 +3,7 @@ import dummyData from '../../../data/dummyData.json';
 
 export async function GET() {
   // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-
-  // Return dummy data as if it were fetched from an API
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  
   return NextResponse.json(dummyData);
 }
