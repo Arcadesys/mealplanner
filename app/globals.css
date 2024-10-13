@@ -2,21 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #FDFD96; /* Soft yellow background */
-  --foreground: #333333; /* Dark gray text */
-  --primary: #FF6B6B; /* Coral red */
-  --secondary: #4ECDC4; /* Turquoise */
-  --accent: #FF8C42; /* Orange */
+body {
+  @apply bg-gray-50 text-gray-900;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-bold;
 }
 
 .recipe-card {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  @apply bg-white p-4 rounded shadow transition-shadow hover:shadow-md;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -30,12 +25,6 @@
     border-color: #444;
     box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
   }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 @layer utilities {

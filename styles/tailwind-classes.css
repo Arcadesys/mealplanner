@@ -1,0 +1,143 @@
+/* app/styles/tailwind-classes.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Variables */
+:root {
+  --unassigned: #708090; /* Sad, cold slate gray */
+  --primary: #FF6B6B; /* Coral red */
+  --secondary: #FFD700; /* Bright yellow for highlights */
+  --day-monday: #FF69B4; /* Crayola Pink */
+  --day-tuesday: #1E90FF; /* Crayola Blue */
+  --day-wednesday: #32CD32; /* Crayola Green */
+  --day-thursday: #FFA500; /* Crayola Orange */
+  --day-friday: #9400D3; /* Crayola Violet */
+  --day-saturday: #00CED1; /* Crayola Dark Turquoise */
+  --day-sunday: #FF4500; /* Crayola Orange Red */
+}
+
+/* Dark Mode Styles */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+/* Custom Utility Classes */
+.text-balance {
+  @apply text-wrap balance;
+}
+
+/* Recipe Card */
+.recipe-card {
+  @apply bg-white rounded-lg shadow-md p-4 mb-4 transition-all hover:shadow-lg;
+}
+
+.recipe-card:hover,
+.recipe-card:focus {
+  @apply shadow-lg transform scale-105;
+}
+
+.recipe-title {
+  @apply text-lg font-semibold mb-2;
+}
+
+.recipe-description {
+  @apply text-gray-600;
+}
+
+/* Unassigned Recipes */
+.unassigned-recipes {
+  @apply flex flex-col h-full overflow-y-auto p-4 bg-gray-100 rounded-lg shadow-md;
+}
+
+.draggable-item {
+  @apply mb-4;
+}
+
+/* Home Page */
+.drawer-organizer {
+  @apply flex h-screen p-4 bg-yellow-200; /* Adjusted to use Tailwind color class */
+}
+
+.home-unassigned-recipes {
+  @apply w-72 bg-teal-400 rounded-lg p-4 shadow-md overflow-y-auto max-h-screen-8 mr-4;
+}
+
+.days-container {
+  @apply flex flex-col flex-grow overflow-y-auto;
+}
+
+.day-column {
+  @apply flex-1 p-4 rounded-lg shadow-md overflow-y-auto;
+}
+
+.day-header {
+  @apply text-yellow-200 text-xl font-bold mb-3 text-center;
+}
+
+.draggable-item-home {
+  @apply mb-2;
+}
+
+/* Scheduler */
+.scheduler {
+  @apply flex gap-4 p-4 bg-gray-800 text-white h-screen;
+}
+
+.unassigned {
+  @apply flex-none w-64 bg-green-500 p-4 rounded-lg shadow-lg flex flex-col;
+}
+
+.days {
+  @apply flex-1 flex flex-col gap-2 p-4;
+}
+
+.day {
+  @apply bg-red-600 p-4 rounded-lg flex items-center;
+}
+
+.day-label {
+  @apply font-bold uppercase;
+}
+
+.load-more {
+  @apply mt-auto text-center p-2 bg-transparent text-white border border-white rounded hover:bg-white hover:text-black transition;
+}
+
+/* Day Colors */
+.monday { @apply bg-yellow-400; }
+.tuesday { @apply bg-teal-400; }
+.wednesday { @apply bg-blue-600; }
+.thursday { @apply bg-pink-600; }
+.friday { @apply bg-blue-900 text-white; }
+.saturday { @apply bg-blue-300; }
+.sunday { @apply bg-orange-400; }
+
+.main-container {
+  @apply flex flex-row h-screen;
+}
+
+.scheduler-container {
+  @apply flex-grow flex-shrink w-2/3;
+}
+
+.unassigned-recipes-container {
+  @apply w-1/3 bg-gray-100 p-4 overflow-y-auto;
+}
+
+/* Custom Drag and Drop Classes */
+.draggable {
+  @apply cursor-move;
+}
+
+.droppable {
+  @apply border-2 border-dashed border-gray-300;
+}
+
+.droppable-hover {
+  @apply border-blue-500;
+}

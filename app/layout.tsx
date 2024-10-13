@@ -12,8 +12,7 @@ const RootLayout = ({ children }: RootLayoutProps) => (
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <title>Your App Title</title>
     </head>
-    <body>
-      
+    <body>      
         {children}
     </body>
   </html>
