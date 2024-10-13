@@ -38,9 +38,9 @@ const Scheduler: React.FC = () => {
   const days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
   return (
-    <div className="grid grid-cols-7 gap-4 h-full">
+    <div className="flex space-x-4 h-full overflow-x-auto">
       {days.map((day) => (
-        <div key={day} className="bg-white p-4 rounded shadow">
+        <div key={day} className="bg-white p-4 rounded shadow flex-shrink-0 w-48">
           <h3 className="text-lg font-semibold mb-2">{day}</h3>
           {/* Droppable area for recipes */}
           <div className="h-full bg-gray-100 p-2 rounded">

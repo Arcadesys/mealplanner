@@ -3,6 +3,7 @@ import React from 'react';
 import { DragDropContext } from '@hello-pangea/dnd';
 import Scheduler from './components/Scheduler';
 import UnassignedRecipes from './components/UnassignedRecipes';
+import { useRecipes } from './hooks/useRecipes';
 
 interface Recipe {
   id: string;
@@ -10,40 +11,8 @@ interface Recipe {
   // Add other relevant fields
 }
 
-const useFetchRecipes = () => {
-  const [recipes, setRecipes] = React.useState<Recipe[]>([]);
-  const [loading, setLoading] = React.useState<boolean>(true);
-  const [error, setError] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log('Fetching recipes...');
-        const response = await fetch('/api/recipes');
-        console.log('Response status:', response.status);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data: Recipe[] = await response.json();
-        console.log('Fetched data:', data);
-        setRecipes(data);
-      } catch (err: any) {
-        console.error('Error fetching recipes:', err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  return { recipes, loading, error };
-};
-
-
 const HomePage: React.FC = () => {
-  const { recipes, loading, error } = useFetchRecipes();
+  const { recipes, loading, error } = useRecipes();
 
   const onDragEnd = (result: any) => {
     // Handle drag end logic here
