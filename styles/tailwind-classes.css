@@ -6,11 +6,16 @@
 
 /* Custom Variables */
 :root {
-  --background: #FDFD96; /* Soft yellow background */
-  --foreground: #333333; /* Dark gray text */
+  --unassigned: #708090; /* Sad, cold slate gray */
   --primary: #FF6B6B; /* Coral red */
-  --secondary: #4ECDC4; /* Turquoise */
-  --accent: #FF8C42; /* Orange */
+  --secondary: #FFD700; /* Bright yellow for highlights */
+  --day-monday: #FF69B4; /* Crayola Pink */
+  --day-tuesday: #1E90FF; /* Crayola Blue */
+  --day-wednesday: #32CD32; /* Crayola Green */
+  --day-thursday: #FFA500; /* Crayola Orange */
+  --day-friday: #9400D3; /* Crayola Violet */
+  --day-saturday: #00CED1; /* Crayola Dark Turquoise */
+  --day-sunday: #FF4500; /* Crayola Orange Red */
 }
 
 /* Dark Mode Styles */
