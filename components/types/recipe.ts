@@ -5,7 +5,7 @@ export interface Recipe {
   title: string;
   description: string;
   ingredients: Ingredient[];
-  instructions: Step[];
+  instructions: { instruction: string }[];
   prepTime: number;
   cookTime: number;
   servings: number;
@@ -18,8 +18,3 @@ export interface Ingredient {
   measure: string;
 }
 
-// Instructions, broken out into steps so we can style it fancy later
-export interface Step {
-  order: number;
-  instruction: string;
-}

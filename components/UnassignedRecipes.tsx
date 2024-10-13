@@ -1,8 +1,8 @@
 import React from 'react';
 import { Droppable, Draggable } from '@hello-pangea/dnd';
 import RecipeCard from './RecipeCard';
-import { Recipe } from '../components/types/recipe';
-
+import { Recipe } from './types/recipe';
+import styles from '../app/HomePage.module.css';
 
 interface UnassignedRecipesProps {
   recipes: Recipe[];
@@ -10,27 +10,29 @@ interface UnassignedRecipesProps {
 
 const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({ recipes }) => {
   return (
-    <Droppable droppableId="unassigned" direction="horizontal">
-      {(droppableProvided) => (
+    <Droppable droppableId="unassigned">
+      {(provided) => (
         <div 
-          ref={droppableProvided.innerRef} 
-          {...droppableProvided.droppableProps}
+          className={styles.unassignedRecipes}
+          ref={provided.innerRef} 
+          {...provided.droppableProps}
         >
-          <h3>Unassigned Recipes</h3>
+          <h2 className={styles.dayHeader}>Unassigned Recipes</h2>
           {recipes.map((recipe, index) => (
             <Draggable key={recipe.id} draggableId={recipe.id} index={index}>
-              {(draggableProvided) => (
+              {(provided) => (
                 <div
-                  ref={draggableProvided.innerRef}
-                  {...draggableProvided.draggableProps}
-                  {...draggableProvided.dragHandleProps}
+                  ref={provided.innerRef}
+                  {...provided.draggableProps}
+                  {...provided.dragHandleProps}
+                  className={styles.draggableItem}
                 >
                   <RecipeCard recipe={recipe} index={index} />
                 </div>
               )}
             </Draggable>
           ))}
-          {droppableProvided.placeholder}
+          {provided.placeholder}
         </div>
       )}
     </Droppable>

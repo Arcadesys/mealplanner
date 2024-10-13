@@ -3,8 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #FDFD96; /* Soft yellow background */
+  --foreground: #333333; /* Dark gray text */
+  --primary: #FF6B6B; /* Coral red */
+  --secondary: #4ECDC4; /* Turquoise */
+  --accent: #FF8C42; /* Orange */
 }
 
 .recipe-card {

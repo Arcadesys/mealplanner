@@ -58,4 +58,41 @@
     "cookTime": 15,
     "servings": 4
   }
+,
+  {
+    "id": "3",
+    "name": "Vegetarian Lentil Soup",
+    "title": "Hearty Vegetarian Lentil Soup",
+    "description": "A comforting and nutritious soup perfect for cold days",
+    "ingredients": [
+      { "name": "green lentils", "quantity": 200, "measure": "grams" },
+      { "name": "onion", "quantity": 1, "measure": "medium" },
+      { "name": "carrots", "quantity": 2, "measure": "medium" },
+      { "name": "celery", "quantity": 2, "measure": "stalks" },
+      { "name": "garlic", "quantity": 3, "measure": "cloves" },
+      { "name": "vegetable broth", "quantity": 1.5, "measure": "liters" },
+      { "name": "diced tomatoes", "quantity": 400, "measure": "grams" },
+      { "name": "olive oil", "quantity": 2, "measure": "tablespoons" },
+      { "name": "cumin", "quantity": 1, "measure": "teaspoon" },
+      { "name": "paprika", "quantity": 1, "measure": "teaspoon" },
+      { "name": "bay leaf", "quantity": 1, "measure": "piece" },
+      { "name": "salt", "quantity": 1, "measure": "teaspoon" },
+      { "name": "black pepper", "quantity": 0.5, "measure": "teaspoon" },
+      { "name": "lemon juice", "quantity": 2, "measure": "tablespoons" }
+    ],
+    "instructions": [
+      { "order": 1, "instruction": "Rinse and sort lentils" },
+      { "order": 2, "instruction": "Chop onion, carrots, celery, and garlic" },
+      { "order": 3, "instruction": "Heat olive oil in a large pot" },
+      { "order": 4, "instruction": "Sauté onion, carrots, celery, and garlic until softened" },
+      { "order": 5, "instruction": "Add lentils, vegetable broth, diced tomatoes, and spices" },
+      { "order": 6, "instruction": "Bring to a boil, then simmer for 25-30 minutes" },
+      { "order": 7, "instruction": "Remove bay leaf" },
+      { "order": 8, "instruction": "Add lemon juice and adjust seasoning" },
+      { "order": 9, "instruction": "Serve hot, optionally with crusty bread" }
+    ],
+    "prepTime": 15,
+    "cookTime": 35,
+    "servings": 6
+  }
 ]

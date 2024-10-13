@@ -1,0 +1,35 @@
+.recipeCard {
+  width: 200px;
+  height: 150px;
+  background-color: #fefabc;
+  padding: 10px;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  font-size: 14px;
+  color: #000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: rotate(-1deg);
+  transition: transform 0.15s linear;
+}
+
+.recipeCard:hover,
+.recipeCard:focus {
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.15);
+  transform: scale(1.05) rotate(0deg);
+}
+
+.recipeTitle {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #e6e0a7;
+  padding-bottom: 5px;
+}
+
+.recipeDescription {
+  font-size: 12px;
+  line-height: 1.4;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}

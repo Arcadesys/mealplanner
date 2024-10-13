@@ -1,0 +1,54 @@
+.drawerOrganizer {
+  display: flex;
+  height: 100vh;
+  padding: 16px;
+  background-color: var(--background);
+}
+
+.unassignedRecipes {
+  width: 300px;
+  background-color: var(--secondary);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  max-height: calc(100vh - 32px);
+  margin-right: 16px;
+}
+
+.daysContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.dayColumn {
+  background-color: var(--primary);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+  min-height: 100px;
+}
+
+.dayHeader {
+  color: var(--background);
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.draggableItem {
+  margin-bottom: 8px;
+}
+
+/* Kindercore-inspired colors for day columns */
+.monday { background-color: #FFD166; }
+.tuesday { background-color: #06D6A0; }
+.wednesday { background-color: #118AB2; }
+.thursday { background-color: #EF476F; }
+.friday { background-color: #073B4C; color: white; }
+.saturday { background-color: #84C0C6; }
+.sunday { background-color: #F78C6B; }
