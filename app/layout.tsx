@@ -1,5 +1,5 @@
 import React from 'react';
-import '@/styles/globals.css';
+import "./globals.css";
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -12,8 +12,8 @@ const RootLayout = ({ children }: RootLayoutProps) => (
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <title>Your App Title</title>
     </head>
-    <body>
-      {children}
+    <body>      
+        {children}
     </body>
   </html>
 );

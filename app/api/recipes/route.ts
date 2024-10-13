@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import dummyData from '../../../public/dummyData.json';
+import dummyData from '../../../data/dummyData.json';
 
 export async function GET() {
   // Simulate API delay

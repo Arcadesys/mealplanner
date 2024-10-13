@@ -32,9 +32,6 @@ const useRecipes = () => {
 const Scheduler: React.FC = () => {
   const { recipes, loading, error } = useRecipes();
 
-  if (loading) return <p className="text-center">Loading...</p>;
-  if (error) return <p className="text-center text-red-500">{error}</p>;
-
   const days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
   return (
