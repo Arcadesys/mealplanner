@@ -1,6 +1,5 @@
 import React from 'react';
 import { Droppable, Draggable } from '@hello-pangea/dnd';
-import RecipeCard from './RecipeCard';
 import { Recipe } from '../types/recipe';
 
 interface UnassignedRecipesProps {
@@ -11,10 +10,10 @@ const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({ recipes }) => {
   return (
     <Droppable droppableId="unassigned">
       {(provided) => (
-        <div 
-          className="unassigned-recipes"
-          ref={provided.innerRef} 
+        <div
+          ref={provided.innerRef}
           {...provided.droppableProps}
+          className="space-y-4"
         >
           {recipes.map((recipe, index) => (
             <Draggable key={recipe.id} draggableId={recipe.id} index={index}>
@@ -23,9 +22,10 @@ const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({ recipes }) => {
                   ref={provided.innerRef}
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
-                  className="draggable-item"
+                  className="bg-white p-4 rounded shadow"
                 >
-                  <RecipeCard recipe={recipe} index={index} />
+                  <h3 className="font-semibold">{recipe.name}</h3>
+                  <p className="text-sm text-gray-600">{recipe.description}</p>
                 </div>
               )}
             </Draggable>

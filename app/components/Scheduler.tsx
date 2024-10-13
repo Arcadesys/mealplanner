@@ -35,27 +35,19 @@ const Scheduler: React.FC = () => {
   if (loading) return <p className="text-center">Loading...</p>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
+  const days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+
   return (
-    <div className="scheduler">
-      <div className="unassigned">
-        <h2 className="unassigned-title">Unassigned Recipes</h2>
-        {/* You can include the UnassignedRecipes component here if needed */}
-      </div>
-      <div className="days">
-        {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map((day) => (
-          <div key={day} className={`day ${day.toLowerCase()}`}>
-            <span className="day-label">
-              {day.split('').map((letter, index) => (
-                <span key={index} className="day-letter">
-                  {letter}
-                </span>
-              ))}
-            </span>
-            {/* Add Droppable areas or other content here */}
+    <div className="grid grid-cols-7 gap-4 h-full">
+      {days.map((day) => (
+        <div key={day} className="bg-white p-4 rounded shadow">
+          <h3 className="text-lg font-semibold mb-2">{day}</h3>
+          {/* Droppable area for recipes */}
+          <div className="h-full bg-gray-100 p-2 rounded">
+            {/* Recipe cards will be dropped here */}
           </div>
-        ))}
-        <div className="load-more">Load More Recipes</div>
-      </div>
+        </div>
+      ))}
     </div>
   );
 };
