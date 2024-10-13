@@ -1,5 +1,5 @@
 import React from 'react';
-import "./globals.css";
+import "./styles/tailwind-classes.css";
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -13,8 +13,7 @@ const RootLayout = ({ children }: RootLayoutProps) => (
       <title>Your App Title</title>
     </head>
     <body>
-      
-        {children}
+      {children}
     </body>
   </html>
 );

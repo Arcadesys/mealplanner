@@ -1,6 +1,262 @@
 [
   {
     "id": "1",
+    "name": "Classic Oatmeal",
+    "title": "Hearty Classic Oatmeal",
+    "description": "A warm and filling breakfast to start your day",
+    "ingredients": [
+      { "name": "rolled oats", "quantity": 1, "measure": "cup" },
+      { "name": "water", "quantity": 2, "measure": "cups" },
+      { "name": "milk", "quantity": 0.5, "measure": "cup" },
+      { "name": "honey", "quantity": 1, "measure": "tablespoon" },
+      { "name": "cinnamon", "quantity": 0.5, "measure": "teaspoon" },
+      { "name": "salt", "quantity": 0.25, "measure": "teaspoon" }
+    ],
+    "instructions": [
+      { "order": 1, "instruction": "Combine oats, water, and salt in a pot" },
+      { "order": 2, "instruction": "Bring to a boil, then simmer for 5 minutes" },
+      { "order": 3, "instruction": "Stir in milk and cook for another 2-3 minutes" },
+      { "order": 4, "instruction": "Remove from heat and add honey and cinnamon" },
+      { "order": 5, "instruction": "Let stand for a few minutes before serving" }
+    ],
+    "prepTime": 2,
+    "cookTime": 10,
+    "servings": 2,
+    "mealType": "breakfast"
+  },
+  {
+    "id": "2",
+    "name": "Avocado Toast",
+    "title": "Simple Avocado Toast",
+    "description": "A quick and nutritious breakfast option",
+    "ingredients": [
+      { "name": "whole grain bread", "quantity": 2, "measure": "slices" },
+      { "name": "ripe avocado", "quantity": 1, "measure": "piece" },
+      { "name": "lemon juice", "quantity": 1, "measure": "teaspoon" },
+      { "name": "salt", "quantity": 0.25, "measure": "teaspoon" },
+      { "name": "black pepper", "quantity": 0.25, "measure": "teaspoon" },
+      { "name": "red pepper flakes", "quantity": 0.25, "measure": "teaspoon" }
+    ],
+    "instructions": [
+      { "order": 1, "instruction": "Toast the bread slices" },
+      { "order": 2, "instruction": "Mash the avocado with lemon juice, salt, and pepper" },
+      { "order": 3, "instruction": "Spread the avocado mixture on the toast" },
+      { "order": 4, "instruction": "Sprinkle with red pepper flakes" }
+    ],
+    "prepTime": 5,
+    "cookTime": 2,
+    "servings": 2,
+    "mealType": "breakfast"
+  },
+  {
+    "id": "3",
+    "name": "Greek Yogurt Parfait",
+    "title": "Fruity Greek Yogurt Parfait",
+    "description": "A layered breakfast treat with yogurt, fruit, and granola",
+    "ingredients": [
+      { "name": "Greek yogurt", "quantity": 2, "measure": "cups" },
+      { "name": "mixed berries", "quantity": 1, "measure": "cup" },
+      { "name": "granola", "quantity": 0.5, "measure": "cup" },
+      { "name": "honey", "quantity": 2, "measure": "tablespoons" }
+    ],
+    "instructions": [
+      { "order": 1, "instruction": "Layer yogurt, berries, and granola in glasses" },
+      { "order": 2, "instruction": "Repeat layers" },
+      { "order": 3, "instruction": "Drizzle with honey" },
+      { "order": 4, "instruction": "Serve immediately" }
+    ],
+    "prepTime": 10,
+    "cookTime": 0,
+    "servings": 2,
+    "mealType": "breakfast"
+  },
+  {
+    "id": "4",
+    "name": "Veggie Omelette",
+    "title": "Colorful Veggie Omelette",
+    "description": "A protein-packed breakfast with fresh vegetables",
+    "ingredients": [
+      { "name": "eggs", "quantity": 3, "measure": "large" },
+      { "name": "milk", "quantity": 2, "measure": "tablespoons" },
+      { "name": "bell pepper", "quantity": 0.5, "measure": "medium" },
+      { "name": "onion", "quantity": 0.25, "measure": "medium" },
+      { "name": "spinach", "quantity": 1, "measure": "cup" },
+      { "name": "cheddar cheese", "quantity": 0.25, "measure": "cup" },
+      { "name": "salt", "quantity": 0.25, "measure": "teaspoon" },
+      { "name": "black pepper", "quantity": 0.25, "measure": "teaspoon" },
+      { "name": "butter", "quantity": 1, "measure": "tablespoon" }
+    ],
+    "instructions": [
+      { "order": 1, "instruction": "Whisk eggs with milk, salt, and pepper" },
+      { "order": 2, "instruction": "Chop vegetables" },
+      { "order": 3, "instruction": "Melt butter in a non-stick pan" },
+      { "order": 4, "instruction": "Sauté vegetables until softened" },
+      { "order": 5, "instruction": "Pour egg mixture over vegetables" },
+      { "order": 6, "instruction": "Cook until edges are set, then fold and flip" },
+      { "order": 7, "instruction": "Add cheese and cook until melted" }
+    ],
+    "prepTime": 10,
+    "cookTime": 10,
+    "servings": 1,
+    "mealType": "breakfast"
+  },
+  {
+    "id": "5",
+    "name": "Breakfast Burrito",
+    "title": "Hearty Breakfast Burrito",
+    "description": "A filling breakfast wrap with eggs, beans, and cheese",
+    "ingredients": [
+      { "name": "large tortilla", "quantity": 1, "measure": "piece" },
+      { "name": "eggs", "quantity": 2, "measure": "large" },
+      { "name": "black beans", "quantity": 0.25, "measure": "cup" },
+      { "name": "cheddar cheese", "quantity": 0.25, "measure": "cup" },
+      { "name": "salsa", "quantity": 2, "measure": "tablespoons" },
+      { "name": "avocado", "quantity": 0.5, "measure": "medium" },
+      { "name": "salt", "quantity": 0.25, "measure": "teaspoon" },
+      { "name": "black pepper", "quantity": 0.25, "measure": "teaspoon" }
+    ],
+    "instructions": [
+      { "order": 1, "instruction": "Scramble eggs with salt and pepper" },
+      { "order": 2, "instruction": "Warm black beans" },
+      { "order": 3, "instruction": "Warm tortilla" },
+      { "order": 4, "instruction": "Layer eggs, beans, cheese, salsa, and avocado on tortilla" },
+      { "order": 5, "instruction": "Roll up the burrito" },
+      { "order": 6, "instruction": "Optional: grill the burrito for a crispy exterior" }
+    ],
+    "prepTime": 10,
+    "cookTime": 10,
+    "servings": 1,
+    "mealType": "breakfast"
+  },
+  {
+    "id": "6",
+    "name": "Chicken Caesar Salad",
+    "title": "Classic Chicken Caesar Salad",
+    "description": "A refreshing salad with grilled chicken and creamy dressing",
+    "ingredients": [
+      { "name": "romaine lettuce", "quantity": 1, "measure": "head" },
+      { "name": "grilled chicken breast", "quantity": 200, "measure": "grams" },
+      { "name": "croutons", "quantity": 0.5, "measure": "cup" },
+      { "name": "parmesan cheese", "quantity": 0.25, "measure": "cup" },
+      { "name": "caesar dressing", "quantity": 0.25, "measure": "cup" }
+    ],
+    "instructions": [
+      { "order": 1, "instruction": "Chop romaine lettuce" },
+      { "order": 2, "instruction": "Slice grilled chicken breast" },
+      { "order": 3, "instruction": "Toss lettuce with dressing" },
+      { "order": 4, "instruction": "Top with chicken, croutons, and parmesan" }
+    ],
+    "prepTime": 15,
+    "cookTime": 0,
+    "servings": 2,
+    "mealType": "lunch"
+  },
+  {
+    "id": "7",
+    "name": "Caprese Sandwich",
+    "title": "Fresh Caprese Sandwich",
+    "description": "A light Italian-inspired sandwich with mozzarella and tomato",
+    "ingredients": [
+      { "name": "ciabatta bread", "quantity": 1, "measure": "loaf" },
+      { "name": "fresh mozzarella", "quantity": 200, "measure": "grams" },
+      { "name": "tomatoes", "quantity": 2, "measure": "medium" },
+      { "name": "fresh basil leaves", "quantity": 1, "measure": "handful" },
+      { "name": "balsamic glaze", "quantity": 2, "measure": "tablespoons" },
+      { "name": "olive oil", "quantity": 1, "measure": "tablespoon" },
+      { "name": "salt", "quantity": 0.25, "measure": "teaspoon" },
+      { "name": "black pepper", "quantity": 0.25, "measure": "teaspoon" }
+    ],
+    "instructions": [
+      { "order": 1, "instruction": "Slice ciabatta bread in half" },
+      { "order": 2, "instruction": "Layer mozzarella and tomato slices" },
+      { "order": 3, "instruction": "Add basil leaves" },
+      { "order": 4, "instruction": "Drizzle with olive oil and balsamic glaze" },
+      { "order": 5, "instruction": "Season with salt and pepper" },
+      { "order": 6, "instruction": "Close sandwich and slice" }
+    ],
+    "prepTime": 10,
+    "cookTime": 0,
+    "servings": 2,
+    "mealType": "lunch"
+  },
+  {
+    "id": "8",
+    "name": "Quinoa Bowl",
+    "title": "Nourishing Quinoa Bowl",
+    "description": "A protein-packed lunch bowl with quinoa and roasted vegetables",
+    "ingredients": [
+      { "name": "quinoa", "quantity": 1, "measure": "cup" },
+      { "name": "mixed vegetables", "quantity": 2, "measure": "cups" },
+      { "name": "chickpeas", "quantity": 1, "measure": "can" },
+      { "name": "olive oil", "quantity": 2, "measure": "tablespoons" },
+      { "name": "lemon juice", "quantity": 1, "measure": "tablespoon" },
+      { "name": "salt", "quantity": 0.5, "measure": "teaspoon" },
+      { "name": "black pepper", "quantity": 0.25, "measure": "teaspoon" }
+    ],
+    "instructions": [
+      { "order": 1, "instruction": "Cook quinoa according to package instructions" },
+      { "order": 2, "instruction": "Roast mixed vegetables in olive oil" },
+      { "order": 3, "instruction": "Drain and rinse chickpeas" },
+      { "order": 4, "instruction": "Combine quinoa, roasted vegetables, and chickpeas" },
+      { "order": 5, "instruction": "Dress with lemon juice, salt, and pepper" }
+    ],
+    "prepTime": 10,
+    "cookTime": 25,
+    "servings": 2,
+    "mealType": "lunch"
+  },
+  {
+    "id": "9",
+    "name": "Turkey Wrap",
+    "title": "Healthy Turkey Wrap",
+    "description": "A quick and easy wrap with turkey and fresh vegetables",
+    "ingredients": [
+      { "name": "whole wheat tortilla", "quantity": 1, "measure": "large" },
+      { "name": "sliced turkey breast", "quantity": 100, "measure": "grams" },
+      { "name": "lettuce", "quantity": 1, "measure": "cup" },
+      { "name": "tomato", "quantity": 1, "measure": "medium" },
+      { "name": "cucumber", "quantity": 0.5, "measure": "medium" },
+      { "name": "hummus", "quantity": 2, "measure": "tablespoons" }
+    ],
+    "instructions": [
+      { "order": 1, "instruction": "Spread hummus on tortilla" },
+      { "order": 2, "instruction": "Layer turkey, lettuce, tomato, and cucumber" },
+      { "order": 3, "instruction": "Roll up tightly" },
+      { "order": 4, "instruction": "Cut in half and serve" }
+    ],
+    "prepTime": 10,
+    "cookTime": 0,
+    "servings": 1,
+    "mealType": "lunch"
+  },
+  {
+    "id": "10",
+    "name": "Tuna Salad",
+    "title": "Classic Tuna Salad",
+    "description": "A protein-rich salad perfect for a quick lunch",
+    "ingredients": [
+      { "name": "canned tuna", "quantity": 1, "measure": "can" },
+      { "name": "mayonnaise", "quantity": 2, "measure": "tablespoons" },
+      { "name": "celery", "quantity": 1, "measure": "stalk" },
+      { "name": "red onion", "quantity": 0.25, "measure": "small" },
+      { "name": "lemon juice", "quantity": 1, "measure": "teaspoon" },
+      { "name": "salt", "quantity": 0.25, "measure": "teaspoon" },
+      { "name": "black pepper", "quantity": 0.25, "measure": "teaspoon" }
+    ],
+    "instructions": [
+      { "order": 1, "instruction": "Drain tuna and flake with a fork" },
+      { "order": 2, "instruction": "Finely chop celery and red onion" },
+      { "order": 3, "instruction": "Mix tuna, mayonnaise, celery, and onion" },
+      { "order": 4, "instruction": "Add lemon juice, salt, and pepper" },
+      { "order": 5, "instruction": "Serve on bread or with crackers" }
+    ],
+    "prepTime": 10,
+    "cookTime": 0,
+    "servings": 2,
+    "mealType": "lunch"
+  },
+  {
+    "id": "11",
     "name": "Spaghetti Bolognese",
     "title": "Classic Spaghetti Bolognese",
     "description": "A hearty Italian pasta dish with a meaty tomato sauce",
