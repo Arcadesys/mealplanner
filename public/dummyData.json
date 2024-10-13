@@ -1,0 +1,61 @@
+[
+  {
+    "id": "1",
+    "name": "Spaghetti Bolognese",
+    "title": "Classic Spaghetti Bolognese",
+    "description": "A hearty Italian pasta dish with a meaty tomato sauce",
+    "ingredients": [
+      { "name": "spaghetti", "quantity": 500, "measure": "grams" },
+      { "name": "ground beef", "quantity": 400, "measure": "grams" },
+      { "name": "onion", "quantity": 1, "measure": "piece" },
+      { "name": "garlic", "quantity": 2, "measure": "cloves" },
+      { "name": "canned tomatoes", "quantity": 400, "measure": "grams" },
+      { "name": "tomato paste", "quantity": 2, "measure": "tablespoons" },
+      { "name": "olive oil", "quantity": 2, "measure": "tablespoons" },
+      { "name": "dried oregano", "quantity": 1, "measure": "teaspoon" },
+      { "name": "salt", "quantity": 1, "measure": "teaspoon" },
+      { "name": "black pepper", "quantity": 0.5, "measure": "teaspoon" }
+    ],
+    "instructions": [
+      { "order": 1, "instruction": "Boil water for pasta" },
+      { "order": 2, "instruction": "Chop onion and garlic" },
+      { "order": 3, "instruction": "Brown the ground beef" },
+      { "order": 4, "instruction": "Add onion and garlic, cook until softened" },
+      { "order": 5, "instruction": "Add tomatoes, tomato paste, and seasonings" },
+      { "order": 6, "instruction": "Simmer sauce for 20 minutes" },
+      { "order": 7, "instruction": "Cook pasta according to package instructions" },
+      { "order": 8, "instruction": "Drain pasta and combine with sauce" }
+    ],
+    "prepTime": 15,
+    "cookTime": 30,
+    "servings": 4
+  },
+  {
+    "id": "2",
+    "name": "Chicken Stir Fry",
+    "title": "Quick and Easy Chicken Stir Fry",
+    "description": "A colorful and flavorful Asian-inspired dish",
+    "ingredients": [
+      { "name": "chicken breast", "quantity": 500, "measure": "grams" },
+      { "name": "mixed vegetables", "quantity": 400, "measure": "grams" },
+      { "name": "soy sauce", "quantity": 3, "measure": "tablespoons" },
+      { "name": "vegetable oil", "quantity": 2, "measure": "tablespoons" },
+      { "name": "garlic", "quantity": 2, "measure": "cloves" },
+      { "name": "ginger", "quantity": 1, "measure": "tablespoon" },
+      { "name": "cornstarch", "quantity": 1, "measure": "tablespoon" },
+      { "name": "sesame oil", "quantity": 1, "measure": "teaspoon" }
+    ],
+    "instructions": [
+      { "order": 1, "instruction": "Cut chicken into bite-sized pieces" },
+      { "order": 2, "instruction": "Mix soy sauce, cornstarch, and sesame oil" },
+      { "order": 3, "instruction": "Heat oil in a wok or large skillet" },
+      { "order": 4, "instruction": "Stir-fry chicken until cooked through" },
+      { "order": 5, "instruction": "Add vegetables and stir-fry" },
+      { "order": 6, "instruction": "Add sauce mixture and cook until thickened" },
+      { "order": 7, "instruction": "Serve hot with rice or noodles" }
+    ],
+    "prepTime": 15,
+    "cookTime": 15,
+    "servings": 4
+  }
+]
