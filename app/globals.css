@@ -13,8 +13,10 @@
 
 /* Add more dark mode styles as needed */
 
-body {
-  @apply bg-gray-50 text-gray-900;
+@layer base {
+  body {
+    @apply bg-white dark:bg-gray-900 text-black dark:text-white;
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {

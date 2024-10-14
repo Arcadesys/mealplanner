@@ -83,7 +83,6 @@ const HomePage: React.FC = () => {
           <UnassignedRecipes recipes={unassignedRecipes} />
         </div>
         <div className="w-2/3 p-4 overflow-y-auto">
-          <h2 className="text-xl font-bold mb-4">Weekly Schedule</h2>
           <Scheduler assignedRecipes={assignedRecipes} />
         </div>
       </div>

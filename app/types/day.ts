@@ -1,5 +1,4 @@
 import { Recipe } from './recipe';
-import { Days } from './day';
 
 export enum Days {
   Monday = 'Monday',

@@ -14,7 +14,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
-      <body>
+      <body className="bg-white dark:bg-gray-900 text-black dark:text-white">
         <ErrorBoundary>
           <DarkModeProvider>
             <Navigation />

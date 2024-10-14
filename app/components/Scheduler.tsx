@@ -17,20 +17,20 @@ const Scheduler: React.FC<SchedulerProps> = ({ assignedRecipes }) => {
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="flex-1 bg-white p-2 border-b last:border-b-0 min-h-0"
+              className={`flex-1 p-2 border-b last:border-b-0 min-h-[100px] bg-${day.toLowerCase()} dark:bg-${day.toLowerCase()}/50 transition-colors duration-200`}
             >
               <h3 className="text-sm font-semibold mb-1">{day}</h3>
-              <div className="bg-gray-100 p-1 rounded min-h-[30px] flex flex-wrap items-start overflow-y-auto">
-                {assignedRecipes[day].map((recipe, index) => (
+              <div className="flex flex-wrap gap-2">
+                {assignedRecipes[day]?.map((recipe, index) => (
                   <Draggable key={recipe.id} draggableId={recipe.id} index={index}>
                     {(provided) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="bg-white p-1 rounded shadow m-1 text-xs"
+                        className="bg-white dark:bg-gray-700 p-2 rounded shadow text-black dark:text-white transition-colors duration-200"
                       >
-                        {recipe.name}
+                        <span className="text-sm">{recipe.name}</span>
                       </div>
                     )}
                   </Draggable>

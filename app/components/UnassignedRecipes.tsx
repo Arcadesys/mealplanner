@@ -22,10 +22,10 @@ const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({ recipes }) => {
                   ref={provided.innerRef}
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
-                  className="bg-white p-4 rounded shadow flex flex-col"
+                  className="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col"
                 >
-                  <h3 className="font-semibold">{recipe.name}</h3>
-                  <p className="text-sm text-gray-600">{recipe.description}</p>
+                  <h3 className="font-semibold dark:text-white">{recipe.name}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">{recipe.description}</p>
                 </div>
               )}
             </Draggable>
