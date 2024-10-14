@@ -60,11 +60,11 @@
 
 /* Home Page */
 .drawer-organizer {
-  @apply flex h-screen p-4 bg-yellow-200; /* Adjusted to use Tailwind color class */
+  @apply flex h-screen p-4 bg-yellow-200;
 }
 
 .home-unassigned-recipes {
-  @apply w-72 bg-teal-400 rounded-lg p-4 shadow-md overflow-y-auto max-h-screen-8 mr-4;
+  @apply flex-none w-72 bg-teal-400 rounded-lg p-4 shadow-md overflow-y-auto max-h-screen-8 mr-4;
 }
 
 .days-container {
@@ -72,7 +72,7 @@
 }
 
 .day-column {
-  @apply flex-1 p-4 rounded-lg shadow-md overflow-y-auto;
+  @apply flex flex-col flex-1 p-4 rounded-lg shadow-md overflow-y-auto;
 }
 
 .day-header {
@@ -118,15 +118,15 @@
 .sunday { @apply bg-orange-400; }
 
 .main-container {
-  @apply flex flex-row h-screen;
+  @apply flex h-screen;
 }
 
 .scheduler-container {
-  @apply flex-grow flex-shrink w-2/3;
+  @apply flex-grow overflow-y-auto;
 }
 
 .unassigned-recipes-container {
-  @apply w-1/3 bg-gray-100 p-4 overflow-y-auto;
+  @apply flex-none w-1/4 bg-gray-100 p-4 overflow-y-auto;
 }
 
 /* Custom Drag and Drop Classes */

@@ -13,7 +13,7 @@ const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({ recipes }) => {
         <div
           ref={provided.innerRef}
           {...provided.droppableProps}
-          className="space-y-4"
+          className="flex flex-col space-y-4"
         >
           {recipes.map((recipe, index) => (
             <Draggable key={recipe.id} draggableId={recipe.id} index={index}>
@@ -22,7 +22,7 @@ const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({ recipes }) => {
                   ref={provided.innerRef}
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
-                  className="bg-white p-4 rounded shadow"
+                  className="bg-white p-4 rounded shadow flex flex-col"
                 >
                   <h3 className="font-semibold">{recipe.name}</h3>
                   <p className="text-sm text-gray-600">{recipe.description}</p>
