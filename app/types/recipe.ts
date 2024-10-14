@@ -9,6 +9,7 @@ export interface Recipe {
   prepTime: number;
   cookTime: number;
   servings: number;
+  helpings?: number; // New property
 }
 
 // Individual ingredients in the recipe

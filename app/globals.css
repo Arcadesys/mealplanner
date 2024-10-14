@@ -4,7 +4,7 @@
 
 /* Add your custom styles here */
 .dark {
-  @apply bg-gray-900 text-white;
+  @apply bg-cartoon-black text-cartoon-white;
 }
 
 .dark nav {
@@ -15,7 +15,7 @@
 
 @layer base {
   body {
-    @apply bg-white dark:bg-gray-900 text-black dark:text-white;
+    @apply bg-cartoon-white dark:bg-cartoon-black text-cartoon-black dark:text-cartoon-white font-cartoon;
   }
 }
 
@@ -24,19 +24,19 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .recipe-card {
-  @apply bg-white p-4 rounded shadow transition-shadow hover:shadow-md;
+  @apply bg-cartoon-white p-4 rounded-cartoon shadow-cartoon transition-shadow hover:shadow-cartoon-hover;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #333333;
+    --foreground: #FFFFFF;
   }
 
   .recipe-card {
-    background-color: #2a2a2a;
-    border-color: #444;
-    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+    background-color: #333333;
+    border-color: #FFFFFF;
+    box-shadow: 0 4px 0 0 rgba(255, 255, 255, 0.2);
   }
 }
 

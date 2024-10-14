@@ -18,6 +18,27 @@ module.exports = {
         friday: '#FFB3BA',    // Light Red
         saturday: '#BAFFC9',  // Light Green (repeat)
         sunday: '#E6E6FA',    // Lavender
+        'cartoon-black': '#333333',
+        'cartoon-white': '#FFFFFF',
+      },
+      fontFamily: {
+        cartoon: ['Comic Sans MS', 'Comic Sans', 'cursive'],
+      },
+      boxShadow: {
+        'cartoon': '0 4px 0 0 rgba(0, 0, 0, 0.2)',
+        'cartoon-hover': '0 6px 0 0 rgba(0, 0, 0, 0.2)',
+      },
+      borderRadius: {
+        'cartoon': '20px',
+      },
+      animation: {
+        'bounce-slight': 'bounce-slight 1s infinite',
+      },
+      keyframes: {
+        'bounce-slight': {
+          '0%, 100%': { transform: 'translateY(-5%)' },
+          '50%': { transform: 'translateY(0)' },
+        }
       },
     },
   },
