@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const DarkModeContext = createContext({ darkMode: false, toggleDarkMode: () => {} });
 
-export const DarkModeProvider = ({ children }) => {
+export const DarkModeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {

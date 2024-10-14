@@ -1,7 +1,6 @@
 import React from 'react';
 import { DarkModeProvider } from './components/DarkModeProvider';
 import { Navigation } from './components/Navigation';
-import ErrorBoundary from './components/ErrorBoundary';
 import "./globals.css";
 
 interface RootLayoutProps {
@@ -11,17 +10,12 @@ interface RootLayoutProps {
 const RootLayout = ({ children }: RootLayoutProps) => {
   return (
     <html lang="en">
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </head>
-      <body className="bg-white dark:bg-gray-900 text-black dark:text-white">
-        <ErrorBoundary>
-          <DarkModeProvider>
-            <Navigation />
-            <main>{children}</main>
-          </DarkModeProvider>
-        </ErrorBoundary>
-      </body>
+      <DarkModeProvider>
+        <body className="bg-white dark:bg-gray-900 text-black dark:text-white">
+          <Navigation />
+          <main>{children}</main>
+        </body>
+      </DarkModeProvider>
     </html>
   );
 };
