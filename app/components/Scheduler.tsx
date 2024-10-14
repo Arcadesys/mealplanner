@@ -10,17 +10,17 @@ const Scheduler: React.FC<SchedulerProps> = ({ assignedRecipes }) => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto">
+    <div className="flex flex-col h-full">
       {days.map((day) => (
         <Droppable key={day} droppableId={day} direction="horizontal">
           {(provided) => (
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="flex-1 bg-white p-4 border-b last:border-b-0"
+              className="flex-1 bg-white p-2 border-b last:border-b-0 min-h-0"
             >
-              <h3 className="text-lg font-semibold mb-2">{day}</h3>
-              <div className="bg-gray-100 p-2 rounded min-h-[50px] flex flex-wrap items-start">
+              <h3 className="text-sm font-semibold mb-1">{day}</h3>
+              <div className="bg-gray-100 p-1 rounded min-h-[30px] flex flex-wrap items-start overflow-y-auto">
                 {assignedRecipes[day].map((recipe, index) => (
                   <Draggable key={recipe.id} draggableId={recipe.id} index={index}>
                     {(provided) => (
@@ -28,7 +28,7 @@ const Scheduler: React.FC<SchedulerProps> = ({ assignedRecipes }) => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="bg-white p-2 rounded shadow m-1"
+                        className="bg-white p-1 rounded shadow m-1 text-xs"
                       >
                         {recipe.name}
                       </div>
