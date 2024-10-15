@@ -1,1 +1,0 @@
-//a simple shopping list modal that a user can use in the grocery store.

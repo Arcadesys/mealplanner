@@ -3,7 +3,19 @@
 import React from 'react';
 import { useDarkMode } from './DarkModeProvider';
 
-export const Navigation = () => {
+type ViewType = 'PLAN' | 'SCHEDULE' | 'SHOP';
+
+interface NavigationProps {
+  currentView: ViewType;
+  setCurrentView?: (view: ViewType) => void;
+}
+
+export const Navigation: React.FC<NavigationProps> = ({ 
+  currentView, 
+  setCurrentView = () => console.warn('setCurrentView not provided') 
+}) => {
+  console.log('Navigation received setCurrentView:', typeof setCurrentView);
+  
   const { darkMode, toggleDarkMode } = useDarkMode();
 
   return (
@@ -11,9 +23,30 @@ export const Navigation = () => {
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-3xl font-bold text-blue-600 font-cartoon">MealPlanner, by BlindAI</div>
         <ul className="flex space-x-6">
-          <li><a href="/plan" className="text-red-500 hover:text-red-700 text-2xl hover:animate-bounce-slight">📅</a></li>
-          <li><a href="/recipes" className="text-green-500 hover:text-green-700 text-2xl hover:animate-bounce-slight">🍎</a></li>
-          <li><a href="/settings" className="text-purple-500 hover:text-purple-700 text-2xl hover:animate-bounce-slight">⚙️</a></li>
+          <li>
+            <button
+              onClick={() => setCurrentView('PLAN')}
+              className={`px-4 py-2 rounded ${currentView === 'PLAN' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+            >
+              Plan
+            </button>
+          </li>
+          <li>
+            <button
+              onClick={() => setCurrentView('SCHEDULE')}
+              className={`px-4 py-2 rounded ${currentView === 'SCHEDULE' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+            >
+              Schedule
+            </button>
+          </li>
+          <li>
+            <button
+              onClick={() => setCurrentView('SHOP')}
+              className={`px-4 py-2 rounded ${currentView === 'SHOP' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+            >
+              Shop
+            </button>
+          </li>
           <li>
             <button onClick={toggleDarkMode} className="text-purple-500 hover:text-purple-700 text-2xl hover:animate-bounce-slight">
               {darkMode ? '☀️' : '🌙'}
