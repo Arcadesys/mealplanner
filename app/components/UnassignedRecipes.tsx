@@ -49,6 +49,7 @@ const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({ recipes }) => {
                 onHelpingsChange={(newHelpings) => handleHelpingsChange(recipe.id, newHelpings)}
                 isOriginal={recipe.helpingIndex === 0}
                 stableUniqueId={recipe.stableUniqueId}
+                onOpenFullRecipe={() => {/* Define your function here */}} // Add this line
               />
               {recipe.helpingIndex > 0 && (
                 <div 

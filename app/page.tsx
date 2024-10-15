@@ -5,8 +5,16 @@ import Scheduler from './components/Scheduler';
 import UnassignedRecipes from './components/UnassignedRecipes';
 import { useRecipes } from './hooks/useRecipes';
 import { Recipe } from './types/recipe';
+import Modal from 'react-modal';
 
 const HomePage: React.FC = () => {
+  useEffect(() => {
+    // Ensure this runs only on the client side
+    if (typeof window !== 'undefined' && document.querySelector('#__next')) {
+      Modal.setAppElement('#__next');
+    }
+  }, []);
+
   const { recipes: initialRecipes, loading, error } = useRecipes();
   const [unassignedRecipes, setUnassignedRecipes] = useState<Recipe[]>([]);
   const [assignedRecipes, setAssignedRecipes] = useState<{ [key: string]: Recipe[] }>({
