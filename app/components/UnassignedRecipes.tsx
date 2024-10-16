@@ -1,5 +1,6 @@
-import React from 'react';
-import { Droppable, Draggable } from '@hello-pangea/dnd';
+import React, { useMemo } from 'react';
+import { Droppable } from '@hello-pangea/dnd';
+import RecipeCard from './RecipeCard';
 import { Recipe } from '../types/recipe';
 
 interface UnassignedRecipesProps {
@@ -7,28 +8,39 @@ interface UnassignedRecipesProps {
 }
 
 const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({ recipes }) => {
+  // Generate stable IDs for each recipe card
+  const recipeCards = useMemo(() => {
+    return recipes.map((recipe, recipeIndex) => {
+      const stableUniqueId = `${recipe.id}-${recipeIndex}-${Date.now()}`;
+      return { 
+        ...recipe, 
+        stableUniqueId,
+        id: stableUniqueId // Override the original id with our new unique id
+      };
+    });
+  }, [recipes]);
+
   return (
     <Droppable droppableId="unassigned">
       {(provided) => (
         <div
-          ref={provided.innerRef}
           {...provided.droppableProps}
-          className="space-y-4"
+          ref={provided.innerRef}
+          className="unassigned-recipes"
         >
-          {recipes.map((recipe, index) => (
-            <Draggable key={recipe.id} draggableId={recipe.id} index={index}>
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.draggableProps}
-                  {...provided.dragHandleProps}
-                  className="bg-white p-4 rounded shadow"
-                >
-                  <h3 className="font-semibold">{recipe.name}</h3>
-                  <p className="text-sm text-gray-600">{recipe.description}</p>
-                </div>
-              )}
-            </Draggable>
+          {recipeCards.map((recipe, index) => (
+            <div key={recipe.stableUniqueId} className="relative mb-4">
+              <RecipeCard
+                title={recipe.title}
+                description={recipe.description}
+                recipe={recipe}
+                index={index}
+                isOriginal={true}
+                stableUniqueId={recipe.stableUniqueId}
+                onOpenFullRecipe={() => {/* Define your function here */}}
+                onDelete={() => {/* Add your delete logic here */}}
+              />
+            </div>
           ))}
           {provided.placeholder}
         </div>

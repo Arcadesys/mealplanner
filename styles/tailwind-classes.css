@@ -9,13 +9,13 @@
   --unassigned: #708090; /* Sad, cold slate gray */
   --primary: #FF6B6B; /* Coral red */
   --secondary: #FFD700; /* Bright yellow for highlights */
-  --day-monday: #FF69B4; /* Crayola Pink */
-  --day-tuesday: #1E90FF; /* Crayola Blue */
-  --day-wednesday: #32CD32; /* Crayola Green */
-  --day-thursday: #FFA500; /* Crayola Orange */
-  --day-friday: #9400D3; /* Crayola Violet */
-  --day-saturday: #00CED1; /* Crayola Dark Turquoise */
-  --day-sunday: #FF4500; /* Crayola Orange Red */
+  --day-monday: #FF6B6B; /* Coral Red */
+  --day-tuesday: #4ECDC4; /* Caribbean Green */
+  --day-wednesday: #FED766; /* Mustard Yellow */
+  --day-thursday: #9B5DE5; /* Medium Purple */
+  --day-friday: #45B7D1; /* Cerulean Blue */
+  --day-saturday: #FF9F1C; /* Marigold */
+  --day-sunday: #7AE582; /* Light Green */
 }
 
 /* Dark Mode Styles */
@@ -60,11 +60,11 @@
 
 /* Home Page */
 .drawer-organizer {
-  @apply flex h-screen p-4 bg-yellow-200; /* Adjusted to use Tailwind color class */
+  @apply flex h-screen p-4 bg-yellow-200;
 }
 
 .home-unassigned-recipes {
-  @apply w-72 bg-teal-400 rounded-lg p-4 shadow-md overflow-y-auto max-h-screen-8 mr-4;
+  @apply flex-none w-72 bg-teal-400 rounded-lg p-4 shadow-md overflow-y-auto max-h-screen-8 mr-4;
 }
 
 .days-container {
@@ -72,7 +72,7 @@
 }
 
 .day-column {
-  @apply flex-1 p-4 rounded-lg shadow-md overflow-y-auto;
+  @apply flex flex-col flex-1 p-4 rounded-lg shadow-md overflow-y-auto;
 }
 
 .day-header {
@@ -109,24 +109,24 @@
 }
 
 /* Day Colors */
-.monday { @apply bg-yellow-400; }
-.tuesday { @apply bg-teal-400; }
-.wednesday { @apply bg-blue-600; }
-.thursday { @apply bg-pink-600; }
-.friday { @apply bg-blue-900 text-white; }
-.saturday { @apply bg-blue-300; }
-.sunday { @apply bg-orange-400; }
+.monday { @apply bg-[var(--day-monday)] text-white; }
+.tuesday { @apply bg-[var(--day-tuesday)] text-white; }
+.wednesday { @apply bg-[var(--day-wednesday)] text-black; }
+.thursday { @apply bg-[var(--day-thursday)] text-black; }
+.friday { @apply bg-[var(--day-friday)] text-white; }
+.saturday { @apply bg-[var(--day-saturday)] text-black; }
+.sunday { @apply bg-[var(--day-sunday)] text-white; }
 
 .main-container {
-  @apply flex flex-row h-screen;
+  @apply flex h-screen;
 }
 
 .scheduler-container {
-  @apply flex-grow flex-shrink w-2/3;
+  @apply flex-grow overflow-y-auto;
 }
 
 .unassigned-recipes-container {
-  @apply w-1/3 bg-gray-100 p-4 overflow-y-auto;
+  @apply flex-none w-1/4 bg-gray-100 p-4 overflow-y-auto;
 }
 
 /* Custom Drag and Drop Classes */
@@ -140,4 +140,31 @@
 
 .droppable-hover {
   @apply border-blue-500;
+}
+
+/* FullRecipeView Dark Mode Styles */
+.full-recipe-view {
+  @apply bg-white text-black p-8 rounded-lg;
+}
+
+.dark .full-recipe-view {
+  @apply bg-gray-800 text-white;
+}
+
+.full-recipe-view h1,
+.full-recipe-view h2 {
+  @apply text-blue-600;
+}
+
+.dark .full-recipe-view h1,
+.dark .full-recipe-view h2 {
+  @apply text-blue-400;
+}
+
+.full-recipe-view button {
+  @apply bg-blue-500 text-white hover:bg-blue-600;
+}
+
+.dark .full-recipe-view button {
+  @apply bg-blue-700 hover:bg-blue-800;
 }

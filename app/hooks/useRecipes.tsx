@@ -1,9 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Recipe } from '../types/recipe';
-import dummyRecipes from '../data/dummyData.json';
-
-    // Start of Selection
-    // Using our existing /recipes route instead of dummy data
 
 export const useRecipes = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -11,14 +7,17 @@ export const useRecipes = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Simulating an API call
     const fetchRecipes = async () => {
       try {
-        // In a real scenario, this would be an API call
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Fake delay
-        setRecipes(dummyRecipes);
+        const response = await fetch('/api/recipes');
+        if (!response.ok) {
+          throw new Error('Failed to fetch recipes');
+        }
+        const data = await response.json();
+        setRecipes(data);
         setLoading(false);
       } catch (err) {
+        console.error('Error fetching recipes:', err);
         setError('Failed to fetch recipes');
         setLoading(false);
       }

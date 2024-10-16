@@ -30,7 +30,7 @@ const NotFoundPage = () => {
       textAlign: 'center' 
     }}>
       <h1>404 - Page Not Found</h1>
-      <p>But don't worry, failure is just another step towards success:</p>
+      <p>But don&apos;t worry, failure is just another step towards success:</p>
       <blockquote style={{ 
         fontSize: '1.2em', 
         fontStyle: 'italic', 
