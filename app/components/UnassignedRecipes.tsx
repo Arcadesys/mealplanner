@@ -10,14 +10,14 @@ interface UnassignedRecipesProps {
 const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({ recipes }) => {
   // Generate stable IDs for each recipe card
   const recipeCards = useMemo(() => {
-    return recipes.map((recipe, recipeIndex) => {
+    return recipes?.map((recipe, recipeIndex) => {
       const stableUniqueId = `${recipe.id}-${recipeIndex}-${Date.now()}`;
       return { 
         ...recipe, 
         stableUniqueId,
         id: stableUniqueId // Override the original id with our new unique id
       };
-    });
+    }) || [];
   }, [recipes]);
 
   return (
