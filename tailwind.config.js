@@ -22,7 +22,7 @@ module.exports = {
         'cartoon-white': '#FFFFFF',
       },
       fontFamily: {
-        cartoon: ['Comic Sans MS', 'Comic Sans', 'cursive'],
+        cartoon: ['Comic Sans MS', 'Comic Sans', 'sans-serif'],
       },
       boxShadow: {
         'cartoon': '0 4px 0 0 rgba(0, 0, 0, 0.2)',
