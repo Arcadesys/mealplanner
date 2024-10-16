@@ -29,7 +29,7 @@ module.exports = {
         'cartoon-hover': '0 6px 0 0 rgba(0, 0, 0, 0.2)',
       },
       borderRadius: {
-        'cartoon': '20px',
+        'cartoon': '5px',
       },
       animation: {
         'bounce-slight': 'bounce-slight 1s infinite',

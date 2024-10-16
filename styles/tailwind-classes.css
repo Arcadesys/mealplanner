@@ -1,24 +1,27 @@
 /* app/styles/tailwind-classes.css */
 
+/* Import Tailwind's base styles, components, and utilities */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Variables */
+/* Custom color variables for the application */
 :root {
-  --unassigned: #708090; /* Sad, cold slate gray */
-  --primary: #FF6B6B; /* Coral red */
-  --secondary: #FFD700; /* Bright yellow for highlights */
-  --day-monday: #FF6B6B; /* Coral Red */
-  --day-tuesday: #4ECDC4; /* Caribbean Green */
-  --day-wednesday: #FED766; /* Mustard Yellow */
-  --day-thursday: #9B5DE5; /* Medium Purple */
-  --day-friday: #45B7D1; /* Cerulean Blue */
-  --day-saturday: #FF9F1C; /* Marigold */
-  --day-sunday: #7AE582; /* Light Green */
+  --unassigned: #708090; /* Slate gray for unassigned items */
+  --primary: #FF6B6B; /* Coral red for primary elements */
+  --secondary: #FFD700; /* Bright yellow for secondary elements */
+  
+  /* Day-specific colors for visual distinction */
+  --day-monday: #FF6B6B;
+  --day-tuesday: #4ECDC4;
+  --day-wednesday: #FED766;
+  --day-thursday: #9B5DE5;
+  --day-friday: #45B7D1;
+  --day-saturday: #FF9F1C;
+  --day-sunday: #7AE582;
 }
 
-/* Dark Mode Styles */
+/* Dark mode color adjustments */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -26,14 +29,18 @@
   }
 }
 
-/* Custom Utility Classes */
+/* Custom utility class for text balancing */
 .text-balance {
   @apply text-wrap balance;
 }
 
-/* Recipe Card */
+/* Recipe card styles and interactions */
 .recipe-card {
-  @apply bg-white rounded-lg shadow-md p-4 mb-4 transition-all hover:shadow-lg;
+  @apply bg-white text-cartoon-black shadow-md p-4 mb-4 transition-all hover:shadow-lg;
+}
+
+.dark .recipe-card {
+  @apply bg-cartoon-black text-cartoon-white;
 }
 
 .recipe-card:hover,
@@ -49,7 +56,7 @@
   @apply text-gray-600;
 }
 
-/* Unassigned Recipes */
+/* Unassigned recipes section styling */
 .unassigned-recipes {
   @apply flex flex-col h-full overflow-y-auto p-4 bg-gray-100 rounded-lg shadow-md;
 }
