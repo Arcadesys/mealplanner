@@ -141,3 +141,30 @@
 .droppable-hover {
   @apply border-blue-500;
 }
+
+/* FullRecipeView Dark Mode Styles */
+.full-recipe-view {
+  @apply bg-white text-black p-8 rounded-lg;
+}
+
+.dark .full-recipe-view {
+  @apply bg-gray-800 text-white;
+}
+
+.full-recipe-view h1,
+.full-recipe-view h2 {
+  @apply text-blue-600;
+}
+
+.dark .full-recipe-view h1,
+.dark .full-recipe-view h2 {
+  @apply text-blue-400;
+}
+
+.full-recipe-view button {
+  @apply bg-blue-500 text-white hover:bg-blue-600;
+}
+
+.dark .full-recipe-view button {
+  @apply bg-blue-700 hover:bg-blue-800;
+}

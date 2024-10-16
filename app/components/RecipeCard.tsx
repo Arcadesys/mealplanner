@@ -1,20 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Draggable } from '@hello-pangea/dnd';
 import { Recipe } from '../types/recipe';
+import FullRecipeView from './FullRecipeView';
+import Modal from 'react-modal';
 
 interface RecipeCardProps {
   title: string;
   description: string;
   recipe: Recipe;
   index: number;
-  helpings: number;
-  onHelpingsChange: (newHelpings: number) => void;
+  onDelete: () => void;
   isOriginal: boolean;
   stableUniqueId: string;
   onOpenFullRecipe: (recipe: Recipe) => void;
 }
 
-const RecipeCard: React.FC<RecipeCardProps> = ({ title, description, recipe, index, helpings, onHelpingsChange, isOriginal, stableUniqueId, onOpenFullRecipe }) => {
+const RecipeCard: React.FC<RecipeCardProps> = ({ title, description, recipe, index, onDelete, isOriginal, stableUniqueId, onOpenFullRecipe }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <Draggable draggableId={stableUniqueId} index={index}>
@@ -30,22 +40,29 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ title, description, recipe, ind
           {isOriginal && (
             <div className="flex items-center justify-between">
               <button
-                onClick={() => onHelpingsChange(0)}
+//empty for now
                 className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
               >
                 Delete
               </button>
               <button
-                onClick={() => {
-                  // Open FullRecipeModal
-                  onOpenFullRecipe(recipe);
-                }}
+                onClick={handleOpenModal}
                 className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded"
               >
                 View Full Recipe
               </button>
             </div>
           )}
+          <Modal
+            isOpen={isModalOpen}
+            onRequestClose={handleCloseModal}
+            contentLabel="Full Recipe View"
+          >
+            <FullRecipeView
+              recipe={recipe}
+              onClose={handleCloseModal}
+            />
+          </Modal>
         </div>
       )}
     </Draggable>

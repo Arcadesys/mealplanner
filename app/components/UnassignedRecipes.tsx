@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Droppable } from '@hello-pangea/dnd';
 import RecipeCard from './RecipeCard';
 import { Recipe } from '../types/recipe';
@@ -8,27 +8,17 @@ interface UnassignedRecipesProps {
 }
 
 const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({ recipes }) => {
-  const [helpings, setHelpings] = useState<{ [key: string]: number }>({});
-
-  const handleHelpingsChange = useCallback((recipeId: string, newHelpings: number) => {
-    setHelpings(prev => ({ ...prev, [recipeId]: newHelpings }));
-  }, []);
-
   // Generate stable IDs for each recipe card
   const recipeCards = useMemo(() => {
-    return recipes.flatMap((recipe, recipeIndex) => {
-      const recipeHelpings = helpings[recipe.id] || 1;
-      return Array.from({ length: recipeHelpings }, (_, helpingIndex) => {
-        const stableUniqueId = `${recipe.id}-${recipeIndex}-${helpingIndex}-${Date.now()}`;
-        return { 
-          ...recipe, 
-          stableUniqueId, 
-          helpingIndex,
-          id: stableUniqueId // Override the original id with our new unique id
-        };
-      });
+    return recipes.map((recipe, recipeIndex) => {
+      const stableUniqueId = `${recipe.id}-${recipeIndex}-${Date.now()}`;
+      return { 
+        ...recipe, 
+        stableUniqueId,
+        id: stableUniqueId // Override the original id with our new unique id
+      };
     });
-  }, [recipes, helpings]);
+  }, [recipes]);
 
   return (
     <Droppable droppableId="unassigned">
@@ -45,21 +35,11 @@ const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({ recipes }) => {
                 description={recipe.description}
                 recipe={recipe}
                 index={index}
-                helpings={helpings[recipe.id] || 1}
-                onHelpingsChange={(newHelpings) => handleHelpingsChange(recipe.id, newHelpings)}
-                isOriginal={recipe.helpingIndex === 0}
+                isOriginal={true}
                 stableUniqueId={recipe.stableUniqueId}
-                onOpenFullRecipe={() => {/* Define your function here */}} // Add this line
+                onOpenFullRecipe={() => {/* Define your function here */}}
+                onDelete={() => {/* Add your delete logic here */}}
               />
-              {recipe.helpingIndex > 0 && (
-                <div 
-                  className="absolute inset-x-0 bottom-0 h-1/2 bg-gray-200 dark:bg-gray-700 -z-10 transform translate-y-1 rounded-b-lg"
-                  style={{ 
-                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-                    clipPath: 'inset(8px 0px 0px 0px)'
-                  }}
-                />
-              )}
             </div>
           ))}
           {provided.placeholder}
