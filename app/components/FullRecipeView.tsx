@@ -1,5 +1,5 @@
 import React from 'react';
-import { Recipe } from '@types/recipe';
+import { Recipe } from '../types/recipe';
 
 interface FullRecipeViewProps {
   recipe: Recipe;
@@ -44,9 +44,17 @@ const FullRecipeView: React.FC<FullRecipeViewProps> = ({ recipe, onClose, onSave
       <div className="mb-4">
         <label className="block text-sm font-medium mb-1">Instructions</label>
         <ol className="list-decimal list-inside">
-          {recipe.instructions.map((instruction, index) => (
-            <li key={index}>{instruction}</li>
-          ))}
+          {Array.isArray(recipe.instructions) ? (
+            recipe.instructions.map((instruction, index) => (
+              <li key={index}>{instruction}</li>
+            ))
+          ) : typeof recipe.instructions === 'string' ? (
+            <li>{recipe.instructions}</li>
+          ) : (
+            Object.entries(recipe.instructions).map(([key, value]) => (
+              <li key={key}>{`${key}: ${value}`}</li>
+            ))
+          )}
         </ol>
       </div>
 
