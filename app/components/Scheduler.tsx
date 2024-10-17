@@ -1,13 +1,15 @@
 import React from 'react';
 import { Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { Recipe } from '../types/recipe';
+import { FaEdit } from 'react-icons/fa';
 
 interface SchedulerProps {
   assignedRecipes: { [key: string]: Recipe[] };
   onDragEnd: (result: DropResult) => void;
+  onEditRecipe: (recipeId: string) => void;
 }
 
-const Scheduler: React.FC<SchedulerProps> = ({ assignedRecipes, onDragEnd }) => {
+const Scheduler: React.FC<SchedulerProps> = ({ assignedRecipes, onDragEnd, onEditRecipe }) => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
   return (
@@ -30,9 +32,15 @@ const Scheduler: React.FC<SchedulerProps> = ({ assignedRecipes, onDragEnd }) => 
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className={`recipe-card bg-${day.toLowerCase()}-200 dark:bg-${day.toLowerCase()}-700 text-${day.toLowerCase()}-800 dark:text-${day.toLowerCase()}-100`}
+                          className={`recipe-card bg-${day.toLowerCase()}-200 dark:bg-${day.toLowerCase()}-700 text-${day.toLowerCase()}-800 dark:text-${day.toLowerCase()}-100 flex items-center justify-between`}
                         >
                           <span className="text-sm">{recipe.name || recipe.title}</span>
+                          <button
+                            onClick={() => onEditRecipe(recipe.id)}
+                            className="ml-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
+                          >
+                            <FaEdit size={24} />
+                          </button>
                         </div>
                       )}
                     </Draggable>

@@ -15,6 +15,7 @@ const ScheduleView: React.FC = () => {
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const [viewMode, setViewMode] = useState<'schedule' | 'recipe'>('schedule');
 
   useEffect(() => {
     if (initialRecipes.length > 0) {
@@ -52,15 +53,34 @@ const ScheduleView: React.FC = () => {
     setAssignedRecipes(newAssignedRecipes);
   };
 
-  const openRecipeModal = (recipe: Recipe) => {
+  const openRecipeView = (recipe: Recipe) => {
     setSelectedRecipe(recipe);
-    setIsModalOpen(true);
+    setViewMode('recipe');
+  };
+
+  const closeRecipeView = () => {
+    setSelectedRecipe(null);
+    setViewMode('schedule');
   };
 
   const handleSaveRecipe = (updatedRecipe: Recipe) => {
     // Implement save logic here
     console.log('Saving updated recipe:', updatedRecipe);
     // You might want to update the recipe in your state or send it to an API
+    closeRecipeView();
+  };
+
+  const handleEditRecipe = (recipeId: string) => {
+    // Find the recipe in either unassigned or assigned recipes
+    const recipe = unassignedRecipes.find(r => r.id === recipeId) ||
+      Object.values(assignedRecipes).flat().find(r => r.id === recipeId);
+    
+    if (recipe) {
+      openRecipeView(recipe);
+    } else {
+      console.error(`Recipe with id ${recipeId} not found`);
+      // Optionally, you could show a user-friendly error message here
+    }
   };
 
   if (loading) return (
@@ -80,20 +100,27 @@ const ScheduleView: React.FC = () => {
           <UnassignedRecipes 
             recipes={unassignedRecipes} 
             setRecipes={setUnassignedRecipes} 
-            onRecipeClick={openRecipeModal} 
+            onRecipeClick={openRecipeView} 
           />
         </div>
         <div className="w-2/3 p-4">
-          <Scheduler assignedRecipes={assignedRecipes} onRecipeClick={openRecipeModal} />
+          {viewMode === 'schedule' ? (
+            <Scheduler
+              assignedRecipes={assignedRecipes}
+              onDragEnd={onDragEnd}
+              onEditRecipe={handleEditRecipe}
+            />
+          ) : (
+            selectedRecipe && (
+              <FullRecipeView
+                recipe={selectedRecipe}
+                onClose={closeRecipeView}
+                onSave={handleSaveRecipe}
+              />
+            )
+          )}
         </div>
       </div>
-      {isModalOpen && selectedRecipe && (
-        <FullRecipeView
-          recipe={selectedRecipe}
-          onClose={() => setIsModalOpen(false)}
-          onSave={handleSaveRecipe}
-        />
-      )}
     </DragDropContext>
   );
 };
