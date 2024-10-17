@@ -29,9 +29,9 @@ const Scheduler: React.FC<SchedulerProps> = ({ assignedRecipes }) => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className={`recipe-card bg-${day.color}-200 dark:bg-${day.color}-700 text-${day.color}-800 dark:text-${day.color}-100`}
+                          className={`recipe-card bg-${day.toLowerCase()}-200 dark:bg-${day.toLowerCase()}-700 text-${day.toLowerCase()}-800 dark:text-${day.toLowerCase()}-100`}
                         >
-                          <span className="text-sm">{recipe.name || 'Unnamed Recipe'}</span>
+                          <span className="text-sm">{recipe.name || recipe.title}</span>
                         </div>
                       )}
                     </Draggable>
