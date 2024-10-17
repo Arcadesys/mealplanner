@@ -74,7 +74,11 @@ const ScheduleView: React.FC = () => {
       <div className="flex h-full">
         <div className="w-1/3 p-4 overflow-y-auto">
           <h2 className="text-xl font-bold mb-4">Unassigned Recipes</h2>
-          <UnassignedRecipes recipes={unassignedRecipes} onRecipeClick={openRecipeModal} />
+          <UnassignedRecipes 
+            recipes={unassignedRecipes} 
+            setRecipes={setUnassignedRecipes} 
+            onRecipeClick={openRecipeModal} 
+          />
         </div>
         <div className="w-2/3 p-4">
           <Scheduler assignedRecipes={assignedRecipes} onRecipeClick={openRecipeModal} />

@@ -5,10 +5,9 @@ import { Recipe } from '../types/recipe';
 import AddRecipeInline from './AddRecipeInline';
 import FullRecipeView from './FullRecipeView';
 
-const UnassignedRecipes: React.FC = () => {
+const UnassignedRecipes: React.FC<{ recipes: Recipe[], setRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>, onRecipeClick: (recipe: Recipe) => void }> = ({ recipes, setRecipes, onRecipeClick }) => {
   console.log('UnassignedRecipes component rendering');
 
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [isFullRecipeViewOpen, setIsFullRecipeViewOpen] = useState(false);
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
   const [isAddingRecipe, setIsAddingRecipe] = useState(false);
@@ -151,7 +150,8 @@ const UnassignedRecipes: React.FC = () => {
                   {...recipe}
                   index={index}
                   isOriginal={true}
-                  onEdit={handleEditRecipe}
+                  onEdit={onRecipeClick}
+                  className="recipe-card"
                 />
               </div>
             ))}
