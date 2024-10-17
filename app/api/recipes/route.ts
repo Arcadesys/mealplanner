@@ -3,25 +3,55 @@ import { NextResponse } from 'next/server';
 const LOCAL_STORAGE_KEY = 'recipes';
 
 // Demo recipes
-const demoRecipes = [
+const demoRecipes: Recipe[] = [
   {
     id: '1',
     title: "Tuna Casserole",
     description: "A simple and delicious tuna casserole.",
-    ingredients: [
-      { name: "canned tuna", quantity: 2, measure: "cans" },
-      { name: "pasta", quantity: 2, measure: "cups" },
-      { name: "cheese", quantity: 1, measure: "cup" }
-    ],
+    ingredients: {
+      "canned tuna": "2 cans",
+      "pasta": "2 cups",
+      "cheese": "1 cup"
+    },
     instructions: [
-      { order: 1, instruction: "Mix all ingredients in a casserole dish." },
-      { order: 2, instruction: "Bake at 350°F for 20 minutes." }
-    ],
-    prepTime: 10,
-    cookTime: 20,
-    servings: 4
+      "Mix all ingredients in a casserole dish.",
+      "Bake at 350°F for 20 minutes."
+    ]
   },
-  // ... add more demo recipes here
+  {
+    id: '2',
+    title: "Spaghetti Carbonara",
+    description: "Classic Italian pasta dish with eggs, cheese, and bacon.",
+    ingredients: {
+      "spaghetti": "1 pound",
+      "bacon": "8 slices",
+      "eggs": "4 large",
+      "Parmesan cheese": "1 cup grated"
+    },
+    instructions: [
+      "Cook spaghetti according to package instructions.",
+      "Fry bacon until crispy, then crumble.",
+      "Beat eggs with grated cheese.",
+      "Toss hot pasta with egg mixture and bacon."
+    ]
+  },
+  {
+    id: '3',
+    title: "Vegetable Stir Fry",
+    description: "Quick and healthy vegetable stir fry with soy sauce.",
+    ingredients: {
+      "mixed vegetables": "4 cups",
+      "soy sauce": "2 tablespoons",
+      "vegetable oil": "1 tablespoon",
+      "garlic": "2 cloves, minced"
+    },
+    instructions: [
+      "Heat oil in a wok or large skillet.",
+      "Add garlic and stir-fry for 30 seconds.",
+      "Add vegetables and cook for 5-7 minutes.",
+      "Stir in soy sauce and serve hot."
+    ]
+  }
 ];
 
 let recipes = demoRecipes;
