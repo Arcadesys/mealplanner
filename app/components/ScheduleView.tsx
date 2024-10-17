@@ -31,15 +31,18 @@ const ScheduleView: React.FC = () => {
     const destDay = destination.droppableId;
 
     const newAssignedRecipes = { ...assignedRecipes };
+    let newUnassignedRecipes = [...unassignedRecipes];
 
     if (sourceDay === 'unassigned') {
       // Moving from unassigned to a day
-      const [movedRecipe] = unassignedRecipes.splice(source.index, 1);
+      const [movedRecipe] = newUnassignedRecipes.splice(source.index, 1);
       newAssignedRecipes[destDay].splice(destination.index, 0, movedRecipe);
+      setUnassignedRecipes(newUnassignedRecipes);
     } else if (destDay === 'unassigned') {
       // Moving from a day to unassigned
       const [movedRecipe] = newAssignedRecipes[sourceDay].splice(source.index, 1);
-      setUnassignedRecipes(prev => [...prev, movedRecipe]);
+      newUnassignedRecipes.splice(destination.index, 0, movedRecipe);
+      setUnassignedRecipes(newUnassignedRecipes);
     } else {
       // Moving between days
       const [movedRecipe] = newAssignedRecipes[sourceDay].splice(source.index, 1);

@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
+import { Droppable } from '@hello-pangea/dnd';
 import RecipeCard from './RecipeCard';
 import { Recipe } from '../types/recipe';
 import AddRecipeInline from './AddRecipeInline';
 import FullRecipeView from './FullRecipeView';
-import Scheduler from './Scheduler';
 
-const UnassignedRecipes: React.FC = () => {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [assignedRecipes, setAssignedRecipes] = useState<{ [key: string]: Recipe[] }>({});
+const UnassignedRecipes: React.FC<{ recipes: Recipe[], setRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>, onRecipeClick: (recipe: Recipe) => void }> = ({ recipes, setRecipes, onRecipeClick }) => {
+  console.log('UnassignedRecipes component rendering');
+
+  const [isFullRecipeViewOpen, setIsFullRecipeViewOpen] = useState(false);
+  const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
   const [isAddingRecipe, setIsAddingRecipe] = useState(false);
-  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
 
   useEffect(() => {
     // Fetch recipes from API
@@ -30,60 +30,19 @@ const UnassignedRecipes: React.FC = () => {
     fetchRecipes();
   }, []);
 
-  const onDragEnd = (result: DropResult) => {
-    const { source, destination } = result;
-
-    if (!destination) {
-      return;
-    }
-
-    if (source.droppableId === destination.droppableId) {
-      // Reordering within the same list
-      const items = reorder(
-        source.droppableId === 'unassigned' ? recipes : assignedRecipes[source.droppableId],
-        source.index,
-        destination.index
-      );
-
-      if (source.droppableId === 'unassigned') {
-        setRecipes(items);
-      } else {
-        setAssignedRecipes({
-          ...assignedRecipes,
-          [source.droppableId]: items,
-        });
-      }
-    } else {
-      // Moving between lists
-      const result = move(
-        source.droppableId === 'unassigned' ? recipes : assignedRecipes[source.droppableId],
-        destination.droppableId === 'unassigned' ? recipes : assignedRecipes[destination.droppableId],
-        source,
-        destination
-      );
-
-      if (source.droppableId === 'unassigned') {
-        setRecipes(result[source.droppableId]);
-        setAssignedRecipes({
-          ...assignedRecipes,
-          [destination.droppableId]: result[destination.droppableId],
-        });
-      } else {
-        setAssignedRecipes({
-          ...assignedRecipes,
-          [source.droppableId]: result[source.droppableId],
-          [destination.droppableId]: result[destination.droppableId],
-        });
-      }
-    }
-  };
+  const recipeCards = useMemo(() => recipes.map((recipe, index) => ({
+    ...recipe,
+    stableUniqueId: `${recipe.id}-${index}-${Date.now()}`,
+  })), [recipes]);
 
   const handleOpenFullRecipe = (recipe: Recipe) => {
-    setSelectedRecipe(recipe);
+    setEditingRecipe(recipe);
+    setIsFullRecipeViewOpen(true);
   };
 
   const handleCloseFullRecipe = () => {
-    setSelectedRecipe(null);
+    setIsFullRecipeViewOpen(false);
+    setEditingRecipe(null);
   };
 
   const handleAddRecipe = async (newRecipe: { title: string }) => {
@@ -152,17 +111,20 @@ const UnassignedRecipes: React.FC = () => {
 
   const handleEditRecipe = useCallback((recipe: Recipe) => {
     console.log('handleEditRecipe called with:', recipe);
-    setSelectedRecipe(recipe);
+    setEditingRecipe(recipe);
+    setIsFullRecipeViewOpen(true);
   }, []);
 
   useEffect(() => {
     console.log('State changed:');
-    console.log('selectedRecipe:', selectedRecipe);
-  }, [selectedRecipe]);
+    console.log('editingRecipe:', editingRecipe);
+    console.log('isFullRecipeViewOpen:', isFullRecipeViewOpen);
+  }, [editingRecipe, isFullRecipeViewOpen]);
 
   // ... in your render method, right before returning JSX
   console.log('About to render UnassignedRecipes');
-  console.log('Current selectedRecipe:', selectedRecipe);
+  console.log('Current editingRecipe:', editingRecipe);
+  console.log('isFullRecipeViewOpen:', isFullRecipeViewOpen);
 
   return (
     <div>
@@ -182,13 +144,13 @@ const UnassignedRecipes: React.FC = () => {
                 onCancel={() => setIsAddingRecipe(false)}
               />
             )}
-            {recipes.map((recipe, index) => (
-              <div key={recipe.id} className="relative mb-4">
+            {recipeCards.map((recipe, index) => (
+              <div key={recipe.stableUniqueId} className="relative mb-4">
                 <RecipeCard
                   {...recipe}
                   index={index}
                   isOriginal={true}
-                  onEdit={() => handleEditRecipe(recipe)}
+                  onEdit={onRecipeClick}
                   className="recipe-card"
                 />
               </div>
@@ -198,12 +160,13 @@ const UnassignedRecipes: React.FC = () => {
         )}
       </Droppable>
 
-      {selectedRecipe && (
+      {isFullRecipeViewOpen && (
         <FullRecipeView
-          recipe={selectedRecipe}
+          recipe={editingRecipe}
           onClose={() => {
             console.log('Closing FullRecipeView');
-            setSelectedRecipe(null);
+            setIsFullRecipeViewOpen(false);
+            setEditingRecipe(null);
           }}
           onSave={handleUpdateRecipe}
         />
