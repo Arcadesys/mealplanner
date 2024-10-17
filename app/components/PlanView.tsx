@@ -5,6 +5,7 @@ import UnassignedRecipes from './UnassignedRecipes';
 import { DragDropContext } from '@hello-pangea/dnd';
 import FullRecipeView from './FullRecipeView';
 import Modal from 'react-modal';
+import { Recipe } from '../types/recipe';
 
 const PlanView: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -29,10 +30,10 @@ const PlanView: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     const checked = type === 'checkbox' ? (e.target as HTMLInputElement).checked : undefined;
-    setFormData({
-      ...formData,
+    setFormData(prevData => ({
+      ...prevData,
       [name]: type === 'checkbox' ? checked : value,
-    });
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -205,7 +206,11 @@ const PlanView: React.FC = () => {
           </form>
         </div>
         <div className="w-1/3 p-4 overflow-y-auto border-l border-gray-200 dark:border-gray-700">
-          <UnassignedRecipes recipes={recipes} onRecipeClick={handleOpenRecipe} />
+          <UnassignedRecipes 
+            recipes={recipes} 
+            setRecipes={setRecipes}
+            onRecipeClick={handleOpenRecipe} 
+          />
         </div>
       </div>
       
@@ -216,7 +221,11 @@ const PlanView: React.FC = () => {
         contentLabel="Recipe Details"
       >
         {selectedRecipe && (
-          <FullRecipeView recipe={selectedRecipe} onClose={handleCloseRecipe} />
+          <FullRecipeView 
+            recipe={selectedRecipe} 
+            onClose={handleCloseRecipe}
+            onSave={() => {}} // Add this line
+          />
         )}
       </Modal>
     </DragDropContext>
