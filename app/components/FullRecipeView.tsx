@@ -1,57 +1,63 @@
 import React from 'react';
-import Modal from 'react-modal';
-import { useDarkMode } from './DarkModeProvider';
+import { Recipe } from '@types/recipe';
 
-interface Ingredient {
-  name: string;
-  quantity: number;
-  measure: string;
+interface FullRecipeViewProps {
+  recipe: Recipe;
+  onClose: () => void;
 }
 
-interface Instruction {
-  order: number;
-  instruction: string;
-}
-
-interface Recipe {
-  id: string;
-  title: string;
-  description: string;
-  ingredients: Ingredient[];
-  instructions: Instruction[];
-  prepTime: number;
-  cookTime: number;
-  servings: number;
-}
-
-const FullRecipeView: React.FC<{ recipe: Recipe; onClose: () => void }> = ({ recipe, onClose }) => {
-  const { darkMode } = useDarkMode();
-
+const FullRecipeView: React.FC<FullRecipeViewProps> = ({ recipe, onClose }) => {
   return (
-    <div className={`full-recipe-view ${darkMode ? 'dark bg-cartoon-black text-cartoon-white' : 'bg-cartoon-white text-cartoon-black'} p-6 rounded-cartoon shadow-cartoon`}>
-      <h1 className="text-2xl font-bold mb-4 font-cartoon">{recipe.title}</h1>
-      <p className="mb-2">{recipe.description}</p>
-      <p className="mb-1">Prep Time: {recipe.prepTime} minutes</p>
-      <p className="mb-1">Cook Time: {recipe.cookTime} minutes</p>
-      <p className="mb-4">Servings: {recipe.servings}</p>
-      <h2 className="text-xl font-semibold mb-2 font-cartoon">Ingredients</h2>
-      <ul className="list-disc pl-5 mb-4">
-        {recipe.ingredients.map((ingredient, index) => (
-          <li key={index} className="mb-1">
-            {ingredient.quantity} {ingredient.measure} {ingredient.name}
-          </li>
-        ))}
-      </ul>
-      <h2 className="text-xl font-semibold mb-2 font-cartoon">Instructions</h2>
-      <ol className="list-decimal pl-5 mb-4">
-        {recipe.instructions.map((instruction) => (
-          <li key={instruction.order} className="mb-2">{instruction.instruction}</li>
-        ))}
-      </ol>
+    <div className="bg-gray-800 p-6 rounded-lg mb-4 text-white">
+      <h2 className="text-2xl font-bold mb-4">{recipe.title || 'Untitled Recipe'}</h2>
+      
+      <div className="mb-4">
+        <h3 className="text-lg font-semibold mb-2">Description</h3>
+        <p className="text-sm">{recipe.description || 'No description available'}</p>
+      </div>
+
+      <div className="mb-4">
+        <h3 className="text-lg font-semibold mb-2">Ingredients</h3>
+        <ul className="list-disc list-inside">
+          {recipe.ingredients?.map((ingredient, index) => (
+            <li key={index} className="text-sm">{ingredient}</li>
+          )) || <li className="text-sm">No ingredients listed</li>}
+        </ul>
+      </div>
+
+      <div className="mb-4">
+        <h3 className="text-lg font-semibold mb-2">Instructions</h3>
+        <ol className="list-decimal list-inside">
+          {recipe.instructions?.map((step, index) => (
+            <li key={index} className="text-sm mb-1">{step}</li>
+          )) || <li className="text-sm">No instructions available</li>}
+        </ol>
+      </div>
+
+      {recipe.prepTime && (
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold mb-2">Prep Time</h3>
+          <p className="text-sm">{recipe.prepTime} minutes</p>
+        </div>
+      )}
+
+      {recipe.cookTime && (
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold mb-2">Cook Time</h3>
+          <p className="text-sm">{recipe.cookTime} minutes</p>
+        </div>
+      )}
+
+      {recipe.servings && (
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold mb-2">Servings</h3>
+          <p className="text-sm">{recipe.servings}</p>
+        </div>
+      )}
 
       <button 
-        onClick={onClose}
-        className="px-4 py-2 bg-blue-500 text-white rounded-cartoon shadow-cartoon hover:shadow-cartoon-hover transition-shadow duration-200 font-cartoon"
+        onClick={onClose} 
+        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
       >
         Close
       </button>

@@ -63,7 +63,7 @@ const UnassignedRecipes: React.FC = () => {
         addedRecipe.id = Date.now().toString(); // Temporary solution, use UUID in production
       }
       setRecipes(prevRecipes => [...prevRecipes, addedRecipe]);
-      setIsAddingRecipe(false); // Close the add recipe form
+      // We're not closing the form here anymore, that's handled in the AddRecipeInline component
     } catch (error) {
       console.error('Error adding recipe:', error);
     }
@@ -82,6 +82,29 @@ const UnassignedRecipes: React.FC = () => {
       setRecipes(prevRecipes => prevRecipes.filter(recipe => recipe.id !== recipeId));
     } catch (error) {
       console.error('Error deleting recipe:', error);
+    }
+  };
+
+  const handleUpdateRecipe = async (updatedRecipe: Partial<Recipe>) => {
+    try {
+      const response = await fetch(`/api/recipes/${updatedRecipe.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedRecipe),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update recipe');
+      }
+
+      const updatedRecipeFromServer = await response.json();
+      setRecipes(prevRecipes => prevRecipes.map(recipe => 
+        recipe.id === updatedRecipeFromServer.id ? updatedRecipeFromServer : recipe
+      ));
+    } catch (error) {
+      console.error('Error updating recipe:', error);
     }
   };
 
@@ -122,8 +145,11 @@ const UnassignedRecipes: React.FC = () => {
       {isFullRecipeViewOpen && editingRecipe && (
         <FullRecipeView
           recipe={editingRecipe}
-          onClose={handleCloseFullRecipe}
-          onSave={handleAddRecipe}
+          onClose={() => {
+            setIsFullRecipeViewOpen(false);
+            setEditingRecipe(null);
+          }}
+          onSave={handleUpdateRecipe}
         />
       )}
     </div>
