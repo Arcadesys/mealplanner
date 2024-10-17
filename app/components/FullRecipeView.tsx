@@ -38,34 +38,22 @@ const FullRecipeView: React.FC<FullRecipeViewProps> = ({ recipe, onClose, onSave
 
       <div className="mb-4">
         <label className="block text-sm font-medium mb-1">Ingredients</label>
-        <ul className="list-disc list-inside">
-          {recipe.ingredients && Object.keys(recipe.ingredients).length > 0 ? (
-            Object.entries(recipe.ingredients).map(([ingredient, amount]) => (
-              <li key={ingredient}>{`${ingredient}: ${amount}`}</li>
-            ))
-          ) : (
-            <li>No ingredients listed. Time to go shopping!</li>
-          )}
-        </ul>
+        <textarea
+          value={recipe.ingredients ? Object.entries(recipe.ingredients).map(([ingredient, amount]) => `${ingredient}: ${amount}`).join('\n') : 'No ingredients listed. Time to go shopping!'}
+          readOnly
+          rows={5}
+          className="w-full p-2 border rounded text-sm bg-gray-700"
+        />
       </div>
 
       <div className="mb-4">
         <label className="block text-sm font-medium mb-1">Instructions</label>
-        <ol className="list-decimal list-inside">
-          {Array.isArray(recipe.instructions) && recipe.instructions.length > 0 ? (
-            recipe.instructions.map((instruction, index) => (
-              <li key={index}>{instruction}</li>
-            ))
-          ) : typeof recipe.instructions === 'string' && recipe.instructions.trim() !== '' ? (
-            <li>{recipe.instructions}</li>
-          ) : recipe.instructions && typeof recipe.instructions === 'object' && Object.keys(recipe.instructions).length > 0 ? (
-            Object.entries(recipe.instructions).map(([key, value]) => (
-              <li key={key}>{`${key}: ${value}`}</li>
-            ))
-          ) : (
-            <li>No instructions available. Time to get creative!</li>
-          )}
-        </ol>
+        <textarea
+          value={Array.isArray(recipe.instructions) ? recipe.instructions.join('\n') : typeof recipe.instructions === 'string' ? recipe.instructions : recipe.instructions && typeof recipe.instructions === 'object' ? Object.entries(recipe.instructions).map(([key, value]) => `${key}: ${value}`).join('\n') : 'No instructions available. Time to get creative!'}
+          readOnly
+          rows={5}
+          className="w-full p-2 border rounded text-sm bg-gray-700"
+        />
       </div>
 
       <button 
