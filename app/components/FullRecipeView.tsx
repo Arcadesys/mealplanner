@@ -9,51 +9,47 @@ interface FullRecipeViewProps {
 const FullRecipeView: React.FC<FullRecipeViewProps> = ({ recipe, onClose }) => {
   return (
     <div className="bg-gray-800 p-6 rounded-lg mb-4 text-white">
-      <h2 className="text-2xl font-bold mb-4">{recipe.title || 'Untitled Recipe'}</h2>
+      <h2 className="text-2xl font-bold mb-4">Recipe Details</h2>
       
       <div className="mb-4">
-        <h3 className="text-lg font-semibold mb-2">Description</h3>
-        <p className="text-sm">{recipe.description || 'No description available'}</p>
+        <label className="block text-sm font-medium mb-1">Title</label>
+        <input
+          type="text"
+          value={recipe.title || ''}
+          readOnly
+          className="w-full p-2 border rounded text-sm bg-gray-700"
+        />
       </div>
 
       <div className="mb-4">
-        <h3 className="text-lg font-semibold mb-2">Ingredients</h3>
-        <ul className="list-disc list-inside">
-          {recipe.ingredients?.map((ingredient, index) => (
-            <li key={index} className="text-sm">{ingredient}</li>
-          )) || <li className="text-sm">No ingredients listed</li>}
-        </ul>
+        <label className="block text-sm font-medium mb-1">Description</label>
+        <textarea
+          value={recipe.description || ''}
+          readOnly
+          rows={3}
+          className="w-full p-2 border rounded text-sm bg-gray-700"
+        />
       </div>
 
       <div className="mb-4">
-        <h3 className="text-lg font-semibold mb-2">Instructions</h3>
-        <ol className="list-decimal list-inside">
-          {recipe.instructions?.map((step, index) => (
-            <li key={index} className="text-sm mb-1">{step}</li>
-          )) || <li className="text-sm">No instructions available</li>}
-        </ol>
+        <label className="block text-sm font-medium mb-1">Ingredients</label>
+        <textarea
+          value={recipe.ingredients?.join('\n') || ''}
+          readOnly
+          rows={5}
+          className="w-full p-2 border rounded text-sm bg-gray-700"
+        />
       </div>
 
-      {recipe.prepTime && (
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold mb-2">Prep Time</h3>
-          <p className="text-sm">{recipe.prepTime} minutes</p>
-        </div>
-      )}
-
-      {recipe.cookTime && (
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold mb-2">Cook Time</h3>
-          <p className="text-sm">{recipe.cookTime} minutes</p>
-        </div>
-      )}
-
-      {recipe.servings && (
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold mb-2">Servings</h3>
-          <p className="text-sm">{recipe.servings}</p>
-        </div>
-      )}
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-1">Instructions</label>
+        <textarea
+          value={recipe.instructions?.join('\n') || ''}
+          readOnly
+          rows={5}
+          className="w-full p-2 border rounded text-sm bg-gray-700"
+        />
+      </div>
 
       <button 
         onClick={onClose} 
