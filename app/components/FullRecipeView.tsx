@@ -9,17 +9,15 @@ interface FullRecipeViewProps {
 
 const FullRecipeView: React.FC<FullRecipeViewProps> = ({ recipe, onClose, onSave }) => {
   const handleSave = () => {
-    const updatedRecipe = {
+    const updatedRecipe: Recipe = {
       ...recipe,
-      ingredients: Array.isArray(recipe.ingredients) 
-        ? recipe.ingredients 
-        : typeof recipe.ingredients === 'string' 
-          ? (recipe.ingredients as string).split('\n') 
-          : [],
-      instructions: Array.isArray(recipe.instructions) 
-        ? recipe.instructions 
-        : typeof recipe.instructions === 'string' 
-          ? (recipe.instructions as string).split('\n') 
+      ingredients: typeof recipe.ingredients === 'object' && !Array.isArray(recipe.ingredients)
+        ? recipe.ingredients
+        : {},
+      instructions: Array.isArray(recipe.instructions)
+        ? recipe.instructions
+        : typeof recipe.instructions === 'string'
+          ? (recipe.instructions as string).split('\n')
           : [],
     };
     onSave(updatedRecipe);
@@ -66,7 +64,7 @@ const FullRecipeView: React.FC<FullRecipeViewProps> = ({ recipe, onClose, onSave
       <div className="mb-4">
         <label className="block text-sm font-medium mb-1">Instructions</label>
         <textarea
-          value={Array.isArray(recipe.instructions) ? recipe.instructions.join('\n') : typeof recipe.instructions === 'string' ? recipe.instructions : recipe.instructions && typeof recipe.instructions === 'object' ? Object.entries(recipe.instructions).map(([key, value]) => `${key}: ${value}`).join('\n') : 'No instructions available. Time to get creative!'}
+          value={Array.isArray(recipe.instructions) ? recipe.instructions.join('\n') : typeof recipe.instructions === 'string' ? (recipe.instructions as string).split('\n') : recipe.instructions && typeof recipe.instructions === 'object' ? Object.entries(recipe.instructions).map(([key, value]) => `${key}: ${value}`).join('\n') : 'No instructions available. Time to get creative!'}
           readOnly
           rows={5}
           className="w-full p-2 border rounded text-sm bg-gray-700"
