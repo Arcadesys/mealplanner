@@ -2,6 +2,7 @@
 export interface Recipe {
   id: string;
   title: string;
+  name?: string; // Optional quick add name
   description: string;
   ingredients: { [key: string]: string };
   instructions: string[] | { [key: string]: string };
