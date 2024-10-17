@@ -41,16 +41,16 @@ const RecipeCard: React.FC<RecipeCardProps> = (props) => {
   }, [recipe]);
 
   const handleEdit = useCallback(() => {
-    console.log('Edit button clicked. Current recipe:', recipe);
-    if (recipe) {
-      onEdit(recipe);
+    console.log('Edit button clicked. Current recipe:', props.recipe);
+    if (props.recipe) {
+      props.onEdit(props.recipe);
     } else {
       console.error('Cannot edit: recipe is undefined');
     }
-  }, [onEdit, recipe]);
+  }, [props.onEdit, props.recipe]);
 
   return (
-    <Draggable draggableId={stableUniqueId} index={index}>
+    <Draggable draggableId={props.id.toString()} index={props.index}>
       {(provided) => (
         <div
           ref={provided.innerRef}
@@ -84,6 +84,7 @@ const RecipeCard: React.FC<RecipeCardProps> = (props) => {
             <FullRecipeView
               recipe={recipe}
               onClose={handleCloseModal}
+              onSave={() => {}}
             />
           </Modal>
         </div>

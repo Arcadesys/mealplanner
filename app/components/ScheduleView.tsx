@@ -71,15 +71,14 @@ const ScheduleView: React.FC = () => {
   };
 
   const handleEditRecipe = (recipeId: string) => {
-    // Find the recipe in either unassigned or assigned recipes
     const recipe = unassignedRecipes.find(r => r.id === recipeId) ||
       Object.values(assignedRecipes).flat().find(r => r.id === recipeId);
     
     if (recipe) {
-      openRecipeView(recipe);
+      setSelectedRecipe(recipe);
+      setViewMode('recipe');
     } else {
       console.error(`Recipe with id ${recipeId} not found`);
-      // Optionally, you could show a user-friendly error message here
     }
   };
 

@@ -148,17 +148,19 @@ const UnassignedRecipes: React.FC<{ recipes: Recipe[], setRecipes: React.Dispatc
               console.log('Rendering RecipeCard for:', recipe);
               return (
                 <RecipeCard
-                  key={recipe.stableUniqueId}
-                  recipe={recipe} // Explicitly pass the entire recipe object
-                  index={index}
-                  onEdit={handleEditRecipe}
-                  onOpenFullRecipe={handleOpenFullRecipe}
-                  isModalOpen={isFullRecipeViewOpen && editingRecipe?.id === recipe.id}
-                  handleCloseModal={handleCloseFullRecipe}
-                  onDelete={() => handleDeleteRecipe(recipe.id)}
-                  isOriginal={true}
-                  className="recipe-card"
-                />
+                key={recipe.id}
+                {...recipe}
+                recipe={recipe}
+                index={index}
+                onEdit={handleEditRecipe}
+                onOpenFullRecipe={handleOpenFullRecipe}
+                isModalOpen={isFullRecipeViewOpen && editingRecipe?.id === recipe.id}
+                handleCloseModal={handleCloseFullRecipe}
+                onDelete={() => handleDeleteRecipe(recipe.id)}
+                isOriginal={true}
+                className="recipe-card"
+                stableUniqueId={recipe.id.toString()}
+              />
               );
             })}
             {provided.placeholder}
@@ -166,9 +168,9 @@ const UnassignedRecipes: React.FC<{ recipes: Recipe[], setRecipes: React.Dispatc
         )}
       </Droppable>
 
-      {isFullRecipeViewOpen && (
+      {isFullRecipeViewOpen && editingRecipe && (
         <FullRecipeView
-          recipe={editingRecipe}
+          recipe={editingRecipe!}
           onClose={() => {
             console.log('Closing FullRecipeView');
             setIsFullRecipeViewOpen(false);
