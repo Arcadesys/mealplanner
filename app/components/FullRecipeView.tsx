@@ -11,8 +11,16 @@ const FullRecipeView: React.FC<FullRecipeViewProps> = ({ recipe, onClose, onSave
   const handleSave = () => {
     const updatedRecipe = {
       ...recipe,
-      ingredients: typeof recipe.ingredients === 'string' ? recipe.ingredients.split('\n') : [],
-      instructions: typeof recipe.instructions === 'string' ? recipe.instructions.split('\n') : [],
+      ingredients: Array.isArray(recipe.ingredients) 
+        ? recipe.ingredients 
+        : typeof recipe.ingredients === 'string' 
+          ? (recipe.ingredients as string).split('\n') 
+          : [],
+      instructions: Array.isArray(recipe.instructions) 
+        ? recipe.instructions 
+        : typeof recipe.instructions === 'string' 
+          ? (recipe.instructions as string).split('\n') 
+          : [],
     };
     onSave(updatedRecipe);
   };
