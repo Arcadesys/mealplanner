@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import Scheduler from './Scheduler';
 import UnassignedRecipes from './UnassignedRecipes';
+import FullRecipeView from './FullRecipeView';
 import { useRecipes } from '../hooks/useRecipes';
 import { Recipe } from '../types/recipe';
 
@@ -12,6 +13,9 @@ const ScheduleView: React.FC = () => {
   const [assignedRecipes, setAssignedRecipes] = useState<{ [key: string]: Recipe[] }>({
     Monday: [], Tuesday: [], Wednesday: [], Thursday: [], Friday: [], Saturday: [], Sunday: []
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const [viewMode, setViewMode] = useState<'schedule' | 'recipe'>('schedule');
 
   useEffect(() => {
     if (initialRecipes.length > 0) {
@@ -24,45 +28,57 @@ const ScheduleView: React.FC = () => {
 
     if (!destination) return;
 
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    ) return;
+    const sourceDay = source.droppableId;
+    const destDay = destination.droppableId;
 
-    let sourceList: Recipe[];
-    let destList: Recipe[];
+    const newAssignedRecipes = { ...assignedRecipes };
+    let newUnassignedRecipes = [...unassignedRecipes];
 
-    if (source.droppableId === 'unassigned') {
-      sourceList = [...unassignedRecipes];
+    if (sourceDay === 'unassigned') {
+      // Moving from unassigned to a day
+      const [movedRecipe] = newUnassignedRecipes.splice(source.index, 1);
+      newAssignedRecipes[destDay].splice(destination.index, 0, movedRecipe);
+      setUnassignedRecipes(newUnassignedRecipes);
+    } else if (destDay === 'unassigned') {
+      // Moving from a day to unassigned
+      const [movedRecipe] = newAssignedRecipes[sourceDay].splice(source.index, 1);
+      newUnassignedRecipes.splice(destination.index, 0, movedRecipe);
+      setUnassignedRecipes(newUnassignedRecipes);
     } else {
-      sourceList = [...assignedRecipes[source.droppableId]];
+      // Moving between days
+      const [movedRecipe] = newAssignedRecipes[sourceDay].splice(source.index, 1);
+      newAssignedRecipes[destDay].splice(destination.index, 0, movedRecipe);
     }
 
-    if (destination.droppableId === 'unassigned') {
-      destList = [...unassignedRecipes];
-    } else {
-      destList = [...assignedRecipes[destination.droppableId]];
-    }
+    setAssignedRecipes(newAssignedRecipes);
+  };
 
-    const [movedItem] = sourceList.splice(source.index, 1);
-    destList.splice(destination.index, 0, movedItem);
+  const openRecipeView = (recipe: Recipe) => {
+    setSelectedRecipe(recipe);
+    setViewMode('recipe');
+  };
 
-    if (source.droppableId === 'unassigned') {
-      setUnassignedRecipes(sourceList);
-    } else {
-      setAssignedRecipes(prev => ({
-        ...prev,
-        [source.droppableId]: sourceList
-      }));
-    }
+  const closeRecipeView = () => {
+    setSelectedRecipe(null);
+    setViewMode('schedule');
+  };
 
-    if (destination.droppableId === 'unassigned') {
-      setUnassignedRecipes(destList);
+  const handleSaveRecipe = (updatedRecipe: Recipe) => {
+    // Implement save logic here
+    console.log('Saving updated recipe:', updatedRecipe);
+    // You might want to update the recipe in your state or send it to an API
+    closeRecipeView();
+  };
+
+  const handleEditRecipe = (recipeId: string) => {
+    const recipe = unassignedRecipes.find(r => r.id === recipeId) ||
+      Object.values(assignedRecipes).flat().find(r => r.id === recipeId);
+    
+    if (recipe) {
+      setSelectedRecipe(recipe);
+      setViewMode('recipe');
     } else {
-      setAssignedRecipes(prev => ({
-        ...prev,
-        [destination.droppableId]: destList
-      }));
+      console.error(`Recipe with id ${recipeId} not found`);
     }
   };
 
@@ -80,10 +96,28 @@ const ScheduleView: React.FC = () => {
       <div className="flex h-full">
         <div className="w-1/3 p-4 overflow-y-auto">
           <h2 className="text-xl font-bold mb-4">Unassigned Recipes</h2>
-          <UnassignedRecipes recipes={unassignedRecipes} />
+          <UnassignedRecipes 
+            recipes={unassignedRecipes} 
+            setRecipes={setUnassignedRecipes} 
+            onRecipeClick={openRecipeView} 
+          />
         </div>
-        <div className="w-2/3 p-4 overflow-y-auto">
-          <Scheduler assignedRecipes={assignedRecipes} />
+        <div className="w-2/3 p-4">
+          {viewMode === 'schedule' ? (
+            <Scheduler
+              assignedRecipes={assignedRecipes}
+              onDragEnd={onDragEnd}
+              onEditRecipe={handleEditRecipe}
+            />
+          ) : (
+            selectedRecipe && (
+              <FullRecipeView
+                recipe={selectedRecipe}
+                onClose={closeRecipeView}
+                onSave={handleSaveRecipe}
+              />
+            )
+          )}
         </div>
       </div>
     </DragDropContext>

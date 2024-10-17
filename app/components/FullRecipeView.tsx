@@ -1,57 +1,85 @@
 import React from 'react';
-import Modal from 'react-modal';
-import { useDarkMode } from './DarkModeProvider';
+import { Recipe } from '../types/recipe';
 
-interface Ingredient {
-  name: string;
-  quantity: number;
-  measure: string;
+interface FullRecipeViewProps {
+  recipe: Recipe;
+  onClose: () => void;
+  onSave: (recipe: Recipe) => void;
 }
 
-interface Instruction {
-  order: number;
-  instruction: string;
-}
+const FullRecipeView: React.FC<FullRecipeViewProps> = ({ recipe, onClose, onSave }) => {
+  const handleSave = () => {
+    const updatedRecipe: Recipe = {
+      ...recipe,
+      ingredients: typeof recipe.ingredients === 'object' && !Array.isArray(recipe.ingredients)
+        ? recipe.ingredients
+        : {},
+      instructions: Array.isArray(recipe.instructions)
+        ? recipe.instructions
+        : typeof recipe.instructions === 'string'
+          ? (recipe.instructions as string).split('\n')
+          : [],
+    };
+    onSave(updatedRecipe);
+  };
 
-interface Recipe {
-  id: string;
-  title: string;
-  description: string;
-  ingredients: Ingredient[];
-  instructions: Instruction[];
-  prepTime: number;
-  cookTime: number;
-  servings: number;
-}
-
-const FullRecipeView: React.FC<{ recipe: Recipe; onClose: () => void }> = ({ recipe, onClose }) => {
-  const { darkMode } = useDarkMode();
+  if (!recipe) {
+    return <div>No recipe selected. How about we cook up some data?</div>;
+  }
 
   return (
-    <div className={`full-recipe-view ${darkMode ? 'dark bg-cartoon-black text-cartoon-white' : 'bg-cartoon-white text-cartoon-black'} p-6 rounded-cartoon shadow-cartoon`}>
-      <h1 className="text-2xl font-bold mb-4 font-cartoon">{recipe.title}</h1>
-      <p className="mb-2">{recipe.description}</p>
-      <p className="mb-1">Prep Time: {recipe.prepTime} minutes</p>
-      <p className="mb-1">Cook Time: {recipe.cookTime} minutes</p>
-      <p className="mb-4">Servings: {recipe.servings}</p>
-      <h2 className="text-xl font-semibold mb-2 font-cartoon">Ingredients</h2>
-      <ul className="list-disc pl-5 mb-4">
-        {recipe.ingredients.map((ingredient, index) => (
-          <li key={index} className="mb-1">
-            {ingredient.quantity} {ingredient.measure} {ingredient.name}
-          </li>
-        ))}
-      </ul>
-      <h2 className="text-xl font-semibold mb-2 font-cartoon">Instructions</h2>
-      <ol className="list-decimal pl-5 mb-4">
-        {recipe.instructions.map((instruction) => (
-          <li key={instruction.order} className="mb-2">{instruction.instruction}</li>
-        ))}
-      </ol>
+    <div className="bg-gray-800 p-6 rounded-lg mb-4 text-white">
+      <h2 className="text-2xl font-bold mb-4">Recipe Details</h2>
+      
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-1">Title</label>
+        <input
+          type="text"
+          value={recipe.title || 'Untitled Recipe'}
+          readOnly
+          className="w-full p-2 border rounded text-sm bg-gray-700"
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-1">Description</label>
+        <textarea
+          value={recipe.description || 'No description available'}
+          readOnly
+          rows={3}
+          className="w-full p-2 border rounded text-sm bg-gray-700"
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-1">Ingredients</label>
+        <textarea
+          value={recipe.ingredients ? Object.entries(recipe.ingredients).map(([ingredient, amount]) => `${ingredient}: ${amount}`).join('\n') : 'No ingredients listed. Time to go shopping!'}
+          readOnly
+          rows={5}
+          className="w-full p-2 border rounded text-sm bg-gray-700"
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-1">Instructions</label>
+        <textarea
+          value={Array.isArray(recipe.instructions) ? recipe.instructions.join('\n') : typeof recipe.instructions === 'string' ? (recipe.instructions as string).split('\n') : recipe.instructions && typeof recipe.instructions === 'object' ? Object.entries(recipe.instructions).map(([key, value]) => `${key}: ${value}`).join('\n') : 'No instructions available. Time to get creative!'}
+          readOnly
+          rows={5}
+          className="w-full p-2 border rounded text-sm bg-gray-700"
+        />
+      </div>
 
       <button 
-        onClick={onClose}
-        className="px-4 py-2 bg-blue-500 text-white rounded-cartoon shadow-cartoon hover:shadow-cartoon-hover transition-shadow duration-200 font-cartoon"
+        onClick={handleSave} 
+        className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+      >
+        Save
+      </button>
+      <button 
+        onClick={onClose} 
+        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
       >
         Close
       </button>
