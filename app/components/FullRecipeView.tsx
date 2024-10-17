@@ -8,6 +8,15 @@ interface FullRecipeViewProps {
 }
 
 const FullRecipeView: React.FC<FullRecipeViewProps> = ({ recipe, onClose, onSave }) => {
+  const handleSave = () => {
+    const updatedRecipe = {
+      ...recipe,
+      ingredients: typeof recipe.ingredients === 'string' ? recipe.ingredients.split('\n') : [],
+      instructions: typeof recipe.instructions === 'string' ? recipe.instructions.split('\n') : [],
+    };
+    onSave(updatedRecipe);
+  };
+
   if (!recipe) {
     return <div>No recipe selected. How about we cook up some data?</div>;
   }
@@ -56,6 +65,12 @@ const FullRecipeView: React.FC<FullRecipeViewProps> = ({ recipe, onClose, onSave
         />
       </div>
 
+      <button 
+        onClick={handleSave} 
+        className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+      >
+        Save
+      </button>
       <button 
         onClick={onClose} 
         className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
