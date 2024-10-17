@@ -1,51 +1,136 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Droppable } from '@hello-pangea/dnd';
 import RecipeCard from './RecipeCard';
 import { Recipe } from '../types/recipe';
+import AddRecipe from './addRecipe';
+import FullRecipeView from './FullRecipeView';
 
-interface UnassignedRecipesProps {
-  recipes: Recipe[];
-}
+const UnassignedRecipes: React.FC = () => {
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [isFullRecipeViewOpen, setIsFullRecipeViewOpen] = useState(false);
+  const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
+  const [isAddRecipeModalOpen, setIsAddRecipeModalOpen] = useState(false);
 
-const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({ recipes }) => {
-  // Generate stable IDs for each recipe card
-  const recipeCards = useMemo(() => {
-    return recipes?.map((recipe, recipeIndex) => {
-      const stableUniqueId = `${recipe.id}-${recipeIndex}-${Date.now()}`;
-      return { 
-        ...recipe, 
-        stableUniqueId,
-        id: stableUniqueId // Override the original id with our new unique id
-      };
-    }) || [];
-  }, [recipes]);
+  useEffect(() => {
+    // Fetch recipes from API
+    const fetchRecipes = async () => {
+      try {
+        const response = await fetch('/api/recipes');
+        if (!response.ok) {
+          throw new Error('Failed to fetch recipes');
+        }
+        const data = await response.json();
+        setRecipes(data);
+      } catch (error) {
+        console.error('Error fetching recipes:', error);
+      }
+    };
+
+    fetchRecipes();
+  }, []);
+
+  const recipeCards = useMemo(() => recipes.map((recipe, index) => ({
+    ...recipe,
+    stableUniqueId: `${recipe.id}-${index}-${Date.now()}`,
+  })), [recipes]);
+
+  const handleOpenFullRecipe = (recipe: Recipe) => {
+    setEditingRecipe(recipe);
+    setIsFullRecipeViewOpen(true);
+  };
+
+  const handleCloseFullRecipe = () => {
+    setIsFullRecipeViewOpen(false);
+    setEditingRecipe(null);
+  };
+
+  const handleAddRecipe = async (newRecipe: Recipe) => {
+    try {
+      const response = await fetch('/api/recipes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newRecipe),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add recipe');
+      }
+
+      const addedRecipe = await response.json();
+      // Make sure the server is returning an id, or generate one here
+      if (!addedRecipe.id) {
+        addedRecipe.id = Date.now().toString(); // Temporary solution, use UUID in production
+      }
+      setRecipes(prevRecipes => [...prevRecipes, addedRecipe]);
+    } catch (error) {
+      console.error('Error adding recipe:', error);
+    }
+  };
+
+  const handleDeleteRecipe = async (recipeId: string) => {
+    try {
+      const response = await fetch(`/api/recipes/${recipeId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete recipe');
+      }
+
+      setRecipes(prevRecipes => prevRecipes.filter(recipe => recipe.id !== recipeId));
+    } catch (error) {
+      console.error('Error deleting recipe:', error);
+    }
+  };
 
   return (
-    <Droppable droppableId="unassigned">
-      {(provided) => (
-        <div
-          {...provided.droppableProps}
-          ref={provided.innerRef}
-          className="unassigned-recipes"
-        >
-          {recipeCards.map((recipe, index) => (
-            <div key={recipe.stableUniqueId} className="relative mb-4">
-              <RecipeCard
-                title={recipe.title}
-                description={recipe.description}
-                recipe={recipe}
-                index={index}
-                isOriginal={true}
-                stableUniqueId={recipe.stableUniqueId}
-                onOpenFullRecipe={() => {/* Define your function here */}}
-                onDelete={() => {/* Add your delete logic here */}}
-              />
-            </div>
-          ))}
-          {provided.placeholder}
-        </div>
+    <div>
+      <button
+        onClick={() => setIsAddRecipeModalOpen(true)}
+        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      >
+        Add Recipe
+      </button>
+
+      <Droppable droppableId="unassigned">
+        {(provided) => (
+          <div {...provided.droppableProps} ref={provided.innerRef} className="unassigned-recipes">
+            {recipeCards.map((recipe, index) => (
+              <div key={recipe.stableUniqueId} className="relative mb-4">
+                <RecipeCard
+                  {...recipe}
+                  index={index}
+                  isOriginal={true}
+                  onOpenFullRecipe={() => handleOpenFullRecipe(recipe)}
+                  onDelete={() => handleDeleteRecipe(recipe.id)}
+                />
+              </div>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+
+      {isFullRecipeViewOpen && editingRecipe && (
+        <FullRecipeView
+          recipe={editingRecipe}
+          onClose={handleCloseFullRecipe}
+          onSave={handleAddRecipe}
+        />
       )}
-    </Droppable>
+
+      {isAddRecipeModalOpen && (
+        <AddRecipe
+          onClose={() => setIsAddRecipeModalOpen(false)}
+          onSave={(newRecipe) => {
+            handleAddRecipe(newRecipe);
+            setIsAddRecipeModalOpen(false);
+          }}
+        />
+      )}
+    </div>
   );
 };
 

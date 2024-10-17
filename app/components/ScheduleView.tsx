@@ -24,46 +24,26 @@ const ScheduleView: React.FC = () => {
 
     if (!destination) return;
 
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    ) return;
+    const sourceDay = source.droppableId;
+    const destDay = destination.droppableId;
 
-    let sourceList: Recipe[];
-    let destList: Recipe[];
+    const newAssignedRecipes = { ...assignedRecipes };
 
-    if (source.droppableId === 'unassigned') {
-      sourceList = [...unassignedRecipes];
+    if (sourceDay === 'unassigned') {
+      // Moving from unassigned to a day
+      const [movedRecipe] = unassignedRecipes.splice(source.index, 1);
+      newAssignedRecipes[destDay].splice(destination.index, 0, movedRecipe);
+    } else if (destDay === 'unassigned') {
+      // Moving from a day to unassigned
+      const [movedRecipe] = newAssignedRecipes[sourceDay].splice(source.index, 1);
+      setUnassignedRecipes(prev => [...prev, movedRecipe]);
     } else {
-      sourceList = [...assignedRecipes[source.droppableId]];
+      // Moving between days
+      const [movedRecipe] = newAssignedRecipes[sourceDay].splice(source.index, 1);
+      newAssignedRecipes[destDay].splice(destination.index, 0, movedRecipe);
     }
 
-    if (destination.droppableId === 'unassigned') {
-      destList = [...unassignedRecipes];
-    } else {
-      destList = [...assignedRecipes[destination.droppableId]];
-    }
-
-    const [movedItem] = sourceList.splice(source.index, 1);
-    destList.splice(destination.index, 0, movedItem);
-
-    if (source.droppableId === 'unassigned') {
-      setUnassignedRecipes(sourceList);
-    } else {
-      setAssignedRecipes(prev => ({
-        ...prev,
-        [source.droppableId]: sourceList
-      }));
-    }
-
-    if (destination.droppableId === 'unassigned') {
-      setUnassignedRecipes(destList);
-    } else {
-      setAssignedRecipes(prev => ({
-        ...prev,
-        [destination.droppableId]: destList
-      }));
-    }
+    setAssignedRecipes(newAssignedRecipes);
   };
 
   if (loading) return (
@@ -80,9 +60,9 @@ const ScheduleView: React.FC = () => {
       <div className="flex h-full">
         <div className="w-1/3 p-4 overflow-y-auto">
           <h2 className="text-xl font-bold mb-4">Unassigned Recipes</h2>
-          <UnassignedRecipes recipes={unassignedRecipes} />
+          <UnassignedRecipes />
         </div>
-        <div className="w-2/3 p-4 overflow-y-auto">
+        <div className="w-2/3 p-4">
           <Scheduler assignedRecipes={assignedRecipes} />
         </div>
       </div>

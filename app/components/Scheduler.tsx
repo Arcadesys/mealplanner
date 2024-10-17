@@ -22,18 +22,20 @@ const Scheduler: React.FC<SchedulerProps> = ({ assignedRecipes }) => {
               <h3 className="text-sm font-semibold mb-1">{day}</h3>
               <div className="flex flex-wrap gap-2">
                 {assignedRecipes[day]?.map((recipe, index) => (
-                  <Draggable key={recipe.id} draggableId={recipe.id} index={index}>
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className="bg-white dark:bg-gray-700 p-2 rounded shadow text-black dark:text-white transition-colors duration-200"
-                      >
-                        <span className="text-sm">{recipe.name}</span>
-                      </div>
-                    )}
-                  </Draggable>
+                  recipe && (
+                    <Draggable key={recipe.id} draggableId={recipe.id} index={index}>
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="bg-white dark:bg-gray-700 p-2 rounded shadow text-black dark:text-white transition-colors duration-200"
+                        >
+                          <span className="text-sm">{recipe.name || 'Unnamed Recipe'}</span>
+                        </div>
+                      )}
+                    </Draggable>
+                  )
                 ))}
                 {provided.placeholder}
               </div>

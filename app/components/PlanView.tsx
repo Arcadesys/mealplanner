@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import UnassignedRecipes from './UnassignedRecipes';
 import { DragDropContext } from '@hello-pangea/dnd';
+import FullRecipeView from './FullRecipeView';
+import Modal from 'react-modal';
 
 const PlanView: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -21,6 +23,8 @@ const PlanView: React.FC = () => {
   });
 
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -43,6 +47,16 @@ const PlanView: React.FC = () => {
     // For now, let's just set an empty array
     setRecipes([]);
   }, []);
+
+  // Add this function to handle opening the modal
+  const handleOpenRecipe = (recipe: Recipe) => {
+    setSelectedRecipe(recipe);
+  };
+
+  // Add this function to handle closing the modal
+  const handleCloseRecipe = () => {
+    setSelectedRecipe(null);
+  };
 
   return (
     <DragDropContext onDragEnd={() => {}}>
@@ -191,9 +205,20 @@ const PlanView: React.FC = () => {
           </form>
         </div>
         <div className="w-1/3 p-4 overflow-y-auto border-l border-gray-200 dark:border-gray-700">
-          <UnassignedRecipes recipes={recipes} />
+          <UnassignedRecipes recipes={recipes} onRecipeClick={handleOpenRecipe} />
         </div>
       </div>
+      
+      {/* Add the Modal component */}
+      <Modal
+        isOpen={selectedRecipe !== null}
+        onRequestClose={handleCloseRecipe}
+        contentLabel="Recipe Details"
+      >
+        {selectedRecipe && (
+          <FullRecipeView recipe={selectedRecipe} onClose={handleCloseRecipe} />
+        )}
+      </Modal>
     </DragDropContext>
   );
 };
