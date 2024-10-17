@@ -10,6 +10,7 @@ const UnassignedRecipes: React.FC = () => {
   const [isFullRecipeViewOpen, setIsFullRecipeViewOpen] = useState(false);
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
   const [isAddRecipeModalOpen, setIsAddRecipeModalOpen] = useState(false);
+  const [modalPosition, setModalPosition] = useState<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     // Fetch recipes from API
@@ -44,7 +45,7 @@ const UnassignedRecipes: React.FC = () => {
     setEditingRecipe(null);
   };
 
-  const handleAddRecipe = async (newRecipe: Recipe) => {
+  const handleAddRecipe = async (newRecipe: { title: string }) => {
     try {
       const response = await fetch('/api/recipes', {
         method: 'POST',
@@ -59,7 +60,6 @@ const UnassignedRecipes: React.FC = () => {
       }
 
       const addedRecipe = await response.json();
-      // Make sure the server is returning an id, or generate one here
       if (!addedRecipe.id) {
         addedRecipe.id = Date.now().toString(); // Temporary solution, use UUID in production
       }
@@ -85,10 +85,15 @@ const UnassignedRecipes: React.FC = () => {
     }
   };
 
+  const handleOpenModal = (event: React.MouseEvent) => {
+    setModalPosition({ x: event.clientX, y: event.clientY });
+    setIsAddRecipeModalOpen(true);
+  };
+
   return (
     <div>
       <button
-        onClick={() => setIsAddRecipeModalOpen(true)}
+        onClick={handleOpenModal}
         className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
       >
         Add Recipe
@@ -128,6 +133,11 @@ const UnassignedRecipes: React.FC = () => {
             handleAddRecipe(newRecipe);
             setIsAddRecipeModalOpen(false);
           }}
+          onAddCard={(title) => {
+            // You can remove this if you're not using it
+            console.log('New card added:', title);
+          }}
+          position={modalPosition || undefined}
         />
       )}
     </div>
