@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { Droppable } from '@hello-pangea/dnd';
 import RecipeCard from './RecipeCard';
 import { Recipe } from '../types/recipe';
@@ -6,6 +6,8 @@ import AddRecipeInline from './AddRecipeInline';
 import FullRecipeView from './FullRecipeView';
 
 const UnassignedRecipes: React.FC = () => {
+  console.log('UnassignedRecipes component rendering');
+
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [isFullRecipeViewOpen, setIsFullRecipeViewOpen] = useState(false);
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
@@ -108,6 +110,23 @@ const UnassignedRecipes: React.FC = () => {
     }
   };
 
+  const handleEditRecipe = useCallback((recipe: Recipe) => {
+    console.log('handleEditRecipe called with:', recipe);
+    setEditingRecipe(recipe);
+    setIsFullRecipeViewOpen(true);
+  }, []);
+
+  useEffect(() => {
+    console.log('State changed:');
+    console.log('editingRecipe:', editingRecipe);
+    console.log('isFullRecipeViewOpen:', isFullRecipeViewOpen);
+  }, [editingRecipe, isFullRecipeViewOpen]);
+
+  // ... in your render method, right before returning JSX
+  console.log('About to render UnassignedRecipes');
+  console.log('Current editingRecipe:', editingRecipe);
+  console.log('isFullRecipeViewOpen:', isFullRecipeViewOpen);
+
   return (
     <div>
       <button
@@ -132,8 +151,7 @@ const UnassignedRecipes: React.FC = () => {
                   {...recipe}
                   index={index}
                   isOriginal={true}
-                  onOpenFullRecipe={() => handleOpenFullRecipe(recipe)}
-                  onDelete={() => handleDeleteRecipe(recipe.id)}
+                  onEdit={handleEditRecipe}
                 />
               </div>
             ))}
@@ -146,6 +164,7 @@ const UnassignedRecipes: React.FC = () => {
         <FullRecipeView
           recipe={editingRecipe}
           onClose={() => {
+            console.log('Closing FullRecipeView');
             setIsFullRecipeViewOpen(false);
             setEditingRecipe(null);
           }}
