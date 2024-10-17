@@ -2,15 +2,14 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { Droppable } from '@hello-pangea/dnd';
 import RecipeCard from './RecipeCard';
 import { Recipe } from '../types/recipe';
-import AddRecipe from './addRecipe';
+import AddRecipeInline from './AddRecipeInline';
 import FullRecipeView from './FullRecipeView';
 
 const UnassignedRecipes: React.FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [isFullRecipeViewOpen, setIsFullRecipeViewOpen] = useState(false);
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
-  const [isAddRecipeModalOpen, setIsAddRecipeModalOpen] = useState(false);
-  const [modalPosition, setModalPosition] = useState<{ x: number; y: number } | null>(null);
+  const [isAddingRecipe, setIsAddingRecipe] = useState(false);
 
   useEffect(() => {
     // Fetch recipes from API
@@ -64,6 +63,7 @@ const UnassignedRecipes: React.FC = () => {
         addedRecipe.id = Date.now().toString(); // Temporary solution, use UUID in production
       }
       setRecipes(prevRecipes => [...prevRecipes, addedRecipe]);
+      setIsAddingRecipe(false); // Close the add recipe form
     } catch (error) {
       console.error('Error adding recipe:', error);
     }
@@ -85,15 +85,10 @@ const UnassignedRecipes: React.FC = () => {
     }
   };
 
-  const handleOpenModal = (event: React.MouseEvent) => {
-    setModalPosition({ x: event.clientX, y: event.clientY });
-    setIsAddRecipeModalOpen(true);
-  };
-
   return (
     <div>
       <button
-        onClick={handleOpenModal}
+        onClick={() => setIsAddingRecipe(true)}
         className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
       >
         Add Recipe
@@ -102,6 +97,12 @@ const UnassignedRecipes: React.FC = () => {
       <Droppable droppableId="unassigned">
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef} className="unassigned-recipes">
+            {isAddingRecipe && (
+              <AddRecipeInline
+                onSave={handleAddRecipe}
+                onCancel={() => setIsAddingRecipe(false)}
+              />
+            )}
             {recipeCards.map((recipe, index) => (
               <div key={recipe.stableUniqueId} className="relative mb-4">
                 <RecipeCard
@@ -123,21 +124,6 @@ const UnassignedRecipes: React.FC = () => {
           recipe={editingRecipe}
           onClose={handleCloseFullRecipe}
           onSave={handleAddRecipe}
-        />
-      )}
-
-      {isAddRecipeModalOpen && (
-        <AddRecipe
-          onClose={() => setIsAddRecipeModalOpen(false)}
-          onSave={(newRecipe) => {
-            handleAddRecipe(newRecipe);
-            setIsAddRecipeModalOpen(false);
-          }}
-          onAddCard={(title) => {
-            // You can remove this if you're not using it
-            console.log('New card added:', title);
-          }}
-          position={modalPosition || undefined}
         />
       )}
     </div>
