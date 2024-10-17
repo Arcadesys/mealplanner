@@ -1,12 +1,13 @@
 import React from 'react';
-import { Droppable, Draggable } from '@hello-pangea/dnd';
+import { Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { Recipe } from '../types/recipe';
 
 interface SchedulerProps {
   assignedRecipes: { [key: string]: Recipe[] };
+  onDragEnd: (result: DropResult) => void;
 }
 
-const Scheduler: React.FC<SchedulerProps> = ({ assignedRecipes }) => {
+const Scheduler: React.FC<SchedulerProps> = ({ assignedRecipes, onDragEnd }) => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
   return (
