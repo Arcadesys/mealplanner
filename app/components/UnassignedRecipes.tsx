@@ -144,17 +144,23 @@ const UnassignedRecipes: React.FC<{ recipes: Recipe[], setRecipes: React.Dispatc
                 onCancel={() => setIsAddingRecipe(false)}
               />
             )}
-            {recipeCards.map((recipe, index) => (
-              <div key={recipe.stableUniqueId} className="relative mb-4">
+            {recipeCards.map((recipe, index) => {
+              console.log('Rendering RecipeCard for:', recipe);
+              return (
                 <RecipeCard
-                  {...recipe}
+                  key={recipe.stableUniqueId}
+                  recipe={recipe} // Explicitly pass the entire recipe object
                   index={index}
+                  onEdit={handleEditRecipe}
+                  onOpenFullRecipe={handleOpenFullRecipe}
+                  isModalOpen={isFullRecipeViewOpen && editingRecipe?.id === recipe.id}
+                  handleCloseModal={handleCloseFullRecipe}
+                  onDelete={() => handleDeleteRecipe(recipe.id)}
                   isOriginal={true}
-                  onEdit={onRecipeClick}
                   className="recipe-card"
                 />
-              </div>
-            ))}
+              );
+            })}
             {provided.placeholder}
           </div>
         )}
