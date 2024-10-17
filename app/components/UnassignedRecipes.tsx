@@ -142,7 +142,7 @@ const UnassignedRecipes: React.FC = () => {
         )}
       </Droppable>
 
-      {isFullRecipeViewOpen && editingRecipe && (
+      {isFullRecipeViewOpen && (
         <FullRecipeView
           recipe={editingRecipe}
           onClose={() => {
