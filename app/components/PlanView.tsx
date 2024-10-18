@@ -6,6 +6,7 @@ import { DragDropContext } from '@hello-pangea/dnd';
 import FullRecipeView from './FullRecipeView';
 import Modal from 'react-modal';
 import { Recipe } from '../types/recipe';
+import { useCompletion } from 'ai/react';
 
 const PlanView: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -26,6 +27,10 @@ const PlanView: React.FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+
+  const { complete, completion, isLoading } = useCompletion({
+    api: '/api/generate-meal-plan',
+  });
 
   const handleStepperChange = (field: string, value: number) => {
     setFormData(prevData => ({
@@ -66,9 +71,22 @@ const PlanView: React.FC = () => {
     setSelectedRecipe(null);
   };
 
-  const handleGenerateMealPlan = () => {
-    // TODO: Implement meal plan generation logic
-    console.log("Generating meal plan...");
+  const handleGenerateMealPlan = async () => {
+    const prompt = `Generate a meal plan based on the following preferences:
+      Breakfasts: ${formData.breakfasts}
+      Lunches: ${formData.lunches}
+      Dinners: ${formData.dinners}
+      Snacks: ${formData.snacks}
+      Leftovers: ${formData.leftovers ? 'Yes' : 'No'}
+      Ingredients to use: ${formData.ingredientsToUse}
+      Ingredients to avoid: ${formData.ingredientsToAvoid}
+      Dietary restrictions: ${formData.dietaryRestrictions}
+      Preferred recipes: ${formData.recipes}
+      Available ingredients: ${formData.availableIngredients}
+      Cooking tools: ${formData.cookingTools}
+      Cooking mood: ${formData.cookingMood}`;
+
+    await complete(prompt);
   };
 
   return (
