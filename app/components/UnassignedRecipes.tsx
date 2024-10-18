@@ -114,14 +114,29 @@ const UnassignedRecipes: React.FC<{ recipes: Recipe[], setRecipes: React.Dispatc
     setIsFullRecipeViewOpen(true);
   }, []);
 
+  const handleClearAll = () => {
+    if (window.confirm('Are you sure you want to clear all recipes? This action cannot be undone.')) {
+      setRecipes([]);
+    }
+  };
+
   return (
     <div>
-      <button
-        onClick={() => setIsAddingRecipe(true)}
-        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      >
-        Add Recipe
-      </button>
+      <h2 className="text-xl font-bold mb-4">Unassigned Recipes</h2>
+      <div className="mb-4 flex space-x-2">
+        <button
+          onClick={handleAddRecipe}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          Add Recipe
+        </button>
+        <button
+          onClick={handleClearAll}
+          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+        >
+          Clear All
+        </button>
+      </div>
 
       <Droppable droppableId="unassigned">
         {(provided) => (

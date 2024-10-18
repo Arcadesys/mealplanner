@@ -66,6 +66,11 @@ const PlanView: React.FC = () => {
     setSelectedRecipe(null);
   };
 
+  const handleGenerateMealPlan = () => {
+    // TODO: Implement meal plan generation logic
+    console.log("Generating meal plan...");
+  };
+
   return (
     <DragDropContext onDragEnd={() => {}}>
       <div className="flex h-screen overflow-hidden dark:bg-gray-800 dark:text-white">
@@ -188,12 +193,21 @@ const PlanView: React.FC = () => {
               />
             </div>
             
-            <button
-              type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700"
-            >
-              Plan Meals
-            </button>
+            <div className="flex justify-between items-center mt-8">
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700"
+              >
+                Plan Meals
+              </button>
+              <button
+                type="button"
+                onClick={handleGenerateMealPlan}
+                className="bg-green-500 text-white px-6 py-3 text-lg font-bold rounded hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 transition-colors duration-200"
+              >
+                Generate My Meal Plan
+              </button>
+            </div>
           </form>
         </div>
         <div className="w-1/3 p-4 overflow-y-auto border-l border-gray-200 dark:border-gray-700">
