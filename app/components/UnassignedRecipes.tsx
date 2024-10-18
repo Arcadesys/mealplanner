@@ -110,21 +110,9 @@ const UnassignedRecipes: React.FC<{ recipes: Recipe[], setRecipes: React.Dispatc
   };
 
   const handleEditRecipe = useCallback((recipe: Recipe) => {
-    console.log('handleEditRecipe called with:', recipe);
     setEditingRecipe(recipe);
     setIsFullRecipeViewOpen(true);
   }, []);
-
-  useEffect(() => {
-    console.log('State changed:');
-    console.log('editingRecipe:', editingRecipe);
-    console.log('isFullRecipeViewOpen:', isFullRecipeViewOpen);
-  }, [editingRecipe, isFullRecipeViewOpen]);
-
-  // ... in your render method, right before returning JSX
-  console.log('About to render UnassignedRecipes');
-  console.log('Current editingRecipe:', editingRecipe);
-  console.log('isFullRecipeViewOpen:', isFullRecipeViewOpen);
 
   return (
     <div>
@@ -144,10 +132,8 @@ const UnassignedRecipes: React.FC<{ recipes: Recipe[], setRecipes: React.Dispatc
                 onCancel={() => setIsAddingRecipe(false)}
               />
             )}
-            {recipeCards.map((recipe, index) => {
-              console.log('Rendering RecipeCard for:', recipe);
-              return (
-                <RecipeCard
+            {recipeCards.map((recipe, index) => (
+              <RecipeCard
                 key={recipe.id}
                 {...recipe}
                 recipe={recipe}
@@ -161,8 +147,7 @@ const UnassignedRecipes: React.FC<{ recipes: Recipe[], setRecipes: React.Dispatc
                 className="recipe-card"
                 stableUniqueId={recipe.id.toString()}
               />
-              );
-            })}
+            ))}
             {provided.placeholder}
           </div>
         )}
