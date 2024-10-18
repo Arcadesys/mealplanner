@@ -9,10 +9,10 @@ import { Recipe } from '../types/recipe';
 
 const PlanView: React.FC = () => {
   const [formData, setFormData] = useState({
-    totalMeals: '',
-    breakfasts: '',
-    lunches: '',
-    dinners: '',
+    breakfasts: 0,
+    lunches: 0,
+    dinners: 0,
+    snacks: 0,
     leftovers: false,
     ingredientsToUse: '',
     ingredientsToAvoid: '',
@@ -26,6 +26,13 @@ const PlanView: React.FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+
+  const handleStepperChange = (field: string, value: number) => {
+    setFormData(prevData => ({
+      ...prevData,
+      [field]: Math.max(0, value), // Ensure value doesn't go below 0
+    }));
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -64,47 +71,24 @@ const PlanView: React.FC = () => {
       <div className="flex h-screen overflow-hidden dark:bg-gray-800 dark:text-white">
         <div className="flex-1 p-4 overflow-y-auto">
           <h2 className="text-2xl font-bold mb-4 dark:text-white">Meal Planning</h2>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="pb-8">
             
-            <div className="mb-4">
-              <label className="block text-gray-700 dark:text-gray-300">Breakfasts</label>
-              <input
-                type="range"
-                name="breakfasts"
-                value={formData.breakfasts}
-                onChange={handleChange}
-                className="mt-1 p-2 border rounded w-full"
-                min="0"
-                max="10"
-                step="1"
-                required
-              />
-              
-              <label className="block text-gray-700 dark:text-gray-300 mt-2">Lunches</label>
-              <input
-                type="range"
-                name="lunches"
-                value={formData.lunches}
-                onChange={handleChange}
-                className="mt-1 p-2 border rounded w-full"
-                min="0"
-                max="10"
-                step="1"
-                required
-              />
-              
-              <label className="block text-gray-700 dark:text-gray-300 mt-2">Dinners</label>
-              <input
-                type="range"
-                name="dinners"
-                value={formData.dinners}
-                onChange={handleChange}
-                className="mt-1 p-2 border rounded w-full"
-                min="0"
-                max="10"
-                step="1"
-                required
-              />
+            <div className="mb-4 grid grid-cols-2 gap-4">
+              {['breakfasts', 'dinners', 'lunches', 'snacks'].map((meal) => (
+                <div key={meal} className="flex items-center">
+                  <label className="mr-2 capitalize">{meal}:</label>
+                  <button type="button" onClick={() => handleStepperChange(meal, formData[meal] - 1)} className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded-l">-</button>
+                  <input
+                    type="number"
+                    name={meal}
+                    value={formData[meal]}
+                    onChange={(e) => handleStepperChange(meal, parseInt(e.target.value) || 0)}
+                    className="w-12 text-center border-t border-b dark:bg-gray-700 dark:text-white"
+                    min="0"
+                  />
+                  <button type="button" onClick={() => handleStepperChange(meal, formData[meal] + 1)} className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded-r">+</button>
+                </div>
+              ))}
             </div>
             
             <div className="mb-4">
@@ -116,7 +100,7 @@ const PlanView: React.FC = () => {
                   onChange={handleChange}
                   className="form-checkbox"
                 />
-                <span className="ml-2">Do you want to have leftovers?</span>
+                <span className="ml-2">Are you okay with eating leftovers for some meals?</span>
               </label>
             </div>
             
@@ -126,8 +110,9 @@ const PlanView: React.FC = () => {
                 name="ingredientsToUse"
                 value={formData.ingredientsToUse}
                 onChange={handleChange}
-                className="mt-1 p-2 border rounded w-full"
+                className="mt-1 p-2 border rounded w-full dark:bg-gray-700 dark:text-white"
                 rows={3}
+                placeholder="List any ingredients you want to use (or use up) this week."
               />
             </div>
             
@@ -137,8 +122,9 @@ const PlanView: React.FC = () => {
                 name="ingredientsToAvoid"
                 value={formData.ingredientsToAvoid}
                 onChange={handleChange}
-                className="mt-1 p-2 border rounded w-full"
+                className="mt-1 p-2 border rounded w-full dark:bg-gray-700 dark:text-white"
                 rows={3}
+                placeholder="List any ingredients you'd rather not see on your plate this week."
               />
             </div>
             
@@ -148,8 +134,9 @@ const PlanView: React.FC = () => {
                 name="dietaryRestrictions"
                 value={formData.dietaryRestrictions}
                 onChange={handleChange}
-                className="mt-1 p-2 border rounded w-full"
+                className="mt-1 p-2 border rounded w-full dark:bg-gray-700 dark:text-white"
                 rows={3}
+                placeholder="Tell us about any allergies or dietary needs (e.g., vegetarian, gluten-free)."
               />
             </div>
             
@@ -159,8 +146,9 @@ const PlanView: React.FC = () => {
                 name="recipes"
                 value={formData.recipes}
                 onChange={handleChange}
-                className="mt-1 p-2 border rounded w-full"
+                className="mt-1 p-2 border rounded w-full dark:bg-gray-700 dark:text-white"
                 rows={3}
+                placeholder="List any specific recipes you're craving this week. (Protip: paste urls from other sites here!)"
               />
             </div>
             
@@ -170,8 +158,9 @@ const PlanView: React.FC = () => {
                 name="availableIngredients"
                 value={formData.availableIngredients}
                 onChange={handleChange}
-                className="mt-1 p-2 border rounded w-full"
+                className="mt-1 p-2 border rounded w-full dark:bg-gray-700 dark:text-white"
                 rows={3}
+                placeholder="List the ingredients you already have in your kitchen."
               />
             </div>
             
@@ -181,8 +170,9 @@ const PlanView: React.FC = () => {
                 name="cookingTools"
                 value={formData.cookingTools}
                 onChange={handleChange}
-                className="mt-1 p-2 border rounded w-full"
+                className="mt-1 p-2 border rounded w-full dark:bg-gray-700 dark:text-white"
                 rows={3}
+                placeholder="List your available cooking tools (e.g., slow cooker, air fryer)."
               />
             </div>
             
@@ -192,8 +182,9 @@ const PlanView: React.FC = () => {
                 name="cookingMood"
                 value={formData.cookingMood}
                 onChange={handleChange}
-                className="mt-1 p-2 border rounded w-full"
+                className="mt-1 p-2 border rounded w-full dark:bg-gray-700 dark:text-white"
                 rows={3}
+                placeholder="Describe your cooking mood (e.g., adventurous, need quick meals)."
               />
             </div>
             
