@@ -49,6 +49,23 @@ const RecipeCard: React.FC<RecipeCardProps> = (props) => {
     }
   }, [props.onEdit, props.recipe]);
 
+  const handleDelete = useCallback(() => {
+    console.log('Delete button clicked. Current recipe ID:', props.recipe.id);
+    fetch(`/recipes/${props.recipe.id}`, {
+      method: 'DELETE',
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        console.log('Recipe deleted successfully');
+        props.onDelete();
+      })
+      .catch(error => {
+        console.error('There was a problem with the delete request:', error);
+      });
+  }, [props.recipe.id, props.onDelete]);
+
   return (
     <Draggable draggableId={props.id.toString()} index={props.index}>
       {(provided) => (
@@ -63,7 +80,7 @@ const RecipeCard: React.FC<RecipeCardProps> = (props) => {
           {isOriginal && (
             <div className="flex items-center justify-between">
               <button
-                onClick={onDelete}
+                onClick={handleDelete}
                 className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
               >
                 Delete

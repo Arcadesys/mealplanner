@@ -172,6 +172,23 @@ export async function GET() {
   }
 }
 
+export async function DELETE(request: Request) {
+  try {
+    console.log('DELETE request received'); // Debugging: Log when DELETE is called
+    const { id } = await request.json();
+    console.log('Recipe ID to delete:', id); // Debugging: Log the ID to be deleted
+    
+    // Filter out the recipe with the given ID
+    recipes = recipes.filter(recipe => recipe.id !== id);
+    console.log('Remaining recipes:', recipes); // Debugging: Log remaining recipes after deletion
+    
+    return NextResponse.json({ message: `Recipe with ID ${id} deleted` }, { status: 200 });
+  } catch (error) {
+    console.error('Error in DELETE /api/recipes:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const newRecipe = await request.json();
