@@ -26,57 +26,88 @@ const PlanForm: React.FC<PlanFormProps> = ({ formData, onChange, onSubmit }) => 
     onChange({ ...formData, [name]: newValue });
   };
 
+  const handleStepperChange = (name: string, increment: number) => {
+    const newValue = Math.max(0, (formData[name as keyof typeof formData] as number) + increment);
+    onChange({ ...formData, [name]: newValue });
+  };
+
+  const inputClass = "w-full p-2 border rounded dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300";
+  const labelClass = "block mb-1 font-medium dark:text-gray-200";
+  const helperTextClass = "mt-1 text-sm text-gray-500 dark:text-gray-400";
+
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
-      <div>
-        <label className="block">Breakfasts</label>
-        <input type="number" name="breakfasts" value={formData.breakfasts} onChange={handleChange} className="w-full p-2 border rounded" />
-      </div>
-      <div>
-        <label className="block">Lunches</label>
-        <input type="number" name="lunches" value={formData.lunches} onChange={handleChange} className="w-full p-2 border rounded" />
-      </div>
-      <div>
-        <label className="block">Dinners</label>
-        <input type="number" name="dinners" value={formData.dinners} onChange={handleChange} className="w-full p-2 border rounded" />
-      </div>
-      <div>
-        <label className="block">Snacks</label>
-        <input type="number" name="snacks" value={formData.snacks} onChange={handleChange} className="w-full p-2 border rounded" />
+    <form onSubmit={onSubmit} className="space-y-6">
+      <div className="grid grid-cols-2 gap-4">
+        {['breakfasts', 'lunches', 'dinners', 'snacks'].map((meal) => (
+          <div key={meal} className="flex flex-col items-center">
+            <label className="mb-1 capitalize">{meal}</label>
+            <div className="flex items-center">
+              <button
+                type="button"
+                onClick={() => handleStepperChange(meal, -1)}
+                className="px-2 py-1 border rounded-l dark:border-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                -
+              </button>
+              <input
+                type="number"
+                name={meal}
+                value={formData[meal as keyof typeof formData]}
+                onChange={handleChange}
+                className="w-12 text-center p-1 border-t border-b dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+              />
+              <button
+                type="button"
+                onClick={() => handleStepperChange(meal, 1)}
+                className="px-2 py-1 border rounded-r dark:border-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                +
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
       <div>
         <label className="flex items-center">
           <input type="checkbox" name="leftovers" checked={formData.leftovers} onChange={handleChange} className="mr-2" />
-          Include Leftovers
+          <span className="dark:text-gray-200">Include Leftovers</span>
         </label>
+        <p className={helperTextClass}>Check this if you want to include leftover meals in your plan.</p>
       </div>
       <div>
-        <label className="block">Ingredients to Use</label>
-        <textarea name="ingredientsToUse" value={formData.ingredientsToUse} onChange={handleChange} className="w-full p-2 border rounded" />
+        <label className={labelClass}>Ingredients to Use</label>
+        <textarea name="ingredientsToUse" value={formData.ingredientsToUse} onChange={handleChange} className={inputClass} />
+        <p className={helperTextClass}>List ingredients you want to include in your meals, separated by commas.</p>
       </div>
       <div>
-        <label className="block">Ingredients to Avoid</label>
-        <textarea name="ingredientsToAvoid" value={formData.ingredientsToAvoid} onChange={handleChange} className="w-full p-2 border rounded" />
+        <label className={labelClass}>Ingredients to Avoid</label>
+        <textarea name="ingredientsToAvoid" value={formData.ingredientsToAvoid} onChange={handleChange} className={inputClass} />
+        <p className={helperTextClass}>List ingredients you want to avoid in your meals, separated by commas.</p>
       </div>
       <div>
-        <label className="block">Dietary Restrictions</label>
-        <textarea name="dietaryRestrictions" value={formData.dietaryRestrictions} onChange={handleChange} className="w-full p-2 border rounded" />
+        <label className={labelClass}>Dietary Restrictions</label>
+        <textarea name="dietaryRestrictions" value={formData.dietaryRestrictions} onChange={handleChange} className={inputClass} />
+        <p className={helperTextClass}>List any dietary restrictions you have, separated by commas.</p>
       </div>
       <div>
-        <label className="block">Preferred Recipes</label>
-        <textarea name="recipes" value={formData.recipes} onChange={handleChange} className="w-full p-2 border rounded" />
+        <label className={labelClass}>Preferred Recipes</label>
+        <textarea name="recipes" value={formData.recipes} onChange={handleChange} className={inputClass} />
+        <p className={helperTextClass}>List your preferred recipes, separated by commas.</p>
       </div>
       <div>
-        <label className="block">Available Ingredients</label>
-        <textarea name="availableIngredients" value={formData.availableIngredients} onChange={handleChange} className="w-full p-2 border rounded" />
+        <label className={labelClass}>Available Ingredients</label>
+        <textarea name="availableIngredients" value={formData.availableIngredients} onChange={handleChange} className={inputClass} />
+        <p className={helperTextClass}>List the ingredients you have available, separated by commas.</p>
       </div>
       <div>
-        <label className="block">Cooking Tools</label>
-        <textarea name="cookingTools" value={formData.cookingTools} onChange={handleChange} className="w-full p-2 border rounded" />
+        <label className={labelClass}>Cooking Tools</label>
+        <textarea name="cookingTools" value={formData.cookingTools} onChange={handleChange} className={inputClass} />
+        <p className={helperTextClass}>List the cooking tools you have available, separated by commas.</p>
       </div>
       <div>
-        <label className="block">Cooking Mood</label>
-        <textarea name="cookingMood" value={formData.cookingMood} onChange={handleChange} className="w-full p-2 border rounded" />
+        <label className={labelClass}>Cooking Mood</label>
+        <textarea name="cookingMood" value={formData.cookingMood} onChange={handleChange} className={inputClass} />
+        <p className={helperTextClass}>Describe your cooking mood, separated by commas.</p>
       </div>
       <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Plan Meals</button>
     </form>
@@ -84,4 +115,3 @@ const PlanForm: React.FC<PlanFormProps> = ({ formData, onChange, onSubmit }) => 
 };
 
 export default PlanForm;
-
