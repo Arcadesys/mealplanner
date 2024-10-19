@@ -46,4 +46,6 @@ const ScheduleView: React.FC = () => {
       console.error('Error updating recipe:', error);
     }
   };
-}
+};
+
+export default ScheduleView;
