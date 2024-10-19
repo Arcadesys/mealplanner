@@ -1,6 +1,6 @@
-//a modal that allows a user to plan their meals for the week.
+'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import UnassignedRecipes from './UnassignedRecipes';
 import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import { Recipe } from '../types/recipe';
@@ -15,6 +15,7 @@ interface PlanViewProps {
 }
 
 const PlanView: React.FC<PlanViewProps> = ({ recipes, onAddRecipe, onEditRecipe, onDeleteRecipe }) => {
+  const [isClient, setIsClient] = useState(false);
   const [formData, setFormData] = useState({
     breakfasts: 0,
     lunches: 0,
@@ -31,6 +32,10 @@ const PlanView: React.FC<PlanViewProps> = ({ recipes, onAddRecipe, onEditRecipe,
   });
   const [generatedPlan, setGeneratedPlan] = useState<Recipe[] | null>(null);
 
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const handleFormChange = (newFormData: typeof formData) => {
     setFormData(newFormData);
   };
@@ -41,9 +46,7 @@ const PlanView: React.FC<PlanViewProps> = ({ recipes, onAddRecipe, onEditRecipe,
   };
 
   const handleDragEnd = (result: DropResult) => {
-    // Implement drag and drop logic here
     console.log('Drag ended:', result);
-    // You can update the state or call a function to update the parent component
   };
 
   const handleGenerateMealPlan = async () => {
@@ -63,28 +66,30 @@ const PlanView: React.FC<PlanViewProps> = ({ recipes, onAddRecipe, onEditRecipe,
       const generatedPlan = await response.json();
       setGeneratedPlan(generatedPlan);
       console.log('Generated meal plan:', generatedPlan);
-      // Handle the generated meal plan (e.g., update state, display results)
     } catch (error) {
       console.error('Error generating meal plan:', error);
-      // Handle the error (e.g., show an error message to the user)
     }
   };
+
+  if (!isClient) {
+    return null; // or a loading spinner
+  }
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <div className="flex h-screen overflow-hidden dark:bg-gray-800 dark:text-white">
         <div className="flex-1 p-4 overflow-y-auto">
-          <h2 className="text-2xl font-bold mb-4 dark:text-white">Meal Planning</h2>
+         
           <PlanForm 
             formData={formData} 
             onChange={handleFormChange} 
-            onSubmit={handleSubmit} 
+            onSubmit={GenerateMealPlan}
+            className="p-4"
           />
           <GenerateMealPlan formData={formData} onGenerate={handleGenerateMealPlan} />
           {generatedPlan && (
             <div className="mt-8">
               <h3 className="text-xl font-bold mb-4">Generated Meal Plan</h3>
-              {/* Display the generated meal plan here */}
               {generatedPlan.map((recipe, index) => (
                 <div key={index} className="mb-2">
                   <h4 className="font-semibold">{recipe.title}</h4>
