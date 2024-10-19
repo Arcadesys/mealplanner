@@ -70,7 +70,7 @@ const HomePage: React.FC = () => {
       case 'PLAN':
         return <PlanView recipes={recipes} onAddRecipe={handleAddRecipe} />;
       case 'SCHEDULE':
-        return <ScheduleView recipes={recipes} onDeleteRecipe={handleDeleteRecipe} onUpdateRecipe={handleUpdateRecipe} />;
+        return <ScheduleView onAddRecipe={handleAddRecipe} onDeleteRecipe={handleDeleteRecipe} onUpdateRecipe={handleUpdateRecipe} />;
       case 'SHOP':
         return <GroceryView />;
       default:

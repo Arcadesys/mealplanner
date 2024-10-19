@@ -6,16 +6,22 @@ import UnassignedRecipes from './UnassignedRecipes';
 import FullRecipeView from './FullRecipeView';
 import { useRecipes } from '../hooks/useRecipes';
 import { Recipe } from '../types/recipe';
+import { Days, Schedule } from '../types/day';
 
-const ScheduleView: React.FC = () => {
-  const { recipes: initialRecipes, loading, error } = useRecipes();
+interface ScheduleViewProps {
+  onAddRecipe: (newRecipe: Partial<Recipe>) => void;
+  onDeleteRecipe: (id: string) => void;
+  onUpdateRecipe: (recipe: Recipe) => void;
+}
+
+const ScheduleView: React.FC<ScheduleViewProps> = ({ onAddRecipe, onDeleteRecipe, onUpdateRecipe }) => {
+  const { recipes: initialRecipes, loading, error, setRecipes } = useRecipes();
   const [unassignedRecipes, setUnassignedRecipes] = useState<Recipe[]>([]);
-  const [assignedRecipes, setAssignedRecipes] = useState<{ [key: string]: Recipe[] }>({
-    Monday: [], Tuesday: [], Wednesday: [], Thursday: [], Friday: [], Saturday: [], Sunday: []
+  const [assignedRecipes, setAssignedRecipes] = useState<Schedule>({
+    [Days.Monday]: [], [Days.Tuesday]: [], [Days.Wednesday]: [], 
+    [Days.Thursday]: [], [Days.Friday]: [], [Days.Saturday]: [], [Days.Sunday]: []
   });
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
-  const [viewMode, setViewMode] = useState<'schedule' | 'recipe'>('schedule');
 
   useEffect(() => {
     if (initialRecipes.length > 0) {
@@ -25,101 +31,69 @@ const ScheduleView: React.FC = () => {
 
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
-
     if (!destination) return;
 
-    const sourceDay = source.droppableId;
-    const destDay = destination.droppableId;
+    const sourceDay = source.droppableId as Days | 'unassigned';
+    const destDay = destination.droppableId as Days | 'unassigned';
 
     const newAssignedRecipes = { ...assignedRecipes };
     let newUnassignedRecipes = [...unassignedRecipes];
 
+    const moveRecipe = (from: Recipe[], to: Recipe[], sourceIndex: number, destIndex: number) => {
+      const [movedRecipe] = from.splice(sourceIndex, 1);
+      to.splice(destIndex, 0, movedRecipe);
+    };
+
     if (sourceDay === 'unassigned') {
-      // Moving from unassigned to a day
-      const [movedRecipe] = newUnassignedRecipes.splice(source.index, 1);
-      newAssignedRecipes[destDay].splice(destination.index, 0, movedRecipe);
+      moveRecipe(newUnassignedRecipes, newAssignedRecipes[destDay], source.index, destination.index);
       setUnassignedRecipes(newUnassignedRecipes);
     } else if (destDay === 'unassigned') {
-      // Moving from a day to unassigned
-      const [movedRecipe] = newAssignedRecipes[sourceDay].splice(source.index, 1);
-      newUnassignedRecipes.splice(destination.index, 0, movedRecipe);
+      moveRecipe(newAssignedRecipes[sourceDay], newUnassignedRecipes, source.index, destination.index);
       setUnassignedRecipes(newUnassignedRecipes);
     } else {
-      // Moving between days
-      const [movedRecipe] = newAssignedRecipes[sourceDay].splice(source.index, 1);
-      newAssignedRecipes[destDay].splice(destination.index, 0, movedRecipe);
+      moveRecipe(newAssignedRecipes[sourceDay], newAssignedRecipes[destDay], source.index, destination.index);
     }
 
     setAssignedRecipes(newAssignedRecipes);
   };
 
-  const openRecipeView = (recipe: Recipe) => {
+  const handleEditRecipe = (recipe: Recipe) => {
     setSelectedRecipe(recipe);
-    setViewMode('recipe');
-  };
-
-  const closeRecipeView = () => {
-    setSelectedRecipe(null);
-    setViewMode('schedule');
   };
 
   const handleSaveRecipe = (updatedRecipe: Recipe) => {
-    // Implement save logic here
-    console.log('Saving updated recipe:', updatedRecipe);
-    // You might want to update the recipe in your state or send it to an API
-    closeRecipeView();
+    setRecipes(prev => prev.map(r => r.id === updatedRecipe.id ? updatedRecipe : r));
+    setSelectedRecipe(null);
   };
 
-  const handleEditRecipe = (recipeId: string) => {
-    const recipe = unassignedRecipes.find(r => r.id === recipeId) ||
-      Object.values(assignedRecipes).flat().find(r => r.id === recipeId);
-    
-    if (recipe) {
-      setSelectedRecipe(recipe);
-      setViewMode('recipe');
-    } else {
-      console.error(`Recipe with id ${recipeId} not found`);
-    }
-  };
-
-  if (loading) return (
-    <div className="flex items-center justify-center h-full">
-      <div className="text-2xl font-bold text-yellow-400 animate-bounce">
-        🐱 Chasing down those recipes... 🍳
-      </div>
-    </div>
-  );
-  if (error) return <p>Error loading recipes: {error}</p>;
+  if (loading) return <div>Loading recipes...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="flex h-full">
         <div className="w-1/3 p-4 overflow-y-auto">
-          <h2 className="text-xl font-bold mb-4">Unassigned Recipes</h2>
           <UnassignedRecipes 
             recipes={unassignedRecipes} 
-            setRecipes={setUnassignedRecipes} 
-            onRecipeClick={openRecipeView} 
+            onAddRecipe={onAddRecipe}
+            onEditRecipe={handleEditRecipe}
+            onDeleteRecipe={onDeleteRecipe}
           />
         </div>
         <div className="w-2/3 p-4">
-          {viewMode === 'schedule' ? (
-            <Scheduler
-              assignedRecipes={assignedRecipes}
-              onDragEnd={onDragEnd}
-              onEditRecipe={handleEditRecipe}
-            />
-          ) : (
-            selectedRecipe && (
-              <FullRecipeView
-                recipe={selectedRecipe}
-                onClose={closeRecipeView}
-                onSave={handleSaveRecipe}
-              />
-            )
-          )}
+          <Scheduler
+            assignedRecipes={assignedRecipes}
+            onEditRecipe={handleEditRecipe}
+          />
         </div>
       </div>
+      {selectedRecipe && (
+        <FullRecipeView
+          recipe={selectedRecipe}
+          onClose={() => setSelectedRecipe(null)}
+          onSave={handleSaveRecipe}
+        />
+      )}
     </DragDropContext>
   );
 };

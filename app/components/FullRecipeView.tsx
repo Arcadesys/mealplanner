@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Recipe } from '../types/recipe';
 
 interface FullRecipeViewProps {
@@ -8,24 +8,16 @@ interface FullRecipeViewProps {
 }
 
 const FullRecipeView: React.FC<FullRecipeViewProps> = ({ recipe, onClose, onSave }) => {
-  const handleSave = () => {
-    const updatedRecipe: Recipe = {
-      ...recipe,
-      ingredients: typeof recipe.ingredients === 'object' && !Array.isArray(recipe.ingredients)
-        ? recipe.ingredients
-        : {},
-      instructions: Array.isArray(recipe.instructions)
-        ? recipe.instructions
-        : typeof recipe.instructions === 'string'
-          ? (recipe.instructions as string).split('\n')
-          : [],
-    };
-    onSave(updatedRecipe);
+  const [editedRecipe, setEditedRecipe] = useState<Recipe>(recipe);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setEditedRecipe(prev => ({ ...prev, [name]: value }));
   };
 
-  if (!recipe) {
-    return <div>No recipe selected. How about we cook up some data?</div>;
-  }
+  const handleSave = () => {
+    onSave(editedRecipe);
+  };
 
   return (
     <div className="bg-gray-800 p-6 rounded-lg mb-4 text-white">
@@ -35,8 +27,9 @@ const FullRecipeView: React.FC<FullRecipeViewProps> = ({ recipe, onClose, onSave
         <label className="block text-sm font-medium mb-1">Title</label>
         <input
           type="text"
-          value={recipe.title || 'Untitled Recipe'}
-          readOnly
+          name="title"
+          value={editedRecipe.title}
+          onChange={handleChange}
           className="w-full p-2 border rounded text-sm bg-gray-700"
         />
       </div>
@@ -44,8 +37,9 @@ const FullRecipeView: React.FC<FullRecipeViewProps> = ({ recipe, onClose, onSave
       <div className="mb-4">
         <label className="block text-sm font-medium mb-1">Description</label>
         <textarea
-          value={recipe.description || 'No description available'}
-          readOnly
+          name="description"
+          value={editedRecipe.description}
+          onChange={handleChange}
           rows={3}
           className="w-full p-2 border rounded text-sm bg-gray-700"
         />
@@ -54,8 +48,9 @@ const FullRecipeView: React.FC<FullRecipeViewProps> = ({ recipe, onClose, onSave
       <div className="mb-4">
         <label className="block text-sm font-medium mb-1">Ingredients</label>
         <textarea
-          value={recipe.ingredients ? Object.entries(recipe.ingredients).map(([ingredient, amount]) => `${ingredient}: ${amount}`).join('\n') : 'No ingredients listed. Time to go shopping!'}
-          readOnly
+          name="ingredients"
+          value={editedRecipe.ingredients ? Object.entries(editedRecipe.ingredients).map(([ingredient, amount]) => `${ingredient}: ${amount}`).join('\n') : 'No ingredients listed. Time to go shopping!'}
+          onChange={handleChange}
           rows={5}
           className="w-full p-2 border rounded text-sm bg-gray-700"
         />
@@ -64,8 +59,9 @@ const FullRecipeView: React.FC<FullRecipeViewProps> = ({ recipe, onClose, onSave
       <div className="mb-4">
         <label className="block text-sm font-medium mb-1">Instructions</label>
         <textarea
-          value={Array.isArray(recipe.instructions) ? recipe.instructions.join('\n') : typeof recipe.instructions === 'string' ? (recipe.instructions as string).split('\n') : recipe.instructions && typeof recipe.instructions === 'object' ? Object.entries(recipe.instructions).map(([key, value]) => `${key}: ${value}`).join('\n') : 'No instructions available. Time to get creative!'}
-          readOnly
+          name="instructions"
+          value={Array.isArray(editedRecipe.instructions) ? editedRecipe.instructions.join('\n') : typeof editedRecipe.instructions === 'string' ? (editedRecipe.instructions as string).split('\n') : editedRecipe.instructions && typeof editedRecipe.instructions === 'object' ? Object.entries(editedRecipe.instructions).map(([key, value]) => `${key}: ${value}`).join('\n') : 'No instructions available. Time to get creative!'}
+          onChange={handleChange}
           rows={5}
           className="w-full p-2 border rounded text-sm bg-gray-700"
         />
@@ -79,7 +75,7 @@ const FullRecipeView: React.FC<FullRecipeViewProps> = ({ recipe, onClose, onSave
       </button>
       <button 
         onClick={onClose} 
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+        className="mt-4 ml-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
       >
         Close
       </button>

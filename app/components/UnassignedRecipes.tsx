@@ -1,130 +1,38 @@
-import React, { useMemo, useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Droppable } from '@hello-pangea/dnd';
 import RecipeCard from './RecipeCard';
 import { Recipe } from '../types/recipe';
 import AddRecipeInline from './AddRecipeInline';
-import FullRecipeView from './FullRecipeView';
-import { useAddRecipe } from '../hooks/useAddRecipe';
 
-const UnassignedRecipes: React.FC<{ recipes: Recipe[], setRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>, onRecipeClick: (recipe: Recipe) => void }> = ({ recipes, setRecipes, onRecipeClick }) => {
-  console.log('UnassignedRecipes component rendering');
+interface UnassignedRecipesProps {
+  recipes: Recipe[];
+  onAddRecipe: (newRecipe: Partial<Recipe>) => void;
+  onEditRecipe: (recipe: Recipe) => void;
+  onDeleteRecipe: (id: string) => void;
+}
 
-  const [isFullRecipeViewOpen, setIsFullRecipeViewOpen] = useState(false);
-  const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
+const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({ 
+  recipes, 
+  onAddRecipe, 
+  onEditRecipe, 
+  onDeleteRecipe 
+}) => {
   const [isAddingRecipe, setIsAddingRecipe] = useState(false);
 
-  useEffect(() => {
-    // Fetch recipes from API
-    const fetchRecipes = async () => {
-      try {
-        const response = await fetch('/api/recipes');
-        if (!response.ok) {
-          throw new Error('Failed to fetch recipes');
-        }
-        const data = await response.json();
-        setRecipes(data);
-      } catch (error) {
-        console.error('Error fetching recipes:', error);
-      }
-    };
-
-    fetchRecipes();
-  }, []);
-
-  const recipeCards = useMemo(() => recipes.map((recipe, index) => ({
-    ...recipe,
-    stableUniqueId: `${recipe.id}-${index}-${Date.now()}`,
-  })), [recipes]);
-
-  const handleOpenFullRecipe = (recipe: Recipe) => {
-    setEditingRecipe(recipe);
-    setIsFullRecipeViewOpen(true);
-  };
-
-  const handleCloseFullRecipe = () => {
-    setIsFullRecipeViewOpen(false);
-    setEditingRecipe(null);
-  };
-
-  const { isAddingRecipe: useAddRecipeIsAddingRecipe, setIsAddingRecipe: useAddRecipeSetIsAddingRecipe, addRecipe } = useAddRecipe();
-
   const handleAddRecipe = async (newRecipe: Partial<Recipe>) => {
-    try {
-      const addedRecipe = await addRecipe(newRecipe);
-      setRecipes(prevRecipes => [...prevRecipes, addedRecipe]);
-      useAddRecipeSetIsAddingRecipe(false);
-    } catch (error) {
-      console.error('Error adding recipe:', error);
-    }
-  };
-
-  const handleDeleteRecipe = async (recipeId: string) => {
-    try {
-      const response = await fetch(`/api/recipes/${recipeId}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete recipe');
-      }
-
-      setRecipes(prevRecipes => prevRecipes.filter(recipe => recipe.id !== recipeId));
-    } catch (error) {
-      console.error('Error deleting recipe:', error);
-    }
-  };
-
-  const handleUpdateRecipe = async (updatedRecipe: Partial<Recipe>) => {
-    try {
-      const response = await fetch(`/api/recipes/${updatedRecipe.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedRecipe),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update recipe');
-      }
-
-      const updatedRecipeFromServer = await response.json();
-      setRecipes(prevRecipes => prevRecipes.map(recipe => 
-        recipe.id === updatedRecipeFromServer.id ? updatedRecipeFromServer : recipe
-      ));
-    } catch (error) {
-      console.error('Error updating recipe:', error);
-    }
-  };
-
-  const handleEditRecipe = useCallback((recipe: Recipe) => {
-    setEditingRecipe(recipe);
-    setIsFullRecipeViewOpen(true);
-  }, []);
-
-  const handleClearAll = () => {
-    if (window.confirm('Are you sure you want to clear all recipes? This action cannot be undone.')) {
-      setRecipes([]);
-    }
+    await onAddRecipe(newRecipe);
+    setIsAddingRecipe(false);
   };
 
   return (
     <div>
       <h2 className="text-xl font-bold mb-4">Unassigned Recipes</h2>
-      <div className="mb-4 flex space-x-2">
-        <button
-          onClick={handleAddRecipe}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Add Recipe
-        </button>
-        <button
-          onClick={handleClearAll}
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-        >
-          Clear All
-        </button>
-      </div>
+      <button
+        onClick={() => setIsAddingRecipe(true)}
+        className="mb-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+      >
+        Add Recipe
+      </button>
 
       <Droppable droppableId="unassigned">
         {(provided) => (
@@ -135,38 +43,19 @@ const UnassignedRecipes: React.FC<{ recipes: Recipe[], setRecipes: React.Dispatc
                 onCancel={() => setIsAddingRecipe(false)}
               />
             )}
-            {recipeCards.map((recipe, index) => (
+            {recipes.map((recipe, index) => (
               <RecipeCard
                 key={recipe.id}
-                {...recipe}
                 recipe={recipe}
                 index={index}
-                onEdit={handleEditRecipe}
-                onOpenFullRecipe={handleOpenFullRecipe}
-                isModalOpen={isFullRecipeViewOpen && editingRecipe?.id === recipe.id}
-                handleCloseModal={handleCloseFullRecipe}
-                onDelete={() => handleDeleteRecipe(recipe.id)}
-                isOriginal={true}
-                className="recipe-card"
-                stableUniqueId={recipe.id.toString()}
+                onEdit={onEditRecipe}
+                onDelete={onDeleteRecipe}
               />
             ))}
             {provided.placeholder}
           </div>
         )}
       </Droppable>
-
-      {isFullRecipeViewOpen && editingRecipe && (
-        <FullRecipeView
-          recipe={editingRecipe!}
-          onClose={() => {
-            console.log('Closing FullRecipeView');
-            setIsFullRecipeViewOpen(false);
-            setEditingRecipe(null);
-          }}
-          onSave={handleUpdateRecipe}
-        />
-      )}
     </div>
   );
 };
