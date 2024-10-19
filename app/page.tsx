@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navigation } from './components/Navigation';
 import PlanView from './components/PlanView';
 import ScheduleView from './components/ScheduleView';
@@ -9,6 +9,19 @@ type ViewType = 'PLAN' | 'SCHEDULE' | 'SHOP';
 
 const HomePage: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewType>('SCHEDULE');
+
+  useEffect(() => {
+    // Load the saved view from localStorage when the component mounts
+    const savedView = localStorage.getItem('currentView') as ViewType;
+    if (savedView) {
+      setCurrentView(savedView);
+    }
+  }, []);
+
+  // Update localStorage whenever currentView changes
+  useEffect(() => {
+    localStorage.setItem('currentView', currentView);
+  }, [currentView]);
 
   console.log('HomePage setCurrentView:', typeof setCurrentView);
 
