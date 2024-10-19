@@ -1,23 +1,10 @@
 import React from 'react';
+import { PlanFormData } from '../types/planFormData';
 
 interface PlanFormProps {
-  formData: {
-    breakfasts: number;
-    lunches: number;
-    dinners: number;
-    snacks: number;
-    leftovers: boolean;
-    ingredientsToUse: string;
-    ingredientsToAvoid: string;
-    dietaryRestrictions: string;
-    recipes: string;
-    availableIngredients: string;
-    cookingTools: string;
-    otherCookingTools?: string; // Add this line
-    cookingMood: string;
-  };
-  onChange: (newFormData: PlanFormProps['formData']) => void;
-  onSubmit: () => void; // Changed this line
+  formData: PlanFormData;
+  onChange: (newFormData: PlanFormData) => void;
+  onSubmit: () => void;
 }
 
 const PlanForm: React.FC<PlanFormProps> = ({ formData, onChange, onSubmit }) => {
