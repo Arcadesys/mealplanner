@@ -1,20 +1,9 @@
 import React from 'react';
 
+import { MealPlanRequest } from '../types/cookingPrefs';
+
 interface GenerateMealPlanProps {
-  formData: {
-    breakfasts: number;
-    lunches: number;
-    dinners: number;
-    snacks: number;
-    leftovers: boolean;
-    ingredientsToUse: string;
-    ingredientsToAvoid: string;
-    dietaryRestrictions: string;
-    recipes: string;
-    availableIngredients: string;
-    cookingTools: string;
-    cookingMood: string;
-  };
+  formData: MealPlanRequest;
 }
 
 const GenerateMealPlan: React.FC<GenerateMealPlanProps> = ({ formData }) => {
