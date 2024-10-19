@@ -50,4 +50,3 @@ const GenerateMealPlan: React.FC<GenerateMealPlanProps> = ({ formData }) => {
 };
 
 export default GenerateMealPlan;
-

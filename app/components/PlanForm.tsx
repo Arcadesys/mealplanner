@@ -13,6 +13,7 @@ interface PlanFormProps {
     recipes: string;
     availableIngredients: string;
     cookingTools: string;
+    otherCookingTools?: string; // Add this line
     cookingMood: string;
   };
   onChange: (newFormData: PlanFormProps['formData']) => void;
