@@ -8,22 +8,21 @@ import GroceryView from './components/GroceryView';
 type ViewType = 'PLAN' | 'SCHEDULE' | 'SHOP';
 
 const HomePage: React.FC = () => {
-  const [currentView, setCurrentView] = useState<ViewType>('SCHEDULE');
-
-  useEffect(() => {
-    // Load the saved view from localStorage when the component mounts
-    const savedView = localStorage.getItem('currentView') as ViewType;
-    if (savedView) {
-      setCurrentView(savedView);
+  const [currentView, setCurrentView] = useState<ViewType>(() => {
+    // Initialize from localStorage, fallback to 'SCHEDULE'
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('currentView') as ViewType) || 'SCHEDULE';
     }
-  }, []);
+    return 'SCHEDULE';
+  });
 
   // Update localStorage whenever currentView changes
   useEffect(() => {
+    console.log('Saving view to localStorage:', currentView);
     localStorage.setItem('currentView', currentView);
   }, [currentView]);
 
-  console.log('HomePage setCurrentView:', typeof setCurrentView);
+  console.log('HomePage rendering with view:', currentView);
 
   const renderView = () => {
     switch (currentView) {

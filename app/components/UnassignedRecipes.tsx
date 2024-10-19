@@ -4,6 +4,7 @@ import RecipeCard from './RecipeCard';
 import { Recipe } from '../types/recipe';
 import AddRecipeInline from './AddRecipeInline';
 import FullRecipeView from './FullRecipeView';
+import { useAddRecipe } from '../hooks/useAddRecipe';
 
 const UnassignedRecipes: React.FC<{ recipes: Recipe[], setRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>, onRecipeClick: (recipe: Recipe) => void }> = ({ recipes, setRecipes, onRecipeClick }) => {
   console.log('UnassignedRecipes component rendering');
@@ -45,26 +46,13 @@ const UnassignedRecipes: React.FC<{ recipes: Recipe[], setRecipes: React.Dispatc
     setEditingRecipe(null);
   };
 
-  const handleAddRecipe = async (newRecipe: { title: string }) => {
+  const { isAddingRecipe: useAddRecipeIsAddingRecipe, setIsAddingRecipe: useAddRecipeSetIsAddingRecipe, addRecipe } = useAddRecipe();
+
+  const handleAddRecipe = async (newRecipe: Partial<Recipe>) => {
     try {
-      const response = await fetch('/api/recipes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newRecipe),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to add recipe');
-      }
-
-      const addedRecipe = await response.json();
-      if (!addedRecipe.id) {
-        addedRecipe.id = Date.now().toString(); // Temporary solution, use UUID in production
-      }
+      const addedRecipe = await addRecipe(newRecipe);
       setRecipes(prevRecipes => [...prevRecipes, addedRecipe]);
-      // We're not closing the form here anymore, that's handled in the AddRecipeInline component
+      useAddRecipeSetIsAddingRecipe(false);
     } catch (error) {
       console.error('Error adding recipe:', error);
     }

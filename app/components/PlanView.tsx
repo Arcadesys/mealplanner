@@ -7,6 +7,7 @@ import FullRecipeView from './FullRecipeView';
 import Modal from 'react-modal';
 import { Recipe } from '../types/recipe';
 import { useCompletion } from 'ai/react';
+import { useAddRecipe } from '../hooks/useAddRecipe';
 
 const PlanView: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -31,6 +32,8 @@ const PlanView: React.FC = () => {
   const { complete, completion, isLoading } = useCompletion({
     api: '/api/generate-meal-plan',
   });
+
+  const { isAddingRecipe, setIsAddingRecipe, addRecipe } = useAddRecipe();
 
   const handleStepperChange = (field: string, value: number) => {
     setFormData(prevData => ({
