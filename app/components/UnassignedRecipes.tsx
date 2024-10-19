@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Droppable } from '@hello-pangea/dnd';
 import RecipeCard from './RecipeCard';
 import { Recipe } from '../types/recipe';
@@ -19,8 +19,14 @@ const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({
 }) => {
   const [isAddingRecipe, setIsAddingRecipe] = useState(false);
 
-  const handleAddRecipe = async (newRecipe: Partial<Recipe>) => {
-    await onAddRecipe(newRecipe);
+  useEffect(() => {
+    console.log('Recipes updated:', recipes);
+  }, [recipes]);
+
+  const handleAddRecipe = (newRecipe: Partial<Recipe>) => {
+    console.log('Adding new recipe:', newRecipe);
+    onAddRecipe(newRecipe);
+    console.log('Recipe added, setting isAddingRecipe to false');
     setIsAddingRecipe(false);
   };
 
@@ -45,7 +51,7 @@ const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({
             )}
             {recipes.map((recipe, index) => (
               <RecipeCard
-                key={recipe.id}
+                key={recipe.id} // Ensure this is unique for each recipe
                 recipe={recipe}
                 index={index}
                 onEdit={onEditRecipe}

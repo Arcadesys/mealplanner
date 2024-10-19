@@ -72,12 +72,12 @@ const PlanForm: React.FC<PlanFormProps> = ({ formData, onChange, onSubmit }) => 
           <input type="checkbox" name="leftovers" checked={formData.leftovers} onChange={handleChange} className="mr-2" />
           <span className="dark:text-gray-200">Include Leftovers</span>
         </label>
-        <p className={helperTextClass}>Check this if you want to include leftover meals in your plan.</p>
+        <p className={helperTextClass}>I'm cool with eating leftovers for some of these meals.</p>
       </div>
       <div>
         <label className={labelClass}>Ingredients to Use</label>
         <textarea name="ingredientsToUse" value={formData.ingredientsToUse} onChange={handleChange} className={inputClass} />
-        <p className={helperTextClass}>List ingredients you want to include in your meals, separated by commas.</p>
+        <p className={helperTextClass}>What do you have around to use? List ingredients separated by commas.</p>
       </div>
       <div>
         <label className={labelClass}>Ingredients to Avoid</label>
@@ -92,17 +92,39 @@ const PlanForm: React.FC<PlanFormProps> = ({ formData, onChange, onSubmit }) => 
       <div>
         <label className={labelClass}>Preferred Recipes</label>
         <textarea name="recipes" value={formData.recipes} onChange={handleChange} className={inputClass} />
-        <p className={helperTextClass}>List your preferred recipes, separated by commas.</p>
-      </div>
-      <div>
-        <label className={labelClass}>Available Ingredients</label>
-        <textarea name="availableIngredients" value={formData.availableIngredients} onChange={handleChange} className={inputClass} />
-        <p className={helperTextClass}>List the ingredients you have available, separated by commas.</p>
+        <p className={helperTextClass}>List recipes you'd like to make this week, separated by commas. You can even paste webpages and the tool will pick it up!</p>
       </div>
       <div>
         <label className={labelClass}>Cooking Tools</label>
-        <textarea name="cookingTools" value={formData.cookingTools} onChange={handleChange} className={inputClass} />
-        <p className={helperTextClass}>List the cooking tools you have available, separated by commas.</p>
+        <div className="grid grid-cols-3 gap-4">
+          {['Stove', 'Microwave', 'Air Fryer', 'Slow Cooker', 'Pressure Cooker'].map((tool) => (
+            <label key={tool} className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                name="cookingTools"
+                value={tool}
+                checked={formData.cookingTools.includes(tool)}
+                onChange={(e) => {
+                  const updatedTools = e.target.checked
+                    ? [...formData.cookingTools.split(','), tool].filter(Boolean).join(',')
+                    : formData.cookingTools.split(',').filter(t => t !== tool).join(',');
+                  handleChange({ target: { name: 'cookingTools', value: updatedTools } });
+                }}
+                className="form-checkbox"
+              />
+              <span className="dark:text-gray-200">{tool}</span>
+            </label>
+          ))}
+          <input
+            type="text"
+            name="otherCookingTools"
+            value={formData.otherCookingTools || ''}
+            onChange={handleChange}
+            placeholder="Other tools"
+            className={`${inputClass} col-span-3`}
+          />
+        </div>
+        <p className={helperTextClass}>Select the cooking tools you have available, or add your own.</p>
       </div>
       <div>
         <label className={labelClass}>Cooking Mood</label>
