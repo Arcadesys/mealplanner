@@ -31,7 +31,7 @@ const PlanForm: React.FC<PlanFormProps> = ({ formData, onChange, onSubmit }) => 
           onClick={onSubmit} 
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
-          Plan Meals
+          Plan for Me
         </button>
       </div>
       <form className="space-y-6">
