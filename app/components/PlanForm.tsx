@@ -14,6 +14,11 @@ const PlanForm: React.FC<PlanFormProps> = ({ formData, onChange, onSubmit }) => 
     onChange({ ...formData, [name]: newValue });
   };
 
+  const handleSubmit = () => {
+    console.log('Submitting form data:', formData);
+    onSubmit();
+  };
+
   const handleStepperChange = (name: string, increment: number) => {
     const newValue = Math.max(0, (formData[name as keyof typeof formData] as number) + increment);
     onChange({ ...formData, [name]: newValue });
@@ -28,10 +33,10 @@ const PlanForm: React.FC<PlanFormProps> = ({ formData, onChange, onSubmit }) => 
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold dark:text-gray-200">Meal Planning</h1>
         <button 
-          onClick={onSubmit} 
+          onClick={handleSubmit} 
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
-          Plan for Me
+          Generate Meal Plan
         </button>
       </div>
       <form className="space-y-6">
