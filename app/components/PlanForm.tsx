@@ -1,5 +1,6 @@
 import React from 'react';
 import { PlanFormData } from '../types/planFormData';
+import { Recipe, MealPlanRequest, Days, Schedule } from '../types/mealPlanner';
 
 interface PlanFormProps {
   formData: PlanFormData;

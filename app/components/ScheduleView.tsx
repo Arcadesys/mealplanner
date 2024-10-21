@@ -7,6 +7,7 @@ import FullRecipeView from './FullRecipeView';
 import { useRecipes } from '../hooks/useRecipes';
 import { Recipe } from '../types/recipe';
 import { Days, Schedule } from '../types/day';
+import HandleEditRecipe from './HandleEditRecipe';
 
 const ScheduleView: React.FC = () => {
   const { recipes, loading, error, addRecipe, deleteRecipe, updateRecipe } = useRecipes();
@@ -46,6 +47,46 @@ const ScheduleView: React.FC = () => {
       console.error('Error updating recipe:', error);
     }
   };
+
+  const handleDragEnd = (result: DropResult) => {
+    const { source, destination } = result;
+
+    // Dropped outside the list
+    if (!destination) return;
+
+    // If the item is dropped in the same place, do nothing
+    if (
+      source.droppableId === destination.droppableId &&
+      source.index === destination.index
+    ) {
+      return;
+    }
+
+    // Logic to reorder or move recipes between lists
+    // Implement based on your application's requirements
+    // 🐱‍👓 Don't forget to keep those git commits clean, Clampett style!
+  };
+
+  return (
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <div style={{ flex: 1 }}>
+          <UnassignedRecipes 
+            recipes={unassignedRecipes} 
+            onAddRecipe={handleAddRecipe} 
+            onDeleteRecipe={handleDeleteRecipe} 
+          />
+        </div>
+        <div style={{ flex: 2 }}>
+          <Scheduler 
+            assignedRecipes={assignedRecipes} 
+            onDragEnd={handleDragEnd} 
+            onEditRecipe={<HandleEditRecipe />}
+          />
+        </div>
+      </div>
+    </DragDropContext>
+  );
 };
 
 export default ScheduleView;
