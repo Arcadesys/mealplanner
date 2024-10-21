@@ -23,11 +23,29 @@ const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({
     console.log('Recipes updated:', recipes);
   }, [recipes]);
 
-  const handleAddRecipe = (newRecipe: Partial<Recipe>) => {
+  const handleAddRecipe = async (newRecipe: Partial<Recipe>) => {
     console.log('Adding new recipe:', newRecipe);
-    onAddRecipe(newRecipe);
-    console.log('Recipe added, setting isAddingRecipe to false');
-    setIsAddingRecipe(false);
+    try {
+      const response = await fetch('/api/recipes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newRecipe),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add recipe');
+      }
+
+      const result = await response.json();
+      console.log('Recipe added successfully:', result);
+      onAddRecipe(newRecipe);
+      setIsAddingRecipe(false);
+    } catch (error) {
+      console.error('Error adding recipe:', error);
+      // Handle error (e.g., show an error message to the user)
+    }
   };
 
   return (

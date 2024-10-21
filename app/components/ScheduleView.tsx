@@ -63,8 +63,32 @@ const ScheduleView: React.FC = () => {
     }
 
     // Logic to reorder or move recipes between lists
-    // Implement based on your application's requirements
-    // 🐱‍👓 Don't forget to keep those git commits clean, Clampett style!
+    if (source.droppableId === 'unassigned') {
+      // Moving from unassigned to a day
+      const [movedRecipe] = unassignedRecipes.splice(source.index, 1);
+      setUnassignedRecipes([...unassignedRecipes]);
+      setAssignedRecipes(prev => ({
+        ...prev,
+        [destination.droppableId]: [
+          ...prev[destination.droppableId as Days].slice(0, destination.index),
+          movedRecipe,
+          ...prev[destination.droppableId as Days].slice(destination.index)
+        ]
+      }));
+    } else if (destination.droppableId === 'unassigned') {
+      // Moving from a day to unassigned
+      const [movedRecipe] = assignedRecipes[source.droppableId as Days].splice(source.index, 1);
+      setUnassignedRecipes([...unassignedRecipes, movedRecipe]);
+      setAssignedRecipes({...assignedRecipes});
+    } else {
+      // Moving between days
+      const sourceDay = assignedRecipes[source.droppableId as Days];
+      const [movedRecipe] = sourceDay.splice(source.index, 1);
+      const destDay = assignedRecipes[destination.droppableId as Days];
+      destDay.splice(destination.index, 0, movedRecipe);
+      setAssignedRecipes({...assignedRecipes});
+    }
+    // 🐱‍👓 Meow-velous job! Don't forget to commit these changes, you cool cat!
   };
 
   return (
@@ -81,7 +105,7 @@ const ScheduleView: React.FC = () => {
           <Scheduler 
             assignedRecipes={assignedRecipes} 
             onDragEnd={handleDragEnd} 
-            onEditRecipe={<HandleEditRecipe />}
+            onEditRecipe={(recipeId: string) => setSelectedRecipe(recipes.find(r => r.id === recipeId) || null)}
           />
         </div>
       </div>
