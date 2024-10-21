@@ -11,10 +11,23 @@ export async function POST(request: Request) {
   const newRecipe = await request.json();
   
   // Add new recipe with a UUID
-  recipes.push({
+  const recipeWithId = {
     ...newRecipe,
-    id: uuidv4()
-  });
+    id: uuidv4(),
+    title: newRecipe.title || 'Untitled Recipe',
+    ingredients: Array.isArray(newRecipe.ingredients) 
+      ? newRecipe.ingredients 
+      : typeof newRecipe.ingredients === 'object' 
+        ? Object.entries(newRecipe.ingredients).map(([name, amount]) => ({ name, amount }))
+        : [],
+    instructions: Array.isArray(newRecipe.instructions)
+      ? newRecipe.instructions
+      : typeof newRecipe.instructions === 'string'
+        ? newRecipe.instructions.split('\n')
+        : []
+  };
   
-  return NextResponse.json({ message: 'Recipe added successfully' });
+  recipes.push(recipeWithId);
+  
+  return NextResponse.json(recipeWithId);
 }
