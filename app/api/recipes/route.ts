@@ -8,22 +8,27 @@ export async function GET() {
     const { rows } = await sql`SELECT * FROM recipes`;
     return NextResponse.json(rows);
   } catch (error) {
-    console.error('Error fetching recipes:', error);
-    return NextResponse.json({ error: 'Failed to fetch recipes' }, { status: 500 });
+    console.error('Detailed error:', error);
+    return NextResponse.json({ error: 'Failed to fetch recipes', details: error.message }, { status: 500 });
   }
 }
 
 export async function POST(request: Request) {
   try {
     const { name, ingredients, instructions } = await request.json();
+    
+    // Convert ingredients to string if it's an array/object
+    const ingredientsString = Array.isArray(ingredients) ? JSON.stringify(ingredients) : ingredients;
+    
     const result = await sql`
       INSERT INTO recipes (name, ingredients, instructions)
-      VALUES (${name}, ${ingredients}, ${instructions})
+      VALUES (${name}, ${ingredientsString}, ${instructions})
       RETURNING *
     `;
     return NextResponse.json(result.rows[0]);
   } catch (error) {
-    console.error('Error adding recipe:', error);
-    return NextResponse.json({ error: 'Failed to add recipe' }, { status: 500 });
+    // Make the error more helpful
+    console.error('Detailed error:', error);
+    return NextResponse.json({ error: 'Failed to add recipe', details: error.message }, { status: 500 });
   }
 }

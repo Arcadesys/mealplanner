@@ -5,7 +5,7 @@ import Scheduler from './Scheduler';
 import UnassignedRecipes from './UnassignedRecipes';
 import FullRecipeView from './FullRecipeView';
 import { useRecipes } from '../hooks/useRecipes';
-import { Recipe } from '../types/recipe';
+import { Recipe } from '../types/mealPlanner';
 import { Days, Schedule } from '../types/day';
 import HandleEditRecipe from './HandleEditRecipe';
 
@@ -101,7 +101,8 @@ const ScheduleView: React.FC = () => {
           <UnassignedRecipes 
             recipes={unassignedRecipes} 
             onAddRecipe={handleAddRecipe} 
-            onDeleteRecipe={handleDeleteRecipe} 
+            onDeleteRecipe={handleDeleteRecipe}
+            onEditRecipe={(recipeId: string) => setSelectedRecipe(recipes.find(r => r.id === recipeId) || null)}
           />
         </div>
         <div style={{ flex: 2 }}>

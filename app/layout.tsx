@@ -10,11 +10,11 @@ interface RootLayoutProps {
 const RootLayout = ({ children }: RootLayoutProps) => {
   return (
     <html lang="en">
-      <DarkModeProvider>
-        <body className="bg-white dark:bg-gray-900 text-black dark:text-white">
+      <body className="bg-white dark:bg-gray-900 text-black dark:text-white">
+        <DarkModeProvider>
           <main>{children}</main>
-        </body>
-      </DarkModeProvider>
+        </DarkModeProvider>
+      </body>
     </html>
   );
 };

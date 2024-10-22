@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { Configuration, OpenAIApi } from 'openai-edge';
-import { Recipe } from '../../types/recipe';
 
 const config = new Configuration({
   apiKey: process.env.OPENAI_API_KEY

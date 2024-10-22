@@ -1,6 +1,6 @@
 import React from 'react';
 import { Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
-import { Recipe } from '../types/recipe';
+import { Recipe } from '../types/mealPlanner';
 import { FaEdit } from 'react-icons/fa';
 
 interface SchedulerProps {
