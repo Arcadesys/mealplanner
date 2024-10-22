@@ -20,9 +20,31 @@ export async function GET() {
     `;
     console.log('Table check result:', tableCheck.rows[0]);
 
-    const { rows } = await sql`SELECT * FROM recipes`;
+    const { rows } = await sql`
+      SELECT 
+        id,
+        title,
+        description,
+        ingredients,
+        instructions,
+        created_at,
+        CASE 
+          WHEN user_id = ${SYSTEM_USER_ID}::uuid THEN true 
+          ELSE false 
+        END as is_system_recipe
+      FROM recipes 
+      ORDER BY created_at DESC
+    `;
     console.log('Fetched recipes:', rows);
-    return NextResponse.json(rows);
+    
+    // Transform the data if needed
+    const formattedRecipes = rows.map(recipe => ({
+      ...recipe,
+      ingredients: recipe.ingredients || [],
+      instructions: recipe.instructions || []
+    }));
+
+    return NextResponse.json(formattedRecipes);
   } catch (error) {
     console.error('Detailed error:', {
       message: error.message,
@@ -30,7 +52,10 @@ export async function GET() {
       detail: error.detail,
       hint: error.hint
     });
-    return NextResponse.json({ error: 'Failed to fetch recipes', details: error.message }, { status: 500 });
+    return NextResponse.json({ 
+      error: 'Failed to fetch recipes', 
+      details: error.message 
+    }, { status: 500 });
   }
 }
 

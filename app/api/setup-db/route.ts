@@ -9,27 +9,37 @@ export async function GET(request: Request) {
   try {
     console.log('Starting database setup...');
 
-    // Drop and recreate the users table (WARNING: This will delete existing users!)
-    await sql`DROP TABLE IF EXISTS recipes;`; // Drop recipes first due to foreign key
-    await sql`DROP TABLE IF EXISTS users;`;
-    
+    // Drop existing tables
+    console.log('Dropping existing tables...');
+    await sql`DROP TABLE IF EXISTS recipes;`;  // Drop recipes FIRST
+    await sql`DROP TABLE IF EXISTS users;`;    // Then drop users
+
+    // Create users table
+    console.log('Creating users table...');
     await sql`
       CREATE TABLE users (
         id UUID PRIMARY KEY,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
     `;
-    console.log('Users table created');
 
-    // Insert our system user
-    await sql`
+    // Insert system user with explicit logging
+    console.log('Attempting to create system user...');
+    const systemUserResult = await sql`
       INSERT INTO users (id)
       VALUES (${SYSTEM_USER_ID}::uuid)
-      RETURNING id;
+      RETURNING *;
     `;
-    console.log('System user created');
+    console.log('System user creation result:', systemUserResult.rows[0]);
+
+    // Verify system user exists
+    const verifyUser = await sql`
+      SELECT * FROM users WHERE id = ${SYSTEM_USER_ID}::uuid;
+    `;
+    console.log('System user verification:', verifyUser.rows[0]);
 
     // Create recipes table
+    console.log('Creating recipes table...');
     await sql`
       CREATE TABLE recipes (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -41,13 +51,18 @@ export async function GET(request: Request) {
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
     `;
-    console.log('Recipes table created');
 
     return NextResponse.json({ 
-      message: 'Database setup completed successfully' 
+      message: 'Database setup completed successfully',
+      systemUser: verifyUser.rows[0]
     });
   } catch (error) {
-    console.error('Database setup error:', error);
+    console.error('Database setup error:', {
+      message: error.message,
+      code: error.code,
+      detail: error.detail,
+      hint: error.hint
+    });
     return NextResponse.json({ 
       error: 'Database setup failed', 
       details: error.message 
