@@ -20,8 +20,21 @@ const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({
   const [isAddingRecipe, setIsAddingRecipe] = useState(false);
 
   useEffect(() => {
-    console.log('Recipes updated:', recipes);
-  }, [recipes]);
+    const fetchRecipes = async () => {
+      try {
+        const response = await fetch('/api/recipes');
+        if (!response.ok) {
+          throw new Error('Failed to fetch recipes');
+        }
+        const data = await response.json();
+        onAddRecipe(data); // This will update the parent component's state
+      } catch (error) {
+        console.error('Error fetching recipes:', error);
+      }
+    };
+
+    fetchRecipes();
+  }, []); // Empty dependency array means this runs once on mount
 
   const handleAddRecipe = async (newRecipe: Partial<Recipe>) => {
     try {
