@@ -4,8 +4,13 @@ import { sql } from '@vercel/postgres';
 let recipes: any[] = [];
 
 export async function GET() {
-  const { rows } = await sql`SELECT * FROM recipes`;
-  return NextResponse.json(rows);
+  try {
+    const { rows } = await sql`SELECT * FROM recipes`;
+    return NextResponse.json(rows);
+  } catch (error) {
+    console.error('Error fetching recipes:', error);
+    return NextResponse.json({ error: 'Failed to fetch recipes' }, { status: 500 });
+  }
 }
 
 export async function POST(request: Request) {
