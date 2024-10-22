@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { sql } from '@vercel/postgres';
 
+const SYSTEM_USER_ID = '11111111-1111-1111-1111-111111111111';
+
 let recipes: any[] = [];
 
 export async function GET() {
@@ -35,21 +37,30 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     console.log('Starting POST request...');
+    
+    // First, verify our system user exists
+    const userCheck = await sql`
+      SELECT id FROM users WHERE id = ${SYSTEM_USER_ID}::uuid;
+    `;
+    console.log('System user check:', userCheck.rows[0]);
+
+    if (!userCheck.rows[0]) {
+      return NextResponse.json({ 
+        error: 'System user not found' 
+      }, { status: 500 });
+    }
+
     const body = await request.json();
     console.log('Received body:', body);
     
     const { title } = body;
     
-    // Validate only the title
     if (!title?.trim()) {
       return NextResponse.json({ 
         error: 'Title is required' 
       }, { status: 400 });
     }
 
-    const tempUserId = '00000000-0000-0000-0000-000000000000';
-    
-    // Set empty defaults for all other fields
     const result = await sql`
       INSERT INTO recipes (
         user_id,
@@ -59,7 +70,7 @@ export async function POST(request: Request) {
         instructions
       )
       VALUES (
-        ${tempUserId}::uuid,
+        ${SYSTEM_USER_ID}::uuid,
         ${title.trim()},
         ${'No description yet'},
         ${'[]'}::jsonb,
