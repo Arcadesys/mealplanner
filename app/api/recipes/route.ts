@@ -14,27 +14,16 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const newRecipe = await request.json();
-  
-  const recipeWithDefaults = {
-    title: newRecipe.title || 'Untitled Recipe',
-    ingredients: JSON.stringify(Array.isArray(newRecipe.ingredients) 
-      ? newRecipe.ingredients 
-      : typeof newRecipe.ingredients === 'object' 
-        ? Object.entries(newRecipe.ingredients).map(([name, amount]) => ({ name, amount }))
-        : []),
-    instructions: JSON.stringify(Array.isArray(newRecipe.instructions)
-      ? newRecipe.instructions
-      : typeof newRecipe.instructions === 'string'
-        ? newRecipe.instructions.split('\n')
-        : [])
-  };
-  
-  const { rows } = await sql`
-    INSERT INTO recipes (title, ingredients, instructions)
-    VALUES (${recipeWithDefaults.title}, ${recipeWithDefaults.ingredients}, ${recipeWithDefaults.instructions})
-    RETURNING *
-  `;
-  
-  return NextResponse.json(rows[0]);
+  try {
+    const { name, ingredients, instructions } = await request.json();
+    const result = await sql`
+      INSERT INTO recipes (name, ingredients, instructions)
+      VALUES (${name}, ${ingredients}, ${instructions})
+      RETURNING *
+    `;
+    return NextResponse.json(result.rows[0]);
+  } catch (error) {
+    console.error('Error adding recipe:', error);
+    return NextResponse.json({ error: 'Failed to add recipe' }, { status: 500 });
+  }
 }
