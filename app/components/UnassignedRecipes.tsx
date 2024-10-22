@@ -59,8 +59,12 @@ const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({
       </button>
 
       <Droppable droppableId="unassigned">
-        {(provided) => (
-          <div {...provided.droppableProps} ref={provided.innerRef} className="unassigned-recipes">
+        {(provided, snapshot) => (
+          <div 
+            {...provided.droppableProps} 
+            ref={provided.innerRef} 
+            className={`unassigned-recipes ${snapshot.isDraggingOver ? 'bg-gray-100' : ''}`}
+          >
             {isAddingRecipe && (
               <AddRecipeInline
                 onSave={handleAddRecipe}
