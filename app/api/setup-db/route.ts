@@ -15,15 +15,22 @@ export async function GET(request: Request) {
     `;
     console.log('Users table created or verified');
 
-    // Insert our default user
+    // Insert our default user with explicit ON CONFLICT handling
     await sql`
       INSERT INTO users (id)
       VALUES ('00000000-0000-0000-0000-000000000000'::uuid)
-      ON CONFLICT (id) DO NOTHING;
+      ON CONFLICT (id) DO UPDATE SET id = EXCLUDED.id
+      RETURNING id;
     `;
     console.log('Default user created or verified');
 
-    // Verify the recipes table
+    // Let's verify the user exists
+    const userCheck = await sql`
+      SELECT id FROM users WHERE id = '00000000-0000-0000-0000-000000000000'::uuid;
+    `;
+    console.log('User check result:', userCheck.rows);
+
+    // Verify the recipes table with additional fields
     await sql`
       CREATE TABLE IF NOT EXISTS recipes (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -32,7 +39,13 @@ export async function GET(request: Request) {
         description TEXT,
         ingredients JSONB DEFAULT '[]'::jsonb,
         instructions JSONB DEFAULT '[]'::jsonb,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+        prep_time INTEGER,
+        cook_time INTEGER,
+        servings INTEGER,
+        meal_type VARCHAR(50),
+        day VARCHAR(50),
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
     `;
     console.log('Recipes table created or verified');

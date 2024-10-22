@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Droppable } from '@hello-pangea/dnd';
 import RecipeCard from './RecipeCard';
-import { Recipe } from '../types/recipe';
+import { Recipe } from '../types/planFormData';
 import AddRecipeInline from './AddRecipeInline';
 
 interface UnassignedRecipesProps {
@@ -24,27 +24,29 @@ const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({
   }, [recipes]);
 
   const handleAddRecipe = async (newRecipe: Partial<Recipe>) => {
-    console.log('Adding new recipe:', newRecipe);
     try {
       const response = await fetch('/api/recipes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newRecipe),
+        body: JSON.stringify({
+          ...newRecipe,
+          user_id: null  // This will use the authenticated user's ID on the server
+        }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to add recipe');
+        const error = await response.json();
+        throw new Error(error.details || 'Failed to add recipe');
       }
 
       const result = await response.json();
-      console.log('Recipe added successfully:', result);
-      onAddRecipe(newRecipe);
+      onAddRecipe(result);
       setIsAddingRecipe(false);
     } catch (error) {
       console.error('Error adding recipe:', error);
-      // Handle error (e.g., show an error message to the user)
+      throw error; // Re-throw to let AddRecipeInline handle the error display
     }
   };
 
