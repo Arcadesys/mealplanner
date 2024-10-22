@@ -30,6 +30,15 @@ const HomePage: React.FC = () => {
   const { recipes, loading, error, setRecipes } = useRecipes();
   const { addRecipe, deleteRecipe, updateRecipe } = useAddRecipe();
 
+  // Add this before the renderView function
+  if (loading) {
+    return <div className="flex-grow flex items-center justify-center">Loading your delicious recipes...</div>;
+  }
+
+  if (error) {
+    return <div className="flex-grow flex items-center justify-center">Oops! The recipe book fell off the shelf! {error.message}</div>;
+  }
+
   const handleAddRecipe = async (newRecipe: Partial<Recipe>) => {
     try {
       const addedRecipe = await addRecipe(newRecipe);
@@ -64,6 +73,13 @@ const HomePage: React.FC = () => {
       // Optionally, show an error message or toast
     }
   };
+
+  function handleGetRecipes() {
+    fetch('/api/recipes')
+      .then(response => response.json())
+      .then(data => setRecipes(data))
+      .catch(error => console.error('Error fetching recipes:', error));
+  }
 
   const renderView = () => {
     switch (currentView) {
