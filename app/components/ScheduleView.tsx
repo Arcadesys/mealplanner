@@ -66,6 +66,7 @@ const ScheduleView: React.FC = () => {
     if (source.droppableId === 'unassigned') {
       // Moving from unassigned to a day
       const [movedRecipe] = unassignedRecipes.splice(source.index, 1);
+      movedRecipe.day = destination.droppableId as Days; // Set the day property
       setUnassignedRecipes([...unassignedRecipes]);
       setAssignedRecipes(prev => ({
         ...prev,
@@ -78,12 +79,14 @@ const ScheduleView: React.FC = () => {
     } else if (destination.droppableId === 'unassigned') {
       // Moving from a day to unassigned
       const [movedRecipe] = assignedRecipes[source.droppableId as Days].splice(source.index, 1);
+      movedRecipe.day = undefined; // Clear the day property
       setUnassignedRecipes([...unassignedRecipes, movedRecipe]);
       setAssignedRecipes({...assignedRecipes});
     } else {
       // Moving between days
       const sourceDay = assignedRecipes[source.droppableId as Days];
       const [movedRecipe] = sourceDay.splice(source.index, 1);
+      movedRecipe.day = destination.droppableId as Days; // Update the day property
       const destDay = assignedRecipes[destination.droppableId as Days];
       destDay.splice(destination.index, 0, movedRecipe);
       setAssignedRecipes({...assignedRecipes});

@@ -1,33 +1,35 @@
 import { NextResponse } from 'next/server';
-import { v4 as uuidv4 } from 'uuid';
+import { sql } from '@vercel/postgres';
 
 let recipes: any[] = [];
 
 export async function GET() {
-  return NextResponse.json(recipes);
+  const { rows } = await sql`SELECT * FROM recipes`;
+  return NextResponse.json(rows);
 }
 
 export async function POST(request: Request) {
   const newRecipe = await request.json();
   
-  // Add new recipe with a UUID
-  const recipeWithId = {
-    ...newRecipe,
-    id: uuidv4(),
+  const recipeWithDefaults = {
     title: newRecipe.title || 'Untitled Recipe',
-    ingredients: Array.isArray(newRecipe.ingredients) 
+    ingredients: JSON.stringify(Array.isArray(newRecipe.ingredients) 
       ? newRecipe.ingredients 
       : typeof newRecipe.ingredients === 'object' 
         ? Object.entries(newRecipe.ingredients).map(([name, amount]) => ({ name, amount }))
-        : [],
-    instructions: Array.isArray(newRecipe.instructions)
+        : []),
+    instructions: JSON.stringify(Array.isArray(newRecipe.instructions)
       ? newRecipe.instructions
       : typeof newRecipe.instructions === 'string'
         ? newRecipe.instructions.split('\n')
-        : []
+        : [])
   };
   
-  recipes.push(recipeWithId);
+  const { rows } = await sql`
+    INSERT INTO recipes (title, ingredients, instructions)
+    VALUES (${recipeWithDefaults.title}, ${recipeWithDefaults.ingredients}, ${recipeWithDefaults.instructions})
+    RETURNING *
+  `;
   
-  return NextResponse.json(recipeWithId);
+  return NextResponse.json(rows[0]);
 }

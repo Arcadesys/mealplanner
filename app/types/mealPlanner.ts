@@ -5,6 +5,7 @@ export interface Recipe {
   description: string;
   ingredients: { [key: string]: string };
   instructions: string[] | { [key: string]: string };
+  day?: string;
 }
 
 export interface Ingredient {
