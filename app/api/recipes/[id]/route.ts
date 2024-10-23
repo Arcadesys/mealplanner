@@ -58,18 +58,26 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
 }
 
 // PUT /api/recipes/[id]
+// PUT /api/recipes/[id]
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
     const id = params.id;
     const updatedRecipe = await request.json();
+    console.log('PUT request received for ID:', id, 'with data:', updatedRecipe);
     
     const index = recipes.findIndex(recipe => recipe.id === id);
     if (index === -1) {
-      return NextResponse.json({ error: 'Recipe not found' }, { status: 404 });
+      // If recipe doesn't exist, create it
+      const newRecipe = {
+        id,
+        ...updatedRecipe
+      };
+      recipes.push(newRecipe);
+      return NextResponse.json(newRecipe);
     }
 
+    // If recipe exists, update it
     recipes[index] = { ...recipes[index], ...updatedRecipe };
-    
     return NextResponse.json(recipes[index]);
   } catch (error) {
     console.error('Error updating recipe:', error);
