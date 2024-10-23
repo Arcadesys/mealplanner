@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import FullRecipeView from './FullRecipeView';
-import { Recipe, MealPlanRequest, Days, Schedule } from '../types/mealPlanner';
+import { Recipe } from '../types/mealPlanner';
 
 function HandleEditRecipe() {
     const [isFullRecipeViewOpen, setFullRecipeViewOpen] = useState(false);
@@ -23,4 +23,3 @@ function HandleEditRecipe() {
 }
 
 export default HandleEditRecipe;
-

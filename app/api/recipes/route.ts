@@ -6,7 +6,6 @@ const SYSTEM_USER_ID = '11111111-1111-1111-1111-111111111111';
 
 export async function GET() {
   try {
-    // Using proper Vercel SQL JSON handling
     const { rows } = await sql`
       SELECT 
         id,
@@ -14,9 +13,8 @@ export async function GET() {
         description,
         ingredients,
         instructions,
-        user_id,
-        day
-      FROM recipes`;
+        user_id
+      FROM recipes;`;
     
     // Transform the rows to ensure proper JSON parsing
     const recipes = rows.map(row => ({
@@ -56,9 +54,7 @@ export async function POST(request: Request) {
         description,
         ingredients,
         instructions,
-        user_id,
-        day
-    `;
+        user_id;`;  // Added semicolon here
     
     return NextResponse.json(rows[0] as Recipe);
   } catch (error) {

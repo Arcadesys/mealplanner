@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Recipe, MealPlanRequest, Days, Schedule } from '../types/mealPlanner';
+import { Recipe, MealPlanRequest } from '../types/mealPlanner';
 
 interface GenerateMealPlanProps {
   formData: MealPlanRequest;
