@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Droppable } from '@hello-pangea/dnd';
 import RecipeCard from './RecipeCard';
 import { Recipe } from '../types/planFormData';
@@ -18,50 +18,6 @@ const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({
   onDeleteRecipe 
 }) => {
   const [isAddingRecipe, setIsAddingRecipe] = useState(false);
-
-  useEffect(() => {
-    const fetchRecipes = async () => {
-      try {
-        const response = await fetch('/api/recipes');
-        if (!response.ok) {
-          throw new Error('Failed to fetch recipes');
-        }
-        const data = await response.json();
-        onAddRecipe(data); // This will update the parent component's state
-      } catch (error) {
-        console.error('Error fetching recipes:', error);
-      }
-    };
-
-    fetchRecipes();
-  }, []); // Empty dependency array means this runs once on mount
-
-  const handleAddRecipe = async (newRecipe: Partial<Recipe>) => {
-    try {
-      const response = await fetch('/api/recipes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...newRecipe,
-          user_id: null  // This will use the authenticated user's ID on the server
-        }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.details || 'Failed to add recipe');
-      }
-
-      const result = await response.json();
-      onAddRecipe(result);
-      setIsAddingRecipe(false);
-    } catch (error) {
-      console.error('Error adding recipe:', error);
-      throw error; // Re-throw to let AddRecipeInline handle the error display
-    }
-  };
 
   return (
     <div>
@@ -88,7 +44,7 @@ const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({
             )}
             {recipes.map((recipe, index) => (
               <RecipeCard
-                key={recipe.id} // Ensure this is unique for each recipe
+                key={recipe.id}
                 recipe={recipe}
                 index={index}
                 onEdit={onEditRecipe}
