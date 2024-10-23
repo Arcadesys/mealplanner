@@ -22,13 +22,10 @@ const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({
   return (
     <div>
       <h2 className="text-xl font-bold mb-4">Unassigned Recipes</h2>
-      <button
-        onClick={() => setIsAddingRecipe(true)}
-        className="mb-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-      >
-        Add Recipe
-      </button>
-
+      <AddRecipeInline
+        onSave={async (recipe) => onAddRecipe(recipe)}
+        onCancel={() => setIsAddingRecipe(false)}
+      />
       <Droppable droppableId="unassigned">
         {(provided, snapshot) => (
           <div 
@@ -36,12 +33,6 @@ const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({
             ref={provided.innerRef} 
             className={`unassigned-recipes ${snapshot.isDraggingOver ? 'bg-gray-100' : ''}`}
           >
-            {isAddingRecipe && (
-              <AddRecipeInline
-                onSave={async (recipe) => onAddRecipe(recipe)}
-                onCancel={() => setIsAddingRecipe(false)}
-              />
-            )}
             {recipes.map((recipe, index) => (
               <RecipeCard
                 key={recipe.id}
