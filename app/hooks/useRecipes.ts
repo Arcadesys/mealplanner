@@ -57,7 +57,7 @@ export const useRecipes = () => {
   const updateRecipe = async (updatedRecipe: Recipe) => {
     try {
       const response = await fetch(`/api/recipes/${updatedRecipe.id}`, {
-        method: 'PATCH',
+        method: 'PUT', // Changed from PATCH to PUT to match the route handler
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedRecipe),
       });
