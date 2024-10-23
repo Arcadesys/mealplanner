@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Recipe } from '../types/mealPlanner';
 
 export const useRecipes = () => {
@@ -6,7 +6,7 @@ export const useRecipes = () => {
   const [error, setError] = useState<string | null>(null);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
-  const fetchRecipes = async () => {
+  const fetchRecipes = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch('/api/recipes');
@@ -21,7 +21,7 @@ export const useRecipes = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []); // Empty dependency array since this doesn't depend on any external values
 
   const addRecipe = async (newRecipe: Partial<Recipe>) => {
     try {

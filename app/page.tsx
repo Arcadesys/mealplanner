@@ -28,9 +28,13 @@ const HomePage: React.FC = () => {
 
   console.log('HomePage rendering with view:', currentView);
 
-  const { recipes, loading, error, addRecipe, deleteRecipe, updateRecipe } = useRecipes();
+  const { recipes, loading, error, addRecipe, deleteRecipe, updateRecipe, fetchRecipes } = useRecipes();
 
-  // Add this before the renderView function
+  // Add this useEffect to fetch recipes on mount
+  useEffect(() => {
+    fetchRecipes().catch(console.error);
+  }, [fetchRecipes]);
+
   if (loading) {
     return <div className="flex-grow flex items-center justify-center">Loading your delicious recipes...</div>;
   }

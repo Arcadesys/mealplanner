@@ -22,9 +22,8 @@ export async function GET() {
     const recipes = rows.map(row => ({
       ...row,
       ingredients: typeof row.ingredients === 'string' ? JSON.parse(row.ingredients) : row.ingredients,
-      instructions: typeof row.instructions === 'string' ? JSON.parse(row.instructions) : row.instructions,
     }));
-    
+    console.log('recipes', recipes);
     return NextResponse.json(recipes as Recipe[]);
   } catch (error) {
     console.log('Recipe GET error:', error);
@@ -46,8 +45,8 @@ export async function POST(request: Request) {
       )
       VALUES (
         ${recipe.title}, 
-        ${JSON.stringify(recipe.ingredients)}, 
-        ${JSON.stringify(recipe.instructions)}, 
+        ${JSON.stringify(recipe.ingredients)}::jsonb, 
+        ${JSON.stringify(recipe.instructions)},
         ${SYSTEM_USER_ID}, 
         ${recipe.description || recipe.title}
       )
@@ -55,8 +54,8 @@ export async function POST(request: Request) {
         id,
         title,
         description,
-        ingredients::json as ingredients,
-        instructions::json as instructions,
+        ingredients,
+        instructions,
         user_id,
         day
     `;
