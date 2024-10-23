@@ -2,10 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { Navigation } from './components/Navigation';
 import PlanView from './components/PlanView';
-import RecipeView from './components/RecipeView';
 import GroceryView from './components/GroceryView';
 import { Recipe } from './types/mealPlanner';
-import { useAddRecipe } from './hooks/useRecipe';
 import { useRecipes } from './hooks/useRecipes';
 
 type ViewType = 'PLAN' | 'SHOP';
@@ -15,7 +13,7 @@ const HomePage: React.FC = () => {
     // Initialize from localStorage, fallback to 'PLAN' instead of 'SCHEDULE'
     if (typeof window !== 'undefined') {
       const savedView = localStorage.getItem('currentView') as ViewType;
-      return savedView === 'SCHEDULE' ? 'PLAN' : savedView || 'PLAN';
+      return savedView === 'SHOP' ? 'PLAN' : savedView || 'PLAN';
     }
     return 'PLAN';
   });
@@ -74,7 +72,14 @@ const HomePage: React.FC = () => {
   const renderView = () => {
     switch (currentView) {
       case 'PLAN':
-        return <PlanView recipes={recipes} onAddRecipe={handleAddRecipe} />;
+        return (
+          <PlanView 
+            recipes={recipes} 
+            onAddRecipe={handleAddRecipe} 
+            onEditRecipe={handleUpdateRecipe}
+            onDeleteRecipe={handleDeleteRecipe}
+          />
+        );
       case 'SHOP':
         return <GroceryView />;
       default:
