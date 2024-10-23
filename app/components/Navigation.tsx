@@ -25,7 +25,10 @@ export const Navigation: React.FC<NavigationProps> = ({
         <ul className="flex space-x-6">
           <li>
             <button
-              onClick={() => setCurrentView('PLAN')}
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentView('PLAN');
+              }}
               className={`px-4 py-2 rounded ${currentView === 'PLAN' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
             >
               Plan
@@ -33,7 +36,10 @@ export const Navigation: React.FC<NavigationProps> = ({
           </li>
           <li>
             <button
-              onClick={() => setCurrentView('SCHEDULE')}
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentView('SCHEDULE');
+              }}
               className={`px-4 py-2 rounded ${currentView === 'SCHEDULE' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
             >
               Schedule
@@ -41,7 +47,10 @@ export const Navigation: React.FC<NavigationProps> = ({
           </li>
           <li>
             <button
-              onClick={() => setCurrentView('SHOP')}
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentView('SHOP');
+              }}
               className={`px-4 py-2 rounded ${currentView === 'SHOP' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
             >
               Shop

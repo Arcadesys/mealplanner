@@ -52,6 +52,26 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({ onAddRecipe, onDeleteRecipe
       console.error('Error updating recipe:', error);
     }
   };
+
+  // Add this return statement
+  return (
+    <div className="container mx-auto p-4">
+      <DragDropContext onDragEnd={() => {}}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <UnassignedRecipes recipes={unassignedRecipes} />
+          <Scheduler schedule={assignedRecipes} />
+        </div>
+      </DragDropContext>
+      {selectedRecipe && (
+        <FullRecipeView
+          recipe={selectedRecipe}
+          onClose={() => setSelectedRecipe(null)}
+          onUpdate={handleUpdateRecipe}
+          onDelete={handleDeleteRecipe}
+        />
+      )}
+    </div>
+  );
 };
 
 export default ScheduleView;

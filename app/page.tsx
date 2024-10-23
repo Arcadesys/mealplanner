@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navigation } from './components/Navigation';
 import PlanView from './components/PlanView';
-import ScheduleView from './components/ScheduleView';
+import RecipeView from './components/RecipeView';
 import GroceryView from './components/GroceryView';
 import { Recipe } from './types/recipe';
 import { useAddRecipe } from './hooks/useAddRecipe';
@@ -75,7 +75,11 @@ const HomePage: React.FC = () => {
           onEditRecipe={handleUpdateRecipe}
         />;
       case 'SCHEDULE':
-        return <ScheduleView onAddRecipe={handleAddRecipe} onDeleteRecipe={handleDeleteRecipe} onUpdateRecipe={handleUpdateRecipe} />;
+        return <RecipeView 
+          onAddRecipe={handleAddRecipe} 
+          onDeleteRecipe={handleDeleteRecipe} 
+          onUpdateRecipe={handleUpdateRecipe} 
+        />;
       case 'SHOP':
         return <GroceryView />;
       default:
