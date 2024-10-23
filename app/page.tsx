@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navigation } from './components/Navigation';
 import PlanView from './components/PlanView';
-import ScheduleView from './components/ScheduleView';
+import RecipeView from './components/RecipeView';
 import GroceryView from './components/GroceryView';
 import { Recipe } from './types/mealPlanner';
 import { useAddRecipe } from './hooks/useRecipe';
@@ -76,19 +76,9 @@ const HomePage: React.FC = () => {
   const renderView = () => {
     switch (currentView) {
       case 'PLAN':
-        return <PlanView 
-          recipes={recipes} 
-          onAddRecipe={handleAddRecipe}
-          onDeleteRecipe={handleDeleteRecipe}
-          onEditRecipe={handleUpdateRecipe} 
-        />;
+        return <PlanView recipes={recipes} onAddRecipe={handleAddRecipe} />;
       case 'SCHEDULE':
-        return <ScheduleView 
-          recipes={recipes}  // <- Add this line
-          onAddRecipe={handleAddRecipe} 
-          onDeleteRecipe={handleDeleteRecipe} 
-          onUpdateRecipe={handleUpdateRecipe} 
-        />;
+        return <ScheduleView onAddRecipe={handleAddRecipe} onDeleteRecipe={handleDeleteRecipe} onUpdateRecipe={handleUpdateRecipe} />;
       case 'SHOP':
         return <GroceryView />;
       default:

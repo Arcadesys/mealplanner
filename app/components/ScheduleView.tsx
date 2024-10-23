@@ -8,12 +8,8 @@ import { Recipe } from '../types/mealPlanner';
 import { Days, Schedule } from '../types/day';
 import HandleEditRecipe from './HandleEditRecipe';
 
-const ScheduleView: React.FC<{
-  recipes: Recipe[];
-  onAddRecipe: (newRecipe: Partial<Recipe>) => Promise<Recipe>;  // Updated return type
-  onDeleteRecipe: (id: string) => void;
-  onUpdateRecipe: (recipe: Recipe) => void;
-}> = ({ recipes, onAddRecipe, onDeleteRecipe, onUpdateRecipe }) => {
+const ScheduleView: React.FC = () => {
+  const { recipes, loading, error, addRecipe, deleteRecipe, updateRecipe } = useRecipes();
   const [unassignedRecipes, setUnassignedRecipes] = useState<Recipe[]>([]);
   const [assignedRecipes, setAssignedRecipes] = useState<Schedule>({
     [Days.Monday]: [], [Days.Tuesday]: [], [Days.Wednesday]: [], 
@@ -57,77 +53,6 @@ const ScheduleView: React.FC<{
       console.error('Error updating recipe:', error);
     }
   };
-
-  const handleDragEnd = (result: DropResult) => {
-    const { source, destination } = result;
-
-    // Dropped outside the list
-    if (!destination) return;
-
-    // If the item is dropped in the same place, do nothing
-    if (
-      source.droppableId === destination.droppableId &&
-      source.index === destination.index
-    ) {
-      return;
-    }
-
-    // Logic to reorder or move recipes between lists
-    if (source.droppableId === 'unassigned') {
-      // Moving from unassigned to a day
-      const [movedRecipe] = unassignedRecipes.splice(source.index, 1);
-      movedRecipe.day = destination.droppableId as Days; // Set the day property
-      setUnassignedRecipes([...unassignedRecipes]);
-      setAssignedRecipes(prev => ({
-        ...prev,
-        [destination.droppableId]: [
-          ...prev[destination.droppableId as Days].slice(0, destination.index),
-          movedRecipe,
-          ...prev[destination.droppableId as Days].slice(destination.index)
-        ]
-      }));
-    } else if (destination.droppableId === 'unassigned') {
-      // Moving from a day to unassigned
-      const [movedRecipe] = assignedRecipes[source.droppableId as Days].splice(source.index, 1);
-      movedRecipe.day = undefined; // Clear the day property
-      setUnassignedRecipes([...unassignedRecipes, movedRecipe]);
-      setAssignedRecipes({...assignedRecipes});
-    } else {
-      // Moving between days
-      const sourceDay = assignedRecipes[source.droppableId as Days];
-      const [movedRecipe] = sourceDay.splice(source.index, 1);
-      movedRecipe.day = destination.droppableId as Days; // Update the day property
-      const destDay = assignedRecipes[destination.droppableId as Days];
-      destDay.splice(destination.index, 0, movedRecipe);
-      setAssignedRecipes({...assignedRecipes});
-    }
-    // 🐱‍ Meow-velous job! Don't forget to commit these changes, you cool cat!
-  };
-
-  return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      <div className="flex h-screen overflow-hidden">
-        {/* Fixed-width sidebar for unassigned recipes */}
-        <div className="w-96 h-full overflow-y-auto border-r border-gray-200 p-4">
-          <UnassignedRecipes 
-            recipes={unassignedRecipes} 
-            onAddRecipe={handleAddRecipe} 
-            onDeleteRecipe={handleDeleteRecipe}
-            onEditRecipe={(recipe: Recipe) => setSelectedRecipe(recipe)}
-          />
-        </div>
-
-        {/* Flex-grow main content area for scheduler */}
-        <div className="flex-grow h-full overflow-y-auto p-4">
-          <Scheduler 
-            assignedRecipes={assignedRecipes} 
-            onDragEnd={handleDragEnd} 
-            onEditRecipe={(recipeId: string) => setSelectedRecipe(recipes.find(r => r.id === recipeId) || null)}
-          />
-        </div>
-      </div>
-    </DragDropContext>
-  );
 };
 
 export default ScheduleView;
