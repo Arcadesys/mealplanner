@@ -99,13 +99,14 @@ const ScheduleView: React.FC<{
       destDay.splice(destination.index, 0, movedRecipe);
       setAssignedRecipes({...assignedRecipes});
     }
-    // 🐱‍👓 Meow-velous job! Don't forget to commit these changes, you cool cat!
+    // 🐱‍���� Meow-velous job! Don't forget to commit these changes, you cool cat!
   };
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <div style={{ flex: 1 }}>
+      <div className="flex h-screen overflow-hidden">
+        {/* Fixed-width sidebar for unassigned recipes */}
+        <div className="w-96 h-full overflow-y-auto border-r border-gray-200 p-4">
           <UnassignedRecipes 
             recipes={unassignedRecipes} 
             onAddRecipe={handleAddRecipe} 
@@ -113,7 +114,9 @@ const ScheduleView: React.FC<{
             onEditRecipe={(recipeId: string) => setSelectedRecipe(recipes.find(r => r.id === recipeId) || null)}
           />
         </div>
-        <div style={{ flex: 2 }}>
+
+        {/* Flex-grow main content area for scheduler */}
+        <div className="flex-grow h-full overflow-y-auto p-4">
           <Scheduler 
             assignedRecipes={assignedRecipes} 
             onDragEnd={handleDragEnd} 
