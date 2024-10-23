@@ -10,7 +10,7 @@ import HandleEditRecipe from './HandleEditRecipe';
 
 const ScheduleView: React.FC<{
   recipes: Recipe[];
-  onAddRecipe: (newRecipe: Partial<Recipe>) => void;
+  onAddRecipe: (newRecipe: Partial<Recipe>) => Promise<Recipe>;  // Updated return type
   onDeleteRecipe: (id: string) => void;
   onUpdateRecipe: (recipe: Recipe) => void;
 }> = ({ recipes, onAddRecipe, onDeleteRecipe, onUpdateRecipe }) => {
