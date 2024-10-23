@@ -20,7 +20,7 @@ const FullRecipeView: React.FC<FullRecipeViewProps> = ({ recipe, onClose, onSave
   };
 
   return (
-    <div className="bg-gray-800 p-6 rounded-lg mb-4 text-white">
+    <div className="bg-gray-800 p-6 rounded-lg mb-4 text-white h-full">
       <h2 className="text-2xl font-bold mb-4">Recipe Details</h2>
       
       <div className="mb-4">
@@ -49,9 +49,10 @@ const FullRecipeView: React.FC<FullRecipeViewProps> = ({ recipe, onClose, onSave
         <label className="block text-sm font-medium mb-1">Ingredients</label>
         <textarea
           name="ingredients"
-          value={editedRecipe.ingredients ? Object.entries(editedRecipe.ingredients).map(([ingredient, amount]) => `${ingredient}: ${amount}`).join('\n') : 'No ingredients listed. Time to go shopping!'}
+          value={editedRecipe.ingredients || ''}
           onChange={handleChange}
           rows={5}
+          placeholder="Enter ingredients, one per line"
           className="w-full p-2 border rounded text-sm bg-gray-700"
         />
       </div>
@@ -60,25 +61,28 @@ const FullRecipeView: React.FC<FullRecipeViewProps> = ({ recipe, onClose, onSave
         <label className="block text-sm font-medium mb-1">Instructions</label>
         <textarea
           name="instructions"
-          value={Array.isArray(editedRecipe.instructions) ? editedRecipe.instructions.join('\n') : typeof editedRecipe.instructions === 'string' ? (editedRecipe.instructions as string).split('\n') : editedRecipe.instructions && typeof editedRecipe.instructions === 'object' ? Object.entries(editedRecipe.instructions).map(([key, value]) => `${key}: ${value}`).join('\n') : 'No instructions available. Time to get creative!'}
+          value={editedRecipe.instructions || ''}
           onChange={handleChange}
           rows={5}
+          placeholder="Enter instructions, one per line"
           className="w-full p-2 border rounded text-sm bg-gray-700"
         />
       </div>
 
-      <button 
-        onClick={handleSave} 
-        className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-      >
-        Save
-      </button>
-      <button 
-        onClick={onClose} 
-        className="mt-4 ml-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-      >
-        Close
-      </button>
+      <div className="flex justify-end gap-2">
+        <button 
+          onClick={handleSave} 
+          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+        >
+          Save
+        </button>
+        <button 
+          onClick={onClose} 
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+        >
+          Close
+        </button>
+      </div>
     </div>
   );
 };

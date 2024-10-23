@@ -6,20 +6,8 @@ let recipes: Recipe[] = [
     id: '1',
     title: "Veggie-Loaded Frittata",
     description: "A versatile egg dish that uses up leftover vegetables.",
-    ingredients: {
-      "eggs": "6 large",
-      "milk": "1/4 cup",
-      "mixed vegetables": "2 cups, chopped (use leftovers from stir-fry)",
-      "cheese": "1/2 cup, shredded (leftover from other recipes)",
-      "salt and pepper": "to taste",
-      "olive oil": "1 tablespoon"
-    },
-    instructions: [
-      "Whisk eggs with milk, salt, and pepper.",
-      "Sauté vegetables in an oven-safe skillet with olive oil.",
-      "Pour egg mixture over vegetables and sprinkle with cheese.",
-      "Cook on stovetop for 5 minutes, then finish in the oven at 375°F for 10-15 minutes."
-    ]
+    ingredients: "6 large eggs\n1/4 cup milk\n2 cups mixed vegetables, chopped\n1/2 cup cheese, shredded\nsalt and pepper to taste\n1 tablespoon olive oil",
+    instructions: "1. Whisk eggs with milk, salt, and pepper\n2. Sauté vegetables in an oven-safe skillet with olive oil\n3. Pour egg mixture over vegetables and sprinkle with cheese\n4. Cook on stovetop for 5 minutes, then finish in the oven at 375°F for 10-15 minutes"
   },
   {
     id: '2',

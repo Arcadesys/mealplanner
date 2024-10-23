@@ -2,10 +2,9 @@
 export interface Recipe {
   id: string;
   title: string;
-  name?: string; // Optional quick add name
   description: string;
-  ingredients: { [key: string]: string };
-  instructions: string[] | { [key: string]: string };
+  ingredients: string | { [key: string]: string };  // Allow both string and object format
+  instructions: string | string[];
 }
 
 // Individual instructions in the recipe
