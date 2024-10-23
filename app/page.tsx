@@ -1,25 +1,98 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navigation } from './components/Navigation';
 import PlanView from './components/PlanView';
 import ScheduleView from './components/ScheduleView';
 import GroceryView from './components/GroceryView';
+import { Recipe } from './types/mealPlanner';
+import { useAddRecipe } from './hooks/useRecipe';
+import { useRecipes } from './hooks/useRecipes';
 
 type ViewType = 'PLAN' | 'SCHEDULE' | 'SHOP';
 
 const HomePage: React.FC = () => {
-  const [currentView, setCurrentView] = useState<ViewType>('SCHEDULE');
+  const [currentView, setCurrentView] = useState<ViewType>(() => {
+    // Initialize from localStorage, fallback to 'SCHEDULE'
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('currentView') as ViewType) || 'SCHEDULE';
+    }
+    return 'SCHEDULE';
+  });
 
-  console.log('HomePage setCurrentView:', typeof setCurrentView);
+  // Update localStorage whenever currentView changes
+  useEffect(() => {
+    console.log('Saving view to localStorage:', currentView);
+    localStorage.setItem('currentView', currentView);
+  }, [currentView]);
+
+  console.log('HomePage rendering with view:', currentView);
+
+  const { recipes, loading, error, addRecipe, deleteRecipe, updateRecipe } = useRecipes();
+
+  // Add this before the renderView function
+  if (loading) {
+    return <div className="flex-grow flex items-center justify-center">Loading your delicious recipes...</div>;
+  }
+
+  if (error) {
+    return <div className="flex-grow flex items-center justify-center">Oops! The recipe book fell off the shelf! {error}</div>;
+  }
+
+  const handleAddRecipe = async (newRecipe: Partial<Recipe>) => {
+    try {
+      const addedRecipe = await addRecipe(newRecipe);
+      setRecipes(prev => [...prev, addedRecipe]);
+      return addedRecipe;  // <- Add this line
+    } catch (error) {
+      console.error('Error adding recipe:', error);
+      // Optionally, show an error message or toast
+    }
+  };
+
+  const handleDeleteRecipe = async (recipeId: string) => {
+    try {
+      await deleteRecipe(recipeId);
+      setRecipes(prev => prev.filter(recipe => recipe.id !== recipeId));
+      // Optionally, show a success message or toast
+    } catch (error) {
+      console.error('Error deleting recipe:', error);
+      // Optionally, show an error message or toast
+    }
+  };
+
+  const handleUpdateRecipe = async (updatedRecipe: Recipe) => {
+    try {
+      const savedRecipe = await updateRecipe(updatedRecipe);
+      setRecipes(prev =>
+        prev.map(recipe => (recipe.id === savedRecipe.id ? savedRecipe : recipe))
+      );
+      // Optionally, show a success message or toast
+    } catch (error) {
+      console.error('Error updating recipe:', error);
+      // Optionally, show an error message or toast
+    }
+  };
 
   const renderView = () => {
     switch (currentView) {
       case 'PLAN':
-        return <PlanView />;
+        return <PlanView 
+          recipes={recipes} 
+          onAddRecipe={handleAddRecipe}
+          onDeleteRecipe={handleDeleteRecipe}
+          onEditRecipe={handleUpdateRecipe} 
+        />;
       case 'SCHEDULE':
-        return <ScheduleView />;
+        return <ScheduleView 
+          recipes={recipes}  // <- Add this line
+          onAddRecipe={handleAddRecipe} 
+          onDeleteRecipe={handleDeleteRecipe} 
+          onUpdateRecipe={handleUpdateRecipe} 
+        />;
       case 'SHOP':
         return <GroceryView />;
+      default:
+        return null;
     }
   };
 

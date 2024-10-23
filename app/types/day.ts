@@ -1,4 +1,4 @@
-import { Recipe } from './recipe';
+import { Recipe } from './mealPlanner';
 
 export enum Days {
   Monday = 'Monday',
@@ -23,4 +23,5 @@ export interface Schedule {
   [Days.Friday]: Recipe[];
   [Days.Saturday]: Recipe[];
   [Days.Sunday]: Recipe[];
+  [key: string]: Recipe[];  // Add this line
 }
