@@ -41,6 +41,7 @@ export const useRecipes = () => {
   };
 
   const deleteRecipe = async (id: string) => {
+   console.log('Deleting recipe with id:', id);
     try {
       const response = await fetch(`/api/recipes/${id}`, {
         method: 'DELETE',

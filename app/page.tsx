@@ -1,71 +1,43 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Navigation } from './components/Navigation';
 import PlanView from './components/PlanView';
 import GroceryView from './components/GroceryView';
 import { Recipe } from './types/mealPlanner';
 import { useRecipes } from './hooks/useRecipes';
 
-type ViewType = 'PLAN' | 'SHOP';
-
 const HomePage: React.FC = () => {
-  const [currentView, setCurrentView] = useState<ViewType>(() => {
-    // Initialize from localStorage, fallback to 'PLAN' instead of 'SCHEDULE'
-    if (typeof window !== 'undefined') {
-      const savedView = localStorage.getItem('currentView') as ViewType;
-      return savedView === 'SHOP' ? 'PLAN' : savedView || 'PLAN';
-    }
-    return 'PLAN';
-  });
-
-  // Update localStorage whenever currentView changes
-  useEffect(() => {
-    console.log('Saving view to localStorage:', currentView);
-    localStorage.setItem('currentView', currentView);
-  }, [currentView]);
-
-  console.log('HomePage rendering with view:', currentView);
-
-  const { recipes, loading, error, addRecipe, deleteRecipe, updateRecipe, fetchRecipes } = useRecipes();
-
-  // Add this useEffect to fetch recipes on mount
-  useEffect(() => {
-    fetchRecipes().catch(console.error);
-  }, [fetchRecipes]);
-
-  if (loading) {
-    return <div className="flex-grow flex items-center justify-center">Loading your delicious recipes...</div>;
-  }
-
-  if (error) {
-    return <div className="flex-grow flex items-center justify-center">Oops! The recipe book fell off the shelf! {error}</div>;
-  }
+  const [currentView, setCurrentView] = useState<'PLAN' | 'SHOP'>('PLAN');
+  const { 
+    recipes, 
+    loading, 
+    error, 
+    addRecipe, 
+    deleteRecipe, 
+    updateRecipe 
+  } = useRecipes();
 
   const handleAddRecipe = async (newRecipe: Partial<Recipe>) => {
     try {
-      const addedRecipe = await addRecipe(newRecipe);
-      return addedRecipe;
+      await addRecipe(newRecipe);
     } catch (error) {
       console.error('Error adding recipe:', error);
-      throw error; // Propagate the error so the UI can handle it
     }
   };
 
-  const handleDeleteRecipe = async (recipeId: string) => {
+  const handleDeleteRecipe = async (id: string) => {
     try {
-      await deleteRecipe(recipeId);
+      await deleteRecipe(id);
     } catch (error) {
       console.error('Error deleting recipe:', error);
-      throw error;
     }
   };
 
-  const handleUpdateRecipe = async (updatedRecipe: Recipe) => {
+  const handleUpdateRecipe = async (recipe: Recipe) => {
     try {
-      const savedRecipe = await updateRecipe(updatedRecipe);
+      await updateRecipe(recipe);
     } catch (error) {
       console.error('Error updating recipe:', error);
-      throw error;
     }
   };
 
@@ -75,7 +47,7 @@ const HomePage: React.FC = () => {
         return (
           <PlanView 
             recipes={recipes} 
-            onAddRecipe={handleAddRecipe} 
+            onAddRecipe={handleAddRecipe}
             onEditRecipe={handleUpdateRecipe}
             onDeleteRecipe={handleDeleteRecipe}
           />
@@ -86,6 +58,9 @@ const HomePage: React.FC = () => {
         return null;
     }
   };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="flex flex-col h-screen">
