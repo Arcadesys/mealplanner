@@ -62,19 +62,17 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   try {
     const id = params.id;
     const updatedRecipe = await request.json();
-    console.log('PUT request received for ID:', id, 'with data:', updatedRecipe);
-
+    
     const index = recipes.findIndex(recipe => recipe.id === id);
     if (index === -1) {
       return NextResponse.json({ error: 'Recipe not found' }, { status: 404 });
     }
 
     recipes[index] = { ...recipes[index], ...updatedRecipe };
-    console.log('Updated recipes:', recipes);
-
-    return NextResponse.json(recipes[index], { status: 200 });
+    
+    return NextResponse.json(recipes[index]);
   } catch (error) {
-    console.error('Error in PUT /api/recipes:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    console.error('Error updating recipe:', error);
+    return NextResponse.json({ error: 'Failed to update recipe' }, { status: 500 });
   }
 }

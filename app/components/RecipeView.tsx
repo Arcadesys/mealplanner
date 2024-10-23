@@ -42,7 +42,7 @@ const RecipeView: React.FC<RecipeViewProps> = ({ onAddRecipe, onDeleteRecipe, on
 
       <div className="flex gap-4 h-[calc(100vh-200px)]">
         <div className="flex flex-col gap-4 flex-1 overflow-y-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-4">
             {recipes.map((recipe, index) => (
               <RecipeCard
                 key={recipe.id}
