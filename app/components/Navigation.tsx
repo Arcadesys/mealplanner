@@ -3,7 +3,7 @@
 import React from 'react';
 import { useDarkMode } from './DarkModeProvider';
 
-type ViewType = 'PLAN' | 'SCHEDULE' | 'SHOP';
+type ViewType = 'PLAN' | 'SHOP';
 
 interface NavigationProps {
   currentView: ViewType;
@@ -32,17 +32,6 @@ export const Navigation: React.FC<NavigationProps> = ({
               className={`px-4 py-2 rounded ${currentView === 'PLAN' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
             >
               Plan
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                setCurrentView('SCHEDULE');
-              }}
-              className={`px-4 py-2 rounded ${currentView === 'SCHEDULE' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
-            >
-              Schedule
             </button>
           </li>
           <li>

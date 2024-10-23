@@ -42,35 +42,28 @@ const HomePage: React.FC = () => {
   const handleAddRecipe = async (newRecipe: Partial<Recipe>) => {
     try {
       const addedRecipe = await addRecipe(newRecipe);
-      setRecipes(prev => [...prev, addedRecipe]);
-      return addedRecipe;  // <- Add this line
+      return addedRecipe;
     } catch (error) {
       console.error('Error adding recipe:', error);
-      // Optionally, show an error message or toast
+      throw error; // Propagate the error so the UI can handle it
     }
   };
 
   const handleDeleteRecipe = async (recipeId: string) => {
     try {
       await deleteRecipe(recipeId);
-      setRecipes(prev => prev.filter(recipe => recipe.id !== recipeId));
-      // Optionally, show a success message or toast
     } catch (error) {
       console.error('Error deleting recipe:', error);
-      // Optionally, show an error message or toast
+      throw error;
     }
   };
 
   const handleUpdateRecipe = async (updatedRecipe: Recipe) => {
     try {
       const savedRecipe = await updateRecipe(updatedRecipe);
-      setRecipes(prev =>
-        prev.map(recipe => (recipe.id === savedRecipe.id ? savedRecipe : recipe))
-      );
-      // Optionally, show a success message or toast
     } catch (error) {
       console.error('Error updating recipe:', error);
-      // Optionally, show an error message or toast
+      throw error;
     }
   };
 
