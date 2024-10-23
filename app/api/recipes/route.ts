@@ -1,20 +1,29 @@
+import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';  // You'll need to set this up if you haven't
 
 export async function GET() {
-  const recipes = await prisma.recipe.findMany();
-  return NextResponse.json(recipes);
+  try {
+    const { rows } = await sql`SELECT * FROM recipes`;
+    return NextResponse.json(rows);
+  } catch (error) {
+    console.log('Recipe GET error:', error);
+    return NextResponse.json({ error: 'Failed to fetch recipes' }, { status: 500 });
+  }
 }
 
 export async function POST(request: Request) {
-  const data = await request.json();
-  
-  const recipe = await prisma.recipe.create({
-    data: {
-      ...data,
-      // Prisma will handle the ID for us, so we can remove the uuid generation
-    }
-  });
-  
-  return NextResponse.json(recipe);
+  try {
+    const { title, ingredients, instructions } = await request.json();
+    
+    const { rows } = await sql`
+      INSERT INTO recipes (title, ingredients, instructions)
+      VALUES (${title}, ${ingredients}, ${instructions})
+      RETURNING *
+    `;
+    
+    return NextResponse.json(rows[0]);
+  } catch (error) {
+    console.log('Recipe POST error:', error);
+    return NextResponse.json({ error: 'Failed to create recipe' }, { status: 500 });
+  }
 }
