@@ -20,7 +20,7 @@ const FullRecipeView: React.FC<FullRecipeViewProps> = ({ recipe, onClose, onSave
   };
 
   return (
-    <div className="bg-gray-800 p-6 rounded-lg mb-4 text-white h-full">
+    <div className="bg-gray-800 p-6 rounded-lg mb-4 text-white h-full max-w-4xl w-full mx-auto">
       <h2 className="text-2xl font-bold mb-4">Recipe Details</h2>
       
       <div className="mb-4">
