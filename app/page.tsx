@@ -4,8 +4,8 @@ import { Navigation } from './components/Navigation';
 import PlanView from './components/PlanView';
 import RecipeView from './components/RecipeView';
 import GroceryView from './components/GroceryView';
-import { Recipe } from './types/recipe';
-import { useAddRecipe } from './hooks/useAddRecipe';
+import { Recipe } from './types/mealPlanner';
+import { useAddRecipe } from './hooks/useRecipe';
 import { useRecipes } from './hooks/useRecipes';
 
 type ViewType = 'PLAN' | 'SCHEDULE' | 'SHOP';
@@ -27,14 +27,22 @@ const HomePage: React.FC = () => {
 
   console.log('HomePage rendering with view:', currentView);
 
-  const { recipes, loading, error, setRecipes } = useRecipes();
-  const { addRecipe, deleteRecipe, updateRecipe } = useAddRecipe();
+  const { recipes, loading, error, addRecipe, deleteRecipe, updateRecipe } = useRecipes();
+
+  // Add this before the renderView function
+  if (loading) {
+    return <div className="flex-grow flex items-center justify-center">Loading your delicious recipes...</div>;
+  }
+
+  if (error) {
+    return <div className="flex-grow flex items-center justify-center">Oops! The recipe book fell off the shelf! {error}</div>;
+  }
 
   const handleAddRecipe = async (newRecipe: Partial<Recipe>) => {
     try {
       const addedRecipe = await addRecipe(newRecipe);
       setRecipes(prev => [...prev, addedRecipe]);
-      // Optionally, show a success message or toast
+      return addedRecipe;  // <- Add this line
     } catch (error) {
       console.error('Error adding recipe:', error);
       // Optionally, show an error message or toast
@@ -68,18 +76,9 @@ const HomePage: React.FC = () => {
   const renderView = () => {
     switch (currentView) {
       case 'PLAN':
-        return <PlanView 
-          recipes={recipes} 
-          onAddRecipe={handleAddRecipe}
-          onDeleteRecipe={handleDeleteRecipe}
-          onEditRecipe={handleUpdateRecipe}
-        />;
+        return <PlanView recipes={recipes} onAddRecipe={handleAddRecipe} />;
       case 'SCHEDULE':
-        return <RecipeView 
-          onAddRecipe={handleAddRecipe} 
-          onDeleteRecipe={handleDeleteRecipe} 
-          onUpdateRecipe={handleUpdateRecipe} 
-        />;
+        return <ScheduleView onAddRecipe={handleAddRecipe} onDeleteRecipe={handleDeleteRecipe} onUpdateRecipe={handleUpdateRecipe} />;
       case 'SHOP':
         return <GroceryView />;
       default:

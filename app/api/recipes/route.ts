@@ -1,5 +1,8 @@
 import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
+import { sql } from '@vercel/postgres';
+
+const SYSTEM_USER_ID = '11111111-1111-1111-1111-111111111111';
 
 export async function GET() {
   try {

@@ -4,17 +4,11 @@ import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import Scheduler from './Scheduler';
 import UnassignedRecipes from './UnassignedRecipes';
 import FullRecipeView from './FullRecipeView';
-import { useRecipes } from '../hooks/useRecipes';
-import { Recipe } from '../types/recipe';
+import { Recipe } from '../types/mealPlanner';
 import { Days, Schedule } from '../types/day';
+import HandleEditRecipe from './HandleEditRecipe';
 
-interface ScheduleViewProps {
-  onAddRecipe: (newRecipe: Partial<Recipe>) => Promise<void>;
-  onDeleteRecipe: (recipeId: string) => Promise<void>;
-  onUpdateRecipe: (updatedRecipe: Recipe) => Promise<void>;
-}
-
-const ScheduleView: React.FC<ScheduleViewProps> = ({ onAddRecipe, onDeleteRecipe, onUpdateRecipe }) => {
+const ScheduleView: React.FC = () => {
   const { recipes, loading, error, addRecipe, deleteRecipe, updateRecipe } = useRecipes();
   const [unassignedRecipes, setUnassignedRecipes] = useState<Recipe[]>([]);
   const [assignedRecipes, setAssignedRecipes] = useState<Schedule>({
@@ -23,10 +17,17 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({ onAddRecipe, onDeleteRecipe
   });
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
 
+  // Add this useEffect to initialize unassignedRecipes when recipes prop changes
+  useEffect(() => {
+    setUnassignedRecipes(recipes.filter(recipe => !recipe.day));
+  }, [recipes]);
+
   const handleAddRecipe = async (newRecipe: Partial<Recipe>) => {
     try {
-      const addedRecipe = await addRecipe(newRecipe);
-      setUnassignedRecipes(prev => [...prev, addedRecipe]);
+      const addedRecipe = await onAddRecipe(newRecipe);
+      if (addedRecipe) {  // Add this check
+        setUnassignedRecipes(prev => [...prev, addedRecipe]);
+      }
     } catch (error) {
       console.error('Error adding recipe:', error);
     }
@@ -34,7 +35,7 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({ onAddRecipe, onDeleteRecipe
 
   const handleDeleteRecipe = async (id: string) => {
     try {
-      await deleteRecipe(id);
+      await onDeleteRecipe(id);
       setUnassignedRecipes(prev => prev.filter(recipe => recipe.id !== id));
     } catch (error) {
       console.error('Error deleting recipe:', error);
@@ -43,35 +44,15 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({ onAddRecipe, onDeleteRecipe
 
   const handleUpdateRecipe = async (updatedRecipe: Recipe) => {
     try {
-      const savedRecipe = await updateRecipe(updatedRecipe);
+      await onUpdateRecipe(updatedRecipe);  // Don't try to capture return value
       setUnassignedRecipes(prev =>
-        prev.map(recipe => (recipe.id === savedRecipe.id ? savedRecipe : recipe))
+        prev.map(recipe => (recipe.id === updatedRecipe.id ? updatedRecipe : recipe))
       );
       setSelectedRecipe(null);
     } catch (error) {
       console.error('Error updating recipe:', error);
     }
   };
-
-  // Add this return statement
-  return (
-    <div className="container mx-auto p-4">
-      <DragDropContext onDragEnd={() => {}}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <UnassignedRecipes recipes={unassignedRecipes} />
-          <Scheduler schedule={assignedRecipes} />
-        </div>
-      </DragDropContext>
-      {selectedRecipe && (
-        <FullRecipeView
-          recipe={selectedRecipe}
-          onClose={() => setSelectedRecipe(null)}
-          onUpdate={handleUpdateRecipe}
-          onDelete={handleDeleteRecipe}
-        />
-      )}
-    </div>
-  );
 };
 
 export default ScheduleView;

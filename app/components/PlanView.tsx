@@ -3,20 +3,20 @@
 import React, { useState, useEffect } from 'react';
 import UnassignedRecipes from './UnassignedRecipes';
 import { DragDropContext, DropResult } from '@hello-pangea/dnd';
-import { Recipe } from '../types/recipe';
+import { Recipe, MealPlanRequest } from '../types/mealPlanner';
 import PlanForm from './PlanForm';
 import GenerateMealPlan from './GenerateMealPlan';
 
 interface PlanViewProps {
   recipes: Recipe[];
-  onAddRecipe: (newRecipe: Partial<Recipe>) => void;
+  onAddRecipe: (newRecipe: Partial<Recipe>) => Promise<void>;
   onEditRecipe: (recipe: Recipe) => void;
   onDeleteRecipe: (id: string) => void;
 }
 
 const PlanView: React.FC<PlanViewProps> = ({ recipes, onAddRecipe, onEditRecipe, onDeleteRecipe }) => {
   const [isClient, setIsClient] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<MealPlanRequest>({
     breakfasts: 0,
     lunches: 0,
     dinners: 0,
@@ -83,7 +83,7 @@ const PlanView: React.FC<PlanViewProps> = ({ recipes, onAddRecipe, onEditRecipe,
           <PlanForm 
             formData={formData} 
             onChange={handleFormChange} 
-            onSubmit={GenerateMealPlan}
+            onSubmit={handleGenerateMealPlan}
             className="p-4"
           />
           <GenerateMealPlan formData={formData} onGenerate={handleGenerateMealPlan} />

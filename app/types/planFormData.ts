@@ -1,5 +1,4 @@
-import { CookingPrefs } from './cookingPrefs';
-import { GeneratePlanFormData } from './generatePlanForm';
+import { GeneratePlanFormData } from './GeneratePlanFormData';
 
-export interface PlanFormData extends GeneratePlanFormData, CookingPrefs {}
+export interface PlanFormData extends GeneratePlanFormData {}
 

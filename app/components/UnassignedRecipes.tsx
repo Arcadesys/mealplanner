@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Droppable } from '@hello-pangea/dnd';
 import RecipeCard from './RecipeCard';
-import { Recipe } from '../types/recipe';
+import { Recipe } from '../types/mealPlanner';
 import AddRecipeInline from './AddRecipeInline';
 
 interface UnassignedRecipesProps {
   recipes: Recipe[];
-  onAddRecipe: (newRecipe: Partial<Recipe>) => void;
+  onAddRecipe: (newRecipe: Partial<Recipe>) => Promise<void>;
   onEditRecipe: (recipe: Recipe) => void;
   onDeleteRecipe: (id: string) => void;
 }
@@ -19,17 +19,6 @@ const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({
 }) => {
   const [isAddingRecipe, setIsAddingRecipe] = useState(false);
 
-  useEffect(() => {
-    console.log('Recipes updated:', recipes);
-  }, [recipes]);
-
-  const handleAddRecipe = (newRecipe: Partial<Recipe>) => {
-    console.log('Adding new recipe:', newRecipe);
-    onAddRecipe(newRecipe);
-    console.log('Recipe added, setting isAddingRecipe to false');
-    setIsAddingRecipe(false);
-  };
-
   return (
     <div>
       <h2 className="text-xl font-bold mb-4">Unassigned Recipes</h2>
@@ -41,17 +30,21 @@ const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({
       </button>
 
       <Droppable droppableId="unassigned">
-        {(provided) => (
-          <div {...provided.droppableProps} ref={provided.innerRef} className="unassigned-recipes">
+        {(provided, snapshot) => (
+          <div 
+            {...provided.droppableProps} 
+            ref={provided.innerRef} 
+            className={`unassigned-recipes ${snapshot.isDraggingOver ? 'bg-gray-100' : ''}`}
+          >
             {isAddingRecipe && (
               <AddRecipeInline
-                onSave={handleAddRecipe}
+                onSave={async (recipe) => onAddRecipe(recipe)}
                 onCancel={() => setIsAddingRecipe(false)}
               />
             )}
             {recipes.map((recipe, index) => (
               <RecipeCard
-                key={recipe.id} // Ensure this is unique for each recipe
+                key={recipe.id}
                 recipe={recipe}
                 index={index}
                 onEdit={onEditRecipe}
