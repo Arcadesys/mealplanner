@@ -5,7 +5,7 @@ import PlanView from './components/PlanView';
 import ScheduleView from './components/ScheduleView';
 import GroceryView from './components/GroceryView';
 import { Recipe } from './types/mealPlanner';
-import { useAddRecipe } from './hooks/useAddRecipe';
+import { useAddRecipe } from './hooks/useRecipe';
 import { useRecipes } from './hooks/useRecipes';
 
 type ViewType = 'PLAN' | 'SCHEDULE' | 'SHOP';
@@ -27,8 +27,7 @@ const HomePage: React.FC = () => {
 
   console.log('HomePage rendering with view:', currentView);
 
-  const { recipes, loading, error, setRecipes } = useRecipes();
-  const { addRecipe, deleteRecipe, updateRecipe } = useAddRecipe();
+  const { recipes, loading, error, addRecipe, deleteRecipe, updateRecipe } = useRecipes();
 
   // Add this before the renderView function
   if (loading) {
