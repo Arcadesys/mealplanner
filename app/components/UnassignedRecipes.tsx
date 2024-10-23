@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Droppable } from '@hello-pangea/dnd';
 import RecipeCard from './RecipeCard';
-import { Recipe } from '../types/planFormData';
+import { Recipe } from '../types/mealPlanner';
 import AddRecipeInline from './AddRecipeInline';
 
 interface UnassignedRecipesProps {
   recipes: Recipe[];
-  onAddRecipe: (newRecipe: Partial<Recipe>) => void;
+  onAddRecipe: (newRecipe: Partial<Recipe>) => Promise<void>;
   onEditRecipe: (recipe: Recipe) => void;
   onDeleteRecipe: (id: string) => void;
 }
@@ -38,7 +38,7 @@ const UnassignedRecipes: React.FC<UnassignedRecipesProps> = ({
           >
             {isAddingRecipe && (
               <AddRecipeInline
-                onSave={handleAddRecipe}
+                onSave={async (recipe) => onAddRecipe(recipe)}
                 onCancel={() => setIsAddingRecipe(false)}
               />
             )}

@@ -29,7 +29,9 @@ const ScheduleView: React.FC<{
   const handleAddRecipe = async (newRecipe: Partial<Recipe>) => {
     try {
       const addedRecipe = await onAddRecipe(newRecipe);
-      setUnassignedRecipes(prev => [...prev, addedRecipe]);
+      if (addedRecipe) {  // Add this check
+        setUnassignedRecipes(prev => [...prev, addedRecipe]);
+      }
     } catch (error) {
       console.error('Error adding recipe:', error);
     }
@@ -99,7 +101,7 @@ const ScheduleView: React.FC<{
       destDay.splice(destination.index, 0, movedRecipe);
       setAssignedRecipes({...assignedRecipes});
     }
-    // 🐱‍���� Meow-velous job! Don't forget to commit these changes, you cool cat!
+    // 🐱‍ Meow-velous job! Don't forget to commit these changes, you cool cat!
   };
 
   return (
