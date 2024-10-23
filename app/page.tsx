@@ -74,19 +74,17 @@ const HomePage: React.FC = () => {
     }
   };
 
-  function handleGetRecipes() {
-    fetch('/api/recipes')
-      .then(response => response.json())
-      .then(data => setRecipes(data))
-      .catch(error => console.error('Error fetching recipes:', error));
-  }
-
   const renderView = () => {
     switch (currentView) {
       case 'PLAN':
         return <PlanView recipes={recipes} onAddRecipe={handleAddRecipe} />;
       case 'SCHEDULE':
-        return <ScheduleView onAddRecipe={handleAddRecipe} onDeleteRecipe={handleDeleteRecipe} onUpdateRecipe={handleUpdateRecipe} />;
+        return <ScheduleView 
+          recipes={recipes}  // <- Add this line
+          onAddRecipe={handleAddRecipe} 
+          onDeleteRecipe={handleDeleteRecipe} 
+          onUpdateRecipe={handleUpdateRecipe} 
+        />;
       case 'SHOP':
         return <GroceryView />;
       default:
