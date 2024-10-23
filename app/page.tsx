@@ -4,7 +4,7 @@ import { Navigation } from './components/Navigation';
 import PlanView from './components/PlanView';
 import ScheduleView from './components/ScheduleView';
 import GroceryView from './components/GroceryView';
-import { Recipe } from './types/recipe';
+import { Recipe } from './types/mealPlanner';
 import { useAddRecipe } from './hooks/useAddRecipe';
 import { useRecipes } from './hooks/useRecipes';
 
@@ -36,14 +36,14 @@ const HomePage: React.FC = () => {
   }
 
   if (error) {
-    return <div className="flex-grow flex items-center justify-center">Oops! The recipe book fell off the shelf! {error.message}</div>;
+    return <div className="flex-grow flex items-center justify-center">Oops! The recipe book fell off the shelf! {error}</div>;
   }
 
   const handleAddRecipe = async (newRecipe: Partial<Recipe>) => {
     try {
       const addedRecipe = await addRecipe(newRecipe);
       setRecipes(prev => [...prev, addedRecipe]);
-      // Optionally, show a success message or toast
+      return addedRecipe;  // <- Add this line
     } catch (error) {
       console.error('Error adding recipe:', error);
       // Optionally, show an error message or toast
@@ -77,7 +77,12 @@ const HomePage: React.FC = () => {
   const renderView = () => {
     switch (currentView) {
       case 'PLAN':
-        return <PlanView recipes={recipes} onAddRecipe={handleAddRecipe} />;
+        return <PlanView 
+          recipes={recipes} 
+          onAddRecipe={handleAddRecipe}
+          onDeleteRecipe={handleDeleteRecipe}
+          onEditRecipe={handleUpdateRecipe} 
+        />;
       case 'SCHEDULE':
         return <ScheduleView 
           recipes={recipes}  // <- Add this line

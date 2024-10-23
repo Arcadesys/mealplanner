@@ -48,9 +48,9 @@ const ScheduleView: React.FC<{
 
   const handleUpdateRecipe = async (updatedRecipe: Recipe) => {
     try {
-      const savedRecipe = await onUpdateRecipe(updatedRecipe);
+      await onUpdateRecipe(updatedRecipe);  // Don't try to capture return value
       setUnassignedRecipes(prev =>
-        prev.map(recipe => (recipe.id === savedRecipe.id ? savedRecipe : recipe))
+        prev.map(recipe => (recipe.id === updatedRecipe.id ? updatedRecipe : recipe))
       );
       setSelectedRecipe(null);
     } catch (error) {
@@ -113,7 +113,7 @@ const ScheduleView: React.FC<{
             recipes={unassignedRecipes} 
             onAddRecipe={handleAddRecipe} 
             onDeleteRecipe={handleDeleteRecipe}
-            onEditRecipe={(recipeId: string) => setSelectedRecipe(recipes.find(r => r.id === recipeId) || null)}
+            onEditRecipe={(recipe: Recipe) => setSelectedRecipe(recipe)}
           />
         </div>
 

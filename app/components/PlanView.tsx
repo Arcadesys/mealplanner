@@ -9,7 +9,7 @@ import GenerateMealPlan from './GenerateMealPlan';
 
 interface PlanViewProps {
   recipes: Recipe[];
-  onAddRecipe: (newRecipe: Partial<Recipe>) => void;
+  onAddRecipe: (newRecipe: Partial<Recipe>) => Promise<void>;
   onEditRecipe: (recipe: Recipe) => void;
   onDeleteRecipe: (id: string) => void;
 }
