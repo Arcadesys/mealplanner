@@ -30,7 +30,7 @@ export async function GET() {
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       title TEXT NOT NULL,
       description TEXT,
-      ingredients JSONB,
+      ingredients TEXT[]
       instructions TEXT[],
       user_id UUID REFERENCES users(id),
       created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
