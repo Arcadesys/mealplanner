@@ -68,7 +68,12 @@ const HomePage: React.FC = () => {
   const renderView = () => {
     switch (currentView) {
       case 'PLAN':
-        return <PlanView recipes={recipes} onAddRecipe={handleAddRecipe} />;
+        return <PlanView 
+          recipes={recipes} 
+          onAddRecipe={handleAddRecipe}
+          onDeleteRecipe={handleDeleteRecipe}
+          onEditRecipe={handleUpdateRecipe}
+        />;
       case 'SCHEDULE':
         return <ScheduleView onAddRecipe={handleAddRecipe} onDeleteRecipe={handleDeleteRecipe} onUpdateRecipe={handleUpdateRecipe} />;
       case 'SHOP':

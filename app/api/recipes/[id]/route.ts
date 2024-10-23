@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { Recipe } from '../../types/recipe';
+import { Recipe } from '../../../types/recipe';
 
 let recipes: Recipe[] = [
   {

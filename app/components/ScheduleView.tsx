@@ -8,7 +8,13 @@ import { useRecipes } from '../hooks/useRecipes';
 import { Recipe } from '../types/recipe';
 import { Days, Schedule } from '../types/day';
 
-const ScheduleView: React.FC = () => {
+interface ScheduleViewProps {
+  onAddRecipe: (newRecipe: Partial<Recipe>) => Promise<void>;
+  onDeleteRecipe: (recipeId: string) => Promise<void>;
+  onUpdateRecipe: (updatedRecipe: Recipe) => Promise<void>;
+}
+
+const ScheduleView: React.FC<ScheduleViewProps> = ({ onAddRecipe, onDeleteRecipe, onUpdateRecipe }) => {
   const { recipes, loading, error, addRecipe, deleteRecipe, updateRecipe } = useRecipes();
   const [unassignedRecipes, setUnassignedRecipes] = useState<Recipe[]>([]);
   const [assignedRecipes, setAssignedRecipes] = useState<Schedule>({

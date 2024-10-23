@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { v4 as uuidv4 } from 'uuid';
 
 let recipes: any[] = [];
 
@@ -8,9 +9,12 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const newRecipe = await request.json();
+  const recipeWithId = {
+    ...newRecipe,
+    id: uuidv4()
+  };
   
-  // Add new recipe
-  recipes.push(newRecipe);
+  recipes.push(recipeWithId);
   
-  return NextResponse.json({ message: 'Recipe added successfully' });
+  return NextResponse.json(recipeWithId);
 }
