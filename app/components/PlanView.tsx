@@ -4,7 +4,7 @@ import React, { useState, KeyboardEvent } from 'react';
 import { Recipe, MealPlanRequest } from '../types/mealPlanner';
 import PlanForm from './PlanForm';
 import RecipeCard from './RecipeCard';
-import { FaMagic, FaShoppingCart, FaPlus } from 'react-icons/fa'; // Don't forget to npm install react-icons!
+import { FaMagic, FaPlus } from 'react-icons/fa';
 
 interface PlanViewProps {
   recipes: Recipe[];
@@ -13,12 +13,7 @@ interface PlanViewProps {
   onDeleteRecipe: (id: string) => void;
 }
 
-export default function PlanView({ 
-  recipes, 
-  onAddRecipe, 
-  onEditRecipe, 
-  onDeleteRecipe 
-}: PlanViewProps) {
+export default function PlanView({ recipes, onAddRecipe, onEditRecipe, onDeleteRecipe }: PlanViewProps) {
   const [quickAddTitle, setQuickAddTitle] = useState('');
   const [showPlanForm, setShowPlanForm] = useState(false);
   const [formData, setFormData] = useState<MealPlanRequest>({
@@ -35,7 +30,6 @@ export default function PlanView({
     cookingTools: '',
     cookingMood: '',
   });
-  const [generatedPlan, setGeneratedPlan] = useState<Recipe[] | null>(null);
 
   const handleQuickAdd = async () => {
     if (!quickAddTitle.trim()) return;
@@ -45,7 +39,7 @@ export default function PlanView({
         title: quickAddTitle,
         description: 'Quick added recipe'
       });
-      setQuickAddTitle(''); // Clear input after successful add
+      setQuickAddTitle('');
     } catch (error) {
       console.error('Error adding recipe:', error);
     }
