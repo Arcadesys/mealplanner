@@ -1,6 +1,7 @@
 import React from 'react';
 import { GeneratePlanFormData } from '../types/GeneratePlanFormData';
 import { Recipe, MealPlanRequest } from '../types/mealPlanner';
+import GenerateMealPlan from './GenerateMealPlan';
 
 interface PlanFormProps {
   formData: MealPlanRequest;
@@ -16,9 +17,8 @@ const PlanForm: React.FC<PlanFormProps> = ({ formData, onChange, onSubmit, class
     onChange({ ...formData, [name]: newValue });
   };
 
-  const handleSubmit = () => {
-    console.log('Submitting form data:', formData);
-    onSubmit();
+  const handleSubmit = async () => {
+    await onSubmit();
   };
 
   const handleStepperChange = (name: string, increment: number) => {
@@ -30,6 +30,10 @@ const PlanForm: React.FC<PlanFormProps> = ({ formData, onChange, onSubmit, class
   const labelClass = "block mb-1 font-medium dark:text-gray-200";
   const helperTextClass = "mt-1 text-sm text-gray-500 dark:text-gray-400";
 
+
+
+
+  
   return (
     <div className={className}>
       <div className="flex justify-between items-center mb-4">

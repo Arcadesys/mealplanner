@@ -12,10 +12,12 @@ interface PlanViewProps {
   onAddRecipe: (newRecipe: Partial<Recipe>) => Promise<void>;
   onEditRecipe: (recipe: Recipe) => void;
   onDeleteRecipe: (id: string) => void;
+  onSubmit: () => Promise<void>;
 }
 
 const PlanView: React.FC<PlanViewProps> = ({ recipes, onAddRecipe, onEditRecipe, onDeleteRecipe }) => {
   const [isClient, setIsClient] = useState(false);
+  console.log(recipes);
   const [formData, setFormData] = useState<MealPlanRequest>({
     breakfasts: 0,
     lunches: 0,
@@ -25,7 +27,7 @@ const PlanView: React.FC<PlanViewProps> = ({ recipes, onAddRecipe, onEditRecipe,
     ingredientsToUse: '',
     ingredientsToAvoid: '',
     dietaryRestrictions: '',
-    recipes: '',
+    recipes: recipes,
     availableIngredients: '',
     cookingTools: '',
     cookingMood: '',
@@ -37,7 +39,10 @@ const PlanView: React.FC<PlanViewProps> = ({ recipes, onAddRecipe, onEditRecipe,
   }, []);
 
   const handleFormChange = (newFormData: typeof formData) => {
-    setFormData(newFormData);
+    setFormData({
+      ...newFormData,
+      recipes: selectedRecipes
+    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -50,13 +55,16 @@ const PlanView: React.FC<PlanViewProps> = ({ recipes, onAddRecipe, onEditRecipe,
   };
 
   const handleGenerateMealPlan = async () => {
+    
+    
     try {
+      console.log(formData); //see what we're working with
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ formData }),
+        body: JSON.stringify(formData), // Remove the extra object wrapper
       });
 
       if (!response.ok) {
@@ -69,6 +77,18 @@ const PlanView: React.FC<PlanViewProps> = ({ recipes, onAddRecipe, onEditRecipe,
     } catch (error) {
       console.error('Error generating meal plan:', error);
     }
+  };
+
+  // Add this function to handle adding recipes to the meal plan
+  const handleAddToMealPlan = (recipe: Recipe) => {
+    setSelectedRecipes(prev => {
+      const newSelected = [...prev, recipe];
+      setFormData(current => ({
+        ...current,
+        recipes: newSelected
+      }));
+      return newSelected;
+    });
   };
 
   if (!isClient) {
@@ -90,12 +110,7 @@ const PlanView: React.FC<PlanViewProps> = ({ recipes, onAddRecipe, onEditRecipe,
           {generatedPlan && (
             <div className="mt-8">
               <h3 className="text-xl font-bold mb-4">Generated Meal Plan</h3>
-              {generatedPlan.map((recipe, index) => (
-                <div key={index} className="mb-2">
-                  <h4 className="font-semibold">{recipe.title}</h4>
-                  <p>{recipe.description}</p>
-                </div>
-              ))}
+              <p>{generatedPlan}</p>
             </div>
           )}
         </div>
