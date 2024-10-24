@@ -3,7 +3,6 @@ import { Recipe } from '../types/recipe';
 
 interface RecipeCardProps {
   recipe: Recipe;
-  index?: number; // Make this optional
   onEdit: (recipe: Recipe) => void;
   onDelete: (id: string) => void;
 }
