@@ -17,7 +17,7 @@ interface PlanViewProps {
 
 const PlanView: React.FC<PlanViewProps> = ({ recipes, onAddRecipe, onEditRecipe, onDeleteRecipe }) => {
   const [isClient, setIsClient] = useState(false);
-  console.log(recipes);
+  const [selectedRecipes, setSelectedRecipes] = useState<Recipe[]>([]);
   const [formData, setFormData] = useState<MealPlanRequest>({
     breakfasts: 0,
     lunches: 0,
@@ -27,7 +27,7 @@ const PlanView: React.FC<PlanViewProps> = ({ recipes, onAddRecipe, onEditRecipe,
     ingredientsToUse: '',
     ingredientsToAvoid: '',
     dietaryRestrictions: '',
-    recipes: recipes,
+    recipes: '',  // Changed this to empty string to match MealPlanRequest type
     availableIngredients: '',
     cookingTools: '',
     cookingMood: '',
@@ -41,7 +41,7 @@ const PlanView: React.FC<PlanViewProps> = ({ recipes, onAddRecipe, onEditRecipe,
   const handleFormChange = (newFormData: typeof formData) => {
     setFormData({
       ...newFormData,
-      recipes: selectedRecipes
+      recipes: selectedRecipes.map(r => r.title).join(', ') // Convert recipes to string format
     });
   };
 
@@ -55,16 +55,16 @@ const PlanView: React.FC<PlanViewProps> = ({ recipes, onAddRecipe, onEditRecipe,
   };
 
   const handleGenerateMealPlan = async () => {
-    
-    
     try {
-      console.log(formData); //see what we're working with
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData), // Remove the extra object wrapper
+        body: JSON.stringify({ 
+          formData,
+          recipes 
+        }),
       });
 
       if (!response.ok) {

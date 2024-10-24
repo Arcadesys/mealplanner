@@ -12,8 +12,15 @@ export const runtime = 'edge';
 export async function POST(req: Request) {
   try {
     const { formData, recipes } = await req.json();
-    console.log(formData);
-    console.log(recipes);
+    
+    // First, verify we have an API key
+    if (!process.env.OPENAI_API_KEY) {
+      console.error('OpenAI API key is not configured');
+      return NextResponse.json(
+        { error: 'OpenAI API key not configured' }, 
+        { status: 500 }
+      );
+    }
 
     const formattedRecipes = recipes
       .map((recipe: Recipe) => `${recipe.name} (${recipe.category})`)
@@ -57,18 +64,34 @@ export async function POST(req: Request) {
           content: prompt
         }
       ],
-      temperature: 0.7,
-      max_tokens: 1500
     });
 
+    // Check if the response is ok
+    if (!completion.ok) {
+      const errorData = await completion.json();
+      console.error('OpenAI API error:', errorData);
+      return NextResponse.json(
+        { error: 'OpenAI API error', details: errorData }, 
+        { status: completion.status }
+      );
+    }
+
     const result = await completion.json();
+    
+    if (!result.choices?.[0]?.message?.content) {
+      throw new Error('Invalid response structure from OpenAI');
+    }
+
     const mealPlan = JSON.parse(result.choices[0].message.content);
     return NextResponse.json({ success: true, plan: mealPlan });
-    
+
   } catch (error) {
     console.error('Error in generate route:', error);
     return NextResponse.json(
-      { error: 'Failed to generate meal plan' },
+      { 
+        error: 'Failed to generate meal plan',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      }, 
       { status: 500 }
     );
   }
