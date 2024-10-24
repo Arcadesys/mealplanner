@@ -4,7 +4,7 @@ import React, { useState, KeyboardEvent } from 'react';
 import { Recipe, MealPlanRequest } from '../types/mealPlanner';
 import PlanForm from './PlanForm';
 import RecipeCard from './RecipeCard';
-import { FaMagic, FaPlus } from 'react-icons/fa';
+
 
 interface PlanViewProps {
   recipes: Recipe[];
@@ -51,71 +51,8 @@ export default function PlanView({ recipes, onAddRecipe, onEditRecipe, onDeleteR
     }
   };
 
-  const handleGenerateShoppingList = async () => {
-    if (!recipes?.length) {
-      alert('No recipes to generate shopping list from!');
-      return;
-    }
-
-    try {
-      const allIngredients = recipes.reduce((acc, recipe) => {
-        if (recipe.ingredients) {
-          return { ...acc, ...recipe.ingredients };
-        }
-        return acc;
-      }, {});
-
-      const response = await fetch('/api/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          type: 'shopping',
-          ingredients: allIngredients 
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to generate shopping list');
-      }
-
-      const data = await response.json();
-      // Handle the shopping list data as needed
-      console.log('Shopping list:', data);
-    } catch (error) {
-      console.error('Error generating shopping list:', error);
-    }
-  };
-
-  const handleGenerateMealPlan = async () => {
-    try {
-      const response = await fetch('/api/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          formData,
-          recipes 
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to generate meal plan');
-      }
-
-      const data = await response.json();
-      // Handle the meal plan data as needed
-      console.log('Meal plan:', data);
-    } catch (error) {
-      console.error('Error generating meal plan:', error);
-    }
-  };
-
   return (
     <div className="container mx-auto p-4">
-      {/* Quick Actions Bar */}
       <div className="flex gap-4 mb-6">
         <div className="flex-1 flex gap-2">
           <input
@@ -128,40 +65,29 @@ export default function PlanView({ recipes, onAddRecipe, onEditRecipe, onDeleteR
           />
           <button
             onClick={handleQuickAdd}
-            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded flex items-center gap-2"
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
           >
-            <FaPlus /> Add
+            Add
           </button>
         </div>
         
         <button
           onClick={() => setShowPlanForm(!showPlanForm)}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded flex items-center gap-2"
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
         >
-          <FaMagic /> Plan Meals
-        </button>
-        
-        <button
-          onClick={handleGenerateShoppingList}
-          className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded flex items-center gap-2"
-        >
-          <FaShoppingCart /> Go Shopping
+          Plan Meals
         </button>
       </div>
 
-      {/* Plan Form */}
-      {showPlanForm && (
+      {showPlanForm ? (
         <PlanForm 
           formData={formData}
           onChange={setFormData}
-          onSubmit={handleGenerateMealPlan}
+          onSubmit={() => {}} // We'll implement this later
           className="mb-8"
         />
-      )}
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <h2 className="text-xl font-bold mb-4">Your Recipes</h2>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {recipes.map((recipe) => (
             <RecipeCard
               key={recipe.id}
@@ -171,21 +97,7 @@ export default function PlanView({ recipes, onAddRecipe, onEditRecipe, onDeleteR
             />
           ))}
         </div>
-        
-        {generatedPlan && (
-          <div>
-            <h2 className="text-xl font-bold mb-4">Generated Meal Plan</h2>
-            {generatedPlan.map((recipe) => (
-              <RecipeCard
-                key={recipe.id}
-                recipe={recipe}
-                onEdit={onEditRecipe}
-                onDelete={onDeleteRecipe}
-              />
-            ))}
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 }
