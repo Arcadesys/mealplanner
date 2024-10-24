@@ -2,7 +2,6 @@ import React from 'react';
 import { Recipe } from '../types/recipe';
 import { useRecipes } from '../hooks/useRecipes';
 import RecipeCard from './RecipeCard';
-import AddRecipeInline from './AddRecipeInline';
 import FullRecipeView from './FullRecipeView';
 
 interface RecipeViewProps {
@@ -12,7 +11,6 @@ interface RecipeViewProps {
 }
 
 const RecipeView: React.FC<RecipeViewProps> = ({ onAddRecipe, onDeleteRecipe, onUpdateRecipe }) => {
-  const [isAddingRecipe, setIsAddingRecipe] = React.useState(false);
   const [editingRecipe, setEditingRecipe] = React.useState<Recipe | null>(null);
   const { recipes, loading, error } = useRecipes();
 
@@ -23,21 +21,11 @@ const RecipeView: React.FC<RecipeViewProps> = ({ onAddRecipe, onDeleteRecipe, on
     <div className="container mx-auto p-4">
       <div className="mb-4">
         <button
-          onClick={() => setIsAddingRecipe(true)}
+          onClick={() => onAddRecipe({})}
           className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
           Add Recipe
         </button>
-
-        {isAddingRecipe && (
-          <AddRecipeInline
-            onSave={(recipe) => {
-              onAddRecipe(recipe);
-              setIsAddingRecipe(false);
-            }}
-            onCancel={() => setIsAddingRecipe(false)}
-          />
-        )}
       </div>
 
       <div className="flex gap-4 h-[calc(100vh-200px)]">

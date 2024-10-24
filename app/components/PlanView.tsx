@@ -4,7 +4,13 @@ import React, { useState, KeyboardEvent } from 'react';
 import { Recipe, MealPlanRequest } from '../types/mealPlanner';
 import PlanForm from './PlanForm';
 import RecipeCard from './RecipeCard';
+import UnassignedRecipes from './UnassignedRecipes'; // Implied import for UnassignedRecipes component
 
+// Add this enum near the top of the file, after imports
+enum ViewMode {
+  RECIPES,
+  PLAN_WIZARD
+}
 
 interface PlanViewProps {
   recipes: Recipe[];
@@ -15,7 +21,7 @@ interface PlanViewProps {
 
 export default function PlanView({ recipes, onAddRecipe, onEditRecipe, onDeleteRecipe }: PlanViewProps) {
   const [quickAddTitle, setQuickAddTitle] = useState('');
-  const [showPlanForm, setShowPlanForm] = useState(false);
+  const [currentView, setCurrentView] = useState<ViewMode>(ViewMode.RECIPES);
   const [formData, setFormData] = useState<MealPlanRequest>({
     breakfasts: 0,
     lunches: 0,
@@ -72,21 +78,14 @@ export default function PlanView({ recipes, onAddRecipe, onEditRecipe, onDeleteR
         </div>
         
         <button
-          onClick={() => setShowPlanForm(!showPlanForm)}
+          onClick={() => setCurrentView(currentView === ViewMode.RECIPES ? ViewMode.PLAN_WIZARD : ViewMode.RECIPES)}
           className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
         >
-          Plan Meals
+          {currentView === ViewMode.RECIPES ? 'Plan Wizard' : 'View Recipes'}
         </button>
       </div>
 
-      {showPlanForm ? (
-        <PlanForm 
-          formData={formData}
-          onChange={setFormData}
-          onSubmit={() => {}} // We'll implement this later
-          className="mb-8"
-        />
-      ) : (
+      {currentView === ViewMode.RECIPES ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {recipes.map((recipe) => (
             <RecipeCard
@@ -97,6 +96,13 @@ export default function PlanView({ recipes, onAddRecipe, onEditRecipe, onDeleteR
             />
           ))}
         </div>
+      ) : (
+        <PlanForm 
+          formData={formData}
+          onChange={setFormData}
+          onSubmit={() => {}} 
+          className="mb-8"
+        />
       )}
     </div>
   );
