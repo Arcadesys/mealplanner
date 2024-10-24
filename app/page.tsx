@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navigation } from './components/Navigation';
 import PlanView from './components/PlanView';
 import GroceryView from './components/GroceryView';
@@ -12,10 +12,17 @@ const HomePage: React.FC = () => {
     recipes, 
     loading, 
     error, 
+    fetchRecipes, 
     addRecipe, 
     deleteRecipe, 
     updateRecipe 
   } = useRecipes();
+
+  useEffect(() => {
+    fetchRecipes().catch(err => 
+      console.error('Failed to fetch recipes on mount:', err)
+    );
+  }, []); // Empty dependency array means this runs once on mount
 
   const handleAddRecipe = async (newRecipe: Partial<Recipe>) => {
     try {
@@ -59,8 +66,20 @@ const HomePage: React.FC = () => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return (
+    <div className="flex items-center justify-center h-screen">
+      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900" />
+    </div>
+  );
+  
+  if (error) return (
+    <div className="flex items-center justify-center h-screen text-red-600">
+      <div className="text-center">
+        <h2 className="text-xl font-bold mb-2">Oops! Something went wrong</h2>
+        <p>{error}</p>
+      </div>
+    </div>
+  );
 
   return (
     <div className="flex flex-col h-screen">
